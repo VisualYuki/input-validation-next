@@ -1,11 +1,14 @@
 import {inputWrap} from "./inputWrap";
 
+/**
+ * Main class for user.
+ */
 export class Core {
 	private formElement!: HTMLFormElement;
 	private inputs: inputWrap[] = [];
-	private config: Config = {};
+	private userConfig: Config = {};
 
-	constructor(formElement: HTMLFormElement | null, config: Config = {}) {
+	constructor(formElement: HTMLFormElement, userConfig: Config = {}) {
 		if (!(formElement instanceof HTMLFormElement)) {
 			console.warn(`root parameter is not form`);
 			console.warn("root parameter: ", formElement);
@@ -13,7 +16,7 @@ export class Core {
 		}
 
 		this.formElement = formElement;
-		this.config = config;
+		this.userConfig = userConfig;
 		this.init();
 	}
 
@@ -22,9 +25,12 @@ export class Core {
 			.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("select, input, textarea")
 			.forEach((input) => {
 				let inputName: string = input.getAttribute("name") || "";
-				let inputRules = this.config.rules?.[inputName] || "";
+				let inputRules = this.userConfig.rules?.[inputName] || {};
 
 				if (inputRules) {
+					input.parentElement?.classList.add("input-validation-next");
+					input.classList.add("input-validation-next__input");
+
 					this.inputs.push(new inputWrap(input, inputRules));
 				}
 			});
@@ -35,16 +41,6 @@ export class Core {
 			this.inputs.forEach((inputWrap) => {
 				inputWrap.validate();
 			});
-
-			//this.formElement.querySelectorAll("input[required]").forEach((item, idx) => {
-			//	if (item.value) {
-			//	} else {
-			//		let errorNode = document.createElement("p");
-			//		errorNode.textContent = "ошибка ввода";
-
-			//		item.parentElement.appendChild(errorNode);
-			//	}
-			//});
 		});
 	}
 }

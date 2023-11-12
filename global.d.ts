@@ -7,7 +7,8 @@ declare global {
 
 	type ConfigRule = {
 		required?: boolean;
-		[index?: string]: boolean;
+		minLength?: number;
+		[index?: string]: boolean | number | Array;
 	};
 
 	type Config = {
@@ -19,4 +20,9 @@ declare global {
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;
 	}
+
+	//type TMessages = {
+	//	required: string;
+	//	minLength: string;
+	//};
 }

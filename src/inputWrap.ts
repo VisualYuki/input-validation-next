@@ -1,12 +1,19 @@
 import globalInputValidationNext from "./global";
 
 export class inputWrap {
-	validators: String[] = [];
+	validators: string[] = [];
+	configRule: ConfigRule;
 	inputNode!: FormElements;
 
-	constructor(input: FormElements, validators: ConfigRule | String) {
-		let inputName: string = input.getAttribute("name") || "";
-		let globalValidators = globalInputValidationNext.getValidators();
+	constructor(input: FormElements, validators: ConfigRule) {
+		//let inputName: string = input.getAttribute("name") || "";
+		let globalValidators = globalInputValidationNext.validators;
+
+		input.getAttributeNames().forEach((inputAttrName) => {
+			if (inputAttrName === "required") {
+				validators["required"] = true;
+			}
+		});
 
 		if (validators instanceof Object) {
 			for (const property in validators) {
@@ -16,33 +23,62 @@ export class inputWrap {
 			}
 		}
 
+		this.validators.sort((firstValidator: string, secondValidator: string) => {
+			let firstValidatorIndex = globalValidators.get(firstValidator)?.index as number;
+			let secondValidatorIndex = globalValidators.get(secondValidator)?.index as number;
+
+			if (firstValidatorIndex < secondValidatorIndex) {
+				return -1;
+			}
+
+			return 1;
+		});
+
+		this.configRule = validators;
 		this.inputNode = input;
-
-		//if (rules instanceof String) {
-		//}
-
-		//item.addEventListener("input", (e) => {
-		//	console.log(inputName);
-		//});
 	}
 
 	public validate() {
 		let inputValue = this.inputNode.value;
 		let isCorrectValidation = true;
-		let globalValidators = globalInputValidationNext.getValidators();
+		let globalValidators = globalInputValidationNext.validators;
 
-		this.validators.forEach((validatorName) => {
-			debugger;
-			if (!globalValidators.get(validatorName)?.["validator"](inputValue)) {
+		this.validators.every((validatorName) => {
+			let validatorParam = this.configRule[validatorName];
+
+			if (!globalValidators.get(validatorName)?.["validator"](inputValue, validatorParam || null, this.inputNode)) {
 				isCorrectValidation = false;
+
+				if (!isCorrectValidation) {
+					let errorNode = this.inputNode.parentElement?.querySelector(".input-validation-next__error");
+
+					let errorMessage = globalInputValidationNext.messages.get(validatorName) as string;
+
+					if (typeof validatorParam === "number") {
+						errorMessage = errorMessage.replace("{0}", validatorParam.toString());
+					} else if (Array.isArray(validatorParam)) {
+						errorMessage = errorMessage.replace("{0}", validatorParam[0]);
+						errorMessage = errorMessage.replace("{1}", validatorParam[1]);
+					}
+
+					if (errorNode) {
+						errorNode.textContent = errorMessage;
+					} else {
+						let errorNode = document.createElement("p");
+						errorNode.className = "input-validation-next__error";
+						this.inputNode.parentElement?.appendChild(errorNode);
+						errorNode.textContent = errorMessage;
+					}
+
+					return;
+				}
 			}
+
+			return true;
 		});
 
-		if (!isCorrectValidation) {
-			let errorNode = document.createElement("p");
-			errorNode.textContent = "ошибка ввода";
-
-			this.inputNode.parentElement?.appendChild(errorNode);
+		if (isCorrectValidation) {
+			this.inputNode.parentElement?.querySelector(".input-validation-next__error")?.remove();
 		}
 
 		return isCorrectValidation;

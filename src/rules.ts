@@ -5,5 +5,25 @@ globalInputValidationNext.addValidator(
 	(value) => {
 		return !!value;
 	},
-	"Это поле обязательно"
+	""
+);
+
+globalInputValidationNext.addValidator(
+	"minLength",
+	(value, params) => {
+		return params <= value.length;
+	},
+	""
+);
+
+globalInputValidationNext.addValidator(
+	"range",
+	(value, params) => {
+		if (params[0] <= +value && +value <= params[1]) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	""
 );
