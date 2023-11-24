@@ -6,12 +6,21 @@ export class inputWrap {
 	inputNode!: FormElements;
 
 	constructor(input: FormElements, validators: ConfigRule) {
-		//let inputName: string = input.getAttribute("name") || "";
 		let globalValidators = globalInputValidationNext.validators;
 
 		input.getAttributeNames().forEach((inputAttrName) => {
-			if (inputAttrName === "required") {
-				validators["required"] = true;
+			switch (inputAttrName) {
+				case "required":
+					validators["required"] = true;
+					break;
+				case "min-length":
+					let attrValue = input.getAttribute(inputAttrName);
+
+					if (attrValue) {
+						validators["minLength"] = +attrValue;
+					}
+
+					break;
 			}
 		});
 
@@ -36,6 +45,18 @@ export class inputWrap {
 
 		this.configRule = validators;
 		this.inputNode = input;
+
+		this.setInputValidation();
+	}
+
+	setInputValidation() {
+		this.inputNode.addEventListener("focusout", () => {
+			this.validate();
+		});
+
+		this.inputNode.addEventListener("input", () => {
+			this.validate();
+		});
 	}
 
 	public validate() {

@@ -9,6 +9,19 @@
 		<div class="container">
 			<form id="first-form" class="row g-3 needs-validation" method="GET" action="/test-form" novalidate>
 				<div class="col-md-4">
+					<label for="validationCustomUsername" class="form-label">Check required attr</label>
+					<div class="has-validation">
+						<input
+							type="text"
+							class="form-control"
+							aria-describedby="inputGroupPrepend"
+							required
+							min-length="4"
+						/>
+					</div>
+				</div>
+
+				<div class="col-md-4">
 					<label for="validationCustomUsername" class="form-label">Username</label>
 					<div class="has-validation">
 						<input
@@ -18,33 +31,12 @@
 							required
 							name="userNameInput"
 						/>
-						<!--?<div class="invalid-feedback">Please choose a username.</div>-->
 					</div>
 				</div>
-				<!--<div class="col-md-6">
-					<label for="validationCustom03" class="form-label">City</label>
-					<input type="text" class="form-control" id="validationCustom03" required />
-					<div class="invalid-feedback">Please provide a valid city.</div>
-				</div>
-				<div class="col-md-3">
-					<label for="validationCustom04" class="form-label">State</label>
-					<select class="form-select" id="validationCustom04" required>
-						<option selected disabled value="">Choose...</option>
-						<option>...</option>
-					</select>
-					<div class="invalid-feedback">Please select a valid state.</div>
-				</div>-->
 				<div class="col-md-3">
 					<label for="validationCustom05" class="form-label">Number</label>
-					<input type="text" class="form-control" id="validationCustom05" required name="numberInputName" />
+					<input type="text" class="form-control" id="validationCustom05" name="numberInputName" />
 				</div>
-				<!--<div class="col-12">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="invalidCheck" required />
-						<label class="form-check-label" for="invalidCheck"> Agree to terms and conditions </label>
-						<div class="invalid-feedback">You must agree before submitting.</div>
-					</div>
-				</div>-->
 				<div class="col-12">
 					<button class="btn btn-primary" type="submit">Submit form</button>
 				</div>

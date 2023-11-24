@@ -1,26 +1,18 @@
-import {inputWrap} from "./inputWrap";
+import {inputWrap} from "./InputWrap";
 
-/**
- * Main class for user.
- */
-export class Core {
-	private formElement!: HTMLFormElement;
+export class FormWrap {
+	private formElement: HTMLFormElement;
 	private inputs: inputWrap[] = [];
 	private userConfig: Config = {};
 
 	constructor(formElement: HTMLFormElement, userConfig: Config = {}) {
-		if (!(formElement instanceof HTMLFormElement)) {
-			console.warn(`root parameter is not form`);
-			console.warn("root parameter: ", formElement);
-			return;
-		}
-
 		this.formElement = formElement;
 		this.userConfig = userConfig;
 		this.init();
 	}
 
 	private init() {
+		// Create input wraps from form
 		this.formElement
 			.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("select, input, textarea")
 			.forEach((input) => {
@@ -35,12 +27,19 @@ export class Core {
 				}
 			});
 
+		// On submit form event, validate all inputs
 		this.formElement.addEventListener("submit", (e: SubmitEvent) => {
 			e.preventDefault();
 
 			this.inputs.forEach((inputWrap) => {
 				inputWrap.validate();
 			});
+		});
+	}
+
+	validate() {
+		this.inputs.forEach((inputWrap) => {
+			inputWrap.validate();
 		});
 	}
 }

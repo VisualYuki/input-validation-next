@@ -1,4 +1,4 @@
-import {Core} from "./core";
+import {Init} from "./Init";
 import globalInputValidationNext from "./global";
 import "./rules";
 
@@ -6,4 +6,4 @@ import "./styles.css";
 
 window.globalInputValidationNext = globalInputValidationNext;
 
-export {Core as InputValidationNext};
+export {Init as InputValidationNext};
