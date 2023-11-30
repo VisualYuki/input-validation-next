@@ -7,31 +7,20 @@
 	</head>
 	<body>
 		<div class="container">
-			<form id="first-form" class="row g-3 needs-validation" method="GET" action="/test-form" novalidate>
+			<form id="form-1" class="row g-3 needs-validation" method="GET" action="/test-form">
 				<div class="col-md-4">
-					<label for="validationCustomUsername" class="form-label">Check required attr</label>
-					<div class="has-validation">
-						<input
-							type="text"
-							class="form-control"
-							aria-describedby="inputGroupPrepend"
-							required
-							min-length="4"
-						/>
-					</div>
+					<label for="validationCustomUsername" class="form-label">default required attr</label>
+					<input type="text" class="form-control" required name="requiredInput" />
 				</div>
 
 				<div class="col-md-4">
-					<label for="validationCustomUsername" class="form-label">Username</label>
-					<div class="has-validation">
-						<input
-							type="text"
-							class="form-control"
-							aria-describedby="inputGroupPrepend"
-							required
-							name="userNameInput"
-						/>
-					</div>
+					<label for="validationCustomUsername" class="form-label">default required min-legnth attr</label>
+					<input type="text" class="form-control" required min-length="4" max-length="7" name="defaultAttrInput" />
+				</div>
+
+				<div class="col-md-4">
+					<label for="validationCustomUsername" class="form-label">custom rule</label>
+					<input type="text" class="form-control" required name="customRuleInput" />
 				</div>
 				<div class="col-md-3">
 					<label for="validationCustom05" class="form-label">Number</label>
@@ -44,16 +33,5 @@
 		</div>
 
 		<script type="module" src="/src/main.ts"></script>
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-			integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-			crossorigin="anonymous"
-		/>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-			integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-			crossorigin="anonymous"
-		></script>
 	</body>
 </html>

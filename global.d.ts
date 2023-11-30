@@ -15,6 +15,9 @@ declare global {
 		rules?: {
 			[index: string]: ConfigRule;
 		};
+		//config?: {
+		//	validateOnSubmit: boolean;
+		//};
 	};
 
 	interface Window {

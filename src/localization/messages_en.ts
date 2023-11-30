@@ -1,13 +1,14 @@
 export let messages_en = {
 	required: "This field is required.",
 	minLength: "Please enter at least {0} characters.",
+	maxLength: "Please enter max {0} characters.",
 	range: "Please enter a value between {0} and {1}.",
 };
 
 export type TMessages = typeof messages_en;
 
 //required: "This field is required.",
-//remote: "Please fix this field.",
+//remote: "Please fix this field.",5
 //email: "Please enter a valid email address.",
 //url: "Please enter a valid URL.",
 //date: "Please enter a valid date.",

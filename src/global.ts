@@ -19,6 +19,10 @@ export abstract class GlobalInputValidationNext {
 	static addValidator(name: string, validator: validatorFunction, errorText: string) {
 		this.validators.set(name, {validator, errorText, index: this.index});
 		this.index++;
+
+		if (errorText) {
+			this.messages.set(name, errorText);
+		}
 	}
 
 	/**

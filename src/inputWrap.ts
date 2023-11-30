@@ -8,16 +8,26 @@ export class inputWrap {
 	constructor(input: FormElements, validators: ConfigRule) {
 		let globalValidators = globalInputValidationNext.validators;
 
+		let attrValue;
+
 		input.getAttributeNames().forEach((inputAttrName) => {
 			switch (inputAttrName) {
 				case "required":
 					validators["required"] = true;
 					break;
 				case "min-length":
-					let attrValue = input.getAttribute(inputAttrName);
+					attrValue = input.getAttribute(inputAttrName);
 
 					if (attrValue) {
 						validators["minLength"] = +attrValue;
+					}
+
+					break;
+				case "max-length":
+					attrValue = input.getAttribute(inputAttrName);
+
+					if (attrValue) {
+						validators["maxLength"] = +attrValue;
 					}
 
 					break;

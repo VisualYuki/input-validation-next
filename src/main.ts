@@ -1,21 +1,18 @@
 import {InputValidationNext} from "./index";
-//import {messages_ru} from "./localization/messages_ru";
-//import "/src/localization/messages_ru.ts";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 globalInputValidationNext.addValidator(
-	"UserNameValidator",
+	"customRule",
 	function (value: any, element: any) {
-		return false;
+		return value === "qwe123";
 	},
-	"Должны быть цифры и буквы."
+	"qwe123"
 );
 
-//globalInputValidationNext.setValidatorMessages(messages_ru);
-
-let test = new InputValidationNext(document.getElementById("first-form") as HTMLFormElement, {
+let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
 	rules: {
-		userNameInput: {
-			UserNameValidator: true,
+		defaultAttrInput: {
+			customRule: true,
 			//required: true,
 			minLength: 4,
 		},
@@ -25,4 +22,6 @@ let test = new InputValidationNext(document.getElementById("first-form") as HTML
 	},
 });
 
-//test.validate();
+//import {messages_ru} from "./localization/messages_ru";
+//import "/src/localization/messages_ru.ts";
+//globalInputValidationNext.setValidatorMessages(messages_ru);
