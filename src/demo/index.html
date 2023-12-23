@@ -7,14 +7,14 @@
 	</head>
 	<body>
 		<div class="container">
-			<form id="form-1" class="row g-3 needs-validation" method="GET" action="/test-form">
+			<form id="form-1" class="row g-3 needs-validation" method="GET" action="/test-form" novalidate>
 				<div class="col-md-4">
 					<label for="validationCustomUsername" class="form-label">default required attr</label>
 					<input type="text" class="form-control" required name="requiredInput" />
 				</div>
 
 				<div class="col-md-4">
-					<label for="validationCustomUsername" class="form-label">default required min-legnth attr</label>
+					<label for="validationCustomUsername" class="form-label">default required min max length attr</label>
 					<input type="text" class="form-control" required min-length="4" max-length="7" name="defaultAttrInput" />
 				</div>
 
@@ -26,12 +26,21 @@
 					<label for="validationCustom05" class="form-label">Number</label>
 					<input type="text" class="form-control" id="validationCustom05" name="numberInputName" />
 				</div>
+				<div class="col-md-3">
+					<label class="form-label">Select</label>
+					<select name="dropdownSelect" class="form-control" id="" required>
+						<option value="" disabled></option>
+						<option value="">1</option>
+						<option value="">2</option>
+						<option value="">3</option>
+					</select>
+				</div>
 				<div class="col-12">
 					<button class="btn btn-primary" type="submit">Submit form</button>
 				</div>
 			</form>
 		</div>
 
-		<script type="module" src="/src/main.ts"></script>
+		<script type="module" src="main.ts"></script>
 	</body>
 </html>

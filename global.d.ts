@@ -8,24 +8,25 @@ declare global {
 	type ConfigRule = {
 		required?: boolean;
 		minLength?: number;
-		[index?: string]: boolean | number | Array;
+		[index?: string]: boolean | number | Array | string;
 	};
 
 	type Config = {
 		rules?: {
 			[index: string]: ConfigRule;
 		};
-		//config?: {
-		//	validateOnSubmit: boolean;
-		//};
+		config?: {
+			//validateOnSubmit: boolean;
+			enableDefaultValidationForm: boolean;
+		};
+		messages?: {
+			[index: string]: TMessages;
+		};
 	};
+
+	type TMessages = TMessages;
 
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;
 	}
-
-	//type TMessages = {
-	//	required: string;
-	//	minLength: string;
-	//};
 }

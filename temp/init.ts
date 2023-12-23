@@ -1,1 +1,0 @@
-mainClass.addNum(12);

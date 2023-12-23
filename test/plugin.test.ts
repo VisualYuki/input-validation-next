@@ -5,6 +5,7 @@ import {describe, expect, test} from "vitest";
 import {InputValidationNext} from "../src/index";
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
+import {messages_ru} from "../src/localization/messages_ru";
 
 function getFileContent(relPath) {
 	return fs.readFileSync(path.join(__dirname, relPath), {encoding: "utf8"}).toString();
@@ -24,7 +25,7 @@ function findInput(name: string) {
 }
 
 function initPlugin(formId: string, config = {}) {
-	document.body.innerHTML = getFileContent("../index.html");
+	document.body.innerHTML = getFileContent("../src/demo/index.html");
 
 	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
 
@@ -80,7 +81,6 @@ describe("form-1", () => {
 		globalInputValidationNext.addValidator(
 			"customRule",
 			function (value: any, element: any) {
-				debugger;
 				return value === "qwe123";
 			},
 			"qwe123"
@@ -104,7 +104,7 @@ describe("form-1", () => {
 		await user.type(input, "q");
 		let isMinLengthError = input.parentElement
 			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("Please enter at least");
+			?.textContent?.includes("Please enter at least 4 characters.");
 		expect(isMinLengthError).toBe(true);
 		await user.type(input, "we12");
 
@@ -116,5 +116,58 @@ describe("form-1", () => {
 
 		await user.type(input, "3");
 		expect(isThereError(input)).toBe(false);
+	});
+
+	test("custom error message in config", async () => {
+		let pluginInstance = initPlugin("form-1", {
+			rules: {
+				customRuleInput: {
+					required: true,
+					minLength: 4,
+				},
+			},
+			messages: {
+				customRuleInput: {
+					required: "Required custom message from message field of init",
+					minLength: "minLegnth custom rule error text",
+				},
+			},
+		});
+
+		const input = findInput("customRuleInput");
+
+		pluginInstance?.validate();
+		let isCustomRuleError = input.parentElement
+			?.querySelector(".input-validation-next__error")
+			?.textContent?.includes("Required custom message from message field of init");
+		expect(isCustomRuleError).toBe(true);
+
+		await user.type(input, "123");
+		pluginInstance?.validate();
+		expect(isThereError(input)).toBe(true);
+
+		let isMinLengthError = input.parentElement
+			?.querySelector(".input-validation-next__error")
+			?.textContent?.includes("minLegnth custom rule error text");
+		expect(isMinLengthError).toBe(true);
+
+		await user.type(input, "4");
+		pluginInstance?.validate();
+		expect(isThereError(input)).toBe(false);
+	});
+
+	test("test localization", async () => {
+		globalInputValidationNext.setValidatorMessages(messages_ru);
+
+		let pluginInstance = initPlugin("form-1");
+
+		const input = findInput("requiredInput");
+		input.dispatchEvent(new Event("focusout"));
+
+		let isRequiredError = input.parentElement
+			?.querySelector(".input-validation-next__error")
+			?.textContent?.includes("Это поле обязательно.");
+
+		expect(isRequiredError).toBe(true);
 	});
 });

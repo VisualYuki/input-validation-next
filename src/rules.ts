@@ -25,6 +25,22 @@ globalInputValidationNext.addValidator(
 );
 
 globalInputValidationNext.addValidator(
+	"maxLength",
+	(value, params) => {
+		return value.length <= params;
+	},
+	""
+);
+
+globalInputValidationNext.addValidator(
+	"digits",
+	(value) => {
+		return /^\d+$/.test(value);
+	},
+	""
+);
+
+globalInputValidationNext.addValidator(
 	"range",
 	(value, params) => {
 		if (params[0] <= +value && +value <= params[1]) {

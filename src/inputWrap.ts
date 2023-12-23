@@ -1,19 +1,24 @@
 import globalInputValidationNext from "./global";
 
-export class inputWrap {
+export class InputWrap {
 	validators: string[] = [];
 	configRule: ConfigRule;
 	inputNode!: FormElements;
+	messages: TMessages = {};
 
-	constructor(input: FormElements, validators: ConfigRule) {
+	constructor(input: FormElements, validators: ConfigRule, messages: TMessages) {
 		let globalValidators = globalInputValidationNext.validators;
 
-		let attrValue;
+		this.messages = messages;
 
+		// Get default rules via input attrs.
 		input.getAttributeNames().forEach((inputAttrName) => {
+			let attrValue;
+
 			switch (inputAttrName) {
 				case "required":
 					validators["required"] = true;
+
 					break;
 				case "min-length":
 					attrValue = input.getAttribute(inputAttrName);
@@ -34,6 +39,7 @@ export class inputWrap {
 			}
 		});
 
+		// Compare attr, object rules with existing rules.
 		if (validators instanceof Object) {
 			for (const property in validators) {
 				if (globalValidators.get(property)) {
@@ -42,6 +48,7 @@ export class inputWrap {
 			}
 		}
 
+		// Sort rules by order; default attr, custom rules.
 		this.validators.sort((firstValidator: string, secondValidator: string) => {
 			let firstValidatorIndex = globalValidators.get(firstValidator)?.index as number;
 			let secondValidatorIndex = globalValidators.get(secondValidator)?.index as number;
@@ -83,7 +90,13 @@ export class inputWrap {
 				if (!isCorrectValidation) {
 					let errorNode = this.inputNode.parentElement?.querySelector(".input-validation-next__error");
 
-					let errorMessage = globalInputValidationNext.messages.get(validatorName) as string;
+					let errorMessage;
+
+					if (this.messages[validatorName]) {
+						errorMessage = this.messages[validatorName];
+					} else {
+						errorMessage = globalInputValidationNext.messages.get(validatorName) as string;
+					}
 
 					if (typeof validatorParam === "number") {
 						errorMessage = errorMessage.replace("{0}", validatorParam.toString());
