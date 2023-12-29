@@ -90,6 +90,8 @@ export class InputWrap {
 				if (!isCorrectValidation) {
 					let errorNode = this.inputNode.parentElement?.querySelector(".input-validation-next__error");
 
+					this.inputNode.parentElement?.classList.add("input-validation-next_error");
+
 					let errorMessage;
 
 					if (this.messages[validatorName]) {
@@ -123,6 +125,7 @@ export class InputWrap {
 
 		if (isCorrectValidation) {
 			this.inputNode.parentElement?.querySelector(".input-validation-next__error")?.remove();
+			this.inputNode.parentElement?.classList.remove("input-validation-next_error");
 		}
 
 		return isCorrectValidation;

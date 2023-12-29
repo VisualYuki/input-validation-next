@@ -1,3 +1,4 @@
+//@ts-ignore
 import $ from "jquery";
 import "jquery-validation";
 import "bootstrap/dist/css/bootstrap.min.css";

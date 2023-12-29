@@ -1,12 +1,13 @@
 import {InputWrap} from "./InputWrap";
 import {TMessages} from "./localization/messages_en";
+import {consoleWarning} from "./utils";
 
 export class FormWrap {
 	private formElement: HTMLFormElement;
 	private inputs: InputWrap[] = [];
-	private userConfig: Config = {};
+	private userConfig: Config;
 
-	constructor(formElement: HTMLFormElement, userConfig: Config = {}) {
+	constructor(formElement: HTMLFormElement, userConfig: Config) {
 		this.formElement = formElement;
 		this.userConfig = userConfig;
 		this.init();
@@ -32,11 +33,11 @@ export class FormWrap {
 
 		// On submit form event, validate all inputs
 		this.formElement.addEventListener("submit", (e: SubmitEvent) => {
-			e.preventDefault();
+			if (this.userConfig.config?.disableFormSubmitEvent) {
+				e.preventDefault();
+			}
 
-			this.inputs.forEach((inputWrap) => {
-				inputWrap.validate();
-			});
+			this.validate();
 		});
 
 		// Add novalidate form attr
@@ -46,8 +47,23 @@ export class FormWrap {
 	}
 
 	validate() {
+		let isCorrectForm = true;
+
 		this.inputs.forEach((inputWrap) => {
-			inputWrap.validate();
+			let inputValidationCorrect = inputWrap.validate();
+
+			if (!inputValidationCorrect) {
+				isCorrectForm = false;
+			}
 		});
+
+		if (isCorrectForm) {
+			if (this.userConfig.debug) {
+				if (typeof this.userConfig.submitHandler !== "function") {
+					consoleWarning("not function");
+				}
+			}
+			this.userConfig.submitHandler?.();
+		}
 	}
 }

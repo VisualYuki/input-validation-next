@@ -2,7 +2,14 @@ import globalInputValidationNext from "./global";
 
 globalInputValidationNext.addValidator(
 	"required",
-	(value) => {
+	// @ts-ignore
+	(value, params, element) => {
+		if (element instanceof HTMLSelectElement) {
+			let isDisabledOption = element.selectedOptions[0].hasAttribute("disabled");
+
+			return !isDisabledOption;
+		}
+
 		return !!value;
 	},
 	""

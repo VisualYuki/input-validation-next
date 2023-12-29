@@ -12,12 +12,15 @@ declare global {
 	};
 
 	type Config = {
+		submitHandler?: () => void;
+		debug?: boolean;
 		rules?: {
 			[index: string]: ConfigRule;
 		};
 		config?: {
 			//validateOnSubmit: boolean;
-			enableDefaultValidationForm: boolean;
+			enableDefaultValidationForm?: boolean;
+			disableFormSubmitEvent?: boolean;
 		};
 		messages?: {
 			[index: string]: TMessages;

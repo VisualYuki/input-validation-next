@@ -1,8 +1,8 @@
-var fs = require("fs");
-var path = require("path");
+import fs from "fs";
+import path from "path";
 
 import {describe, expect, test} from "vitest";
-import {InputValidationNext} from "../src/index";
+import {InputValidationNext, globalInputValidationNext} from "../src/index";
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
 import {messages_ru} from "../src/localization/messages_ru";
@@ -13,11 +13,9 @@ function getFileContent(relPath) {
 
 function isThereError(input: HTMLInputElement) {
 	let parentNode = input.parentElement;
-
-	let errorNode = parentNode?.querySelector(".input-validation-next__error");
 	let isThereParentErrorSelector = parentNode?.classList.contains("input-validation-next_error");
 
-	return !!errorNode || isThereParentErrorSelector;
+	return !!isThereParentErrorSelector;
 }
 
 function findInput(name: string) {
@@ -26,7 +24,6 @@ function findInput(name: string) {
 
 function initPlugin(formId: string, config = {}) {
 	document.body.innerHTML = getFileContent("../src/demo/index.html");
-
 	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
 
 	return pluginInstance;
@@ -59,7 +56,6 @@ describe("form-1", () => {
 			},
 			"Должны быть цифры и буквы."
 		);
-
 		let pluginInstance = initPlugin("form-1", {
 			rules: {
 				customRuleInput: {
@@ -67,12 +63,9 @@ describe("form-1", () => {
 				},
 			},
 		});
-
 		const input = findInput("customRuleInput");
-
 		await user.type(input, "qwe12");
 		expect(isThereError(input)).toBe(true);
-
 		await user.type(input, "3");
 		expect(isThereError(input)).toBe(false);
 	});
@@ -121,20 +114,20 @@ describe("form-1", () => {
 	test("custom error message in config", async () => {
 		let pluginInstance = initPlugin("form-1", {
 			rules: {
-				customRuleInput: {
+				defaultInput: {
 					required: true,
 					minLength: 4,
 				},
 			},
 			messages: {
-				customRuleInput: {
+				defaultInput: {
 					required: "Required custom message from message field of init",
 					minLength: "minLegnth custom rule error text",
 				},
 			},
 		});
 
-		const input = findInput("customRuleInput");
+		const input = findInput("defaultInput");
 
 		pluginInstance?.validate();
 		let isCustomRuleError = input.parentElement
