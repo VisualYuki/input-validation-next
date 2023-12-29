@@ -11,12 +11,18 @@ globalInputValidationNext.addValidator(
 );
 
 // @ts-ignore
-let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
+let test = InputValidationNext(document.getElementById("form-12") as HTMLFormElement, {
+	submitHandler: function () {
+		console.log("form is submited");
+	},
 	rules: {
-		defaultAttrInput: {
-			customRule: true,
-			//required: true,
-			minLength: 4,
+		//defaultAttrInput: {
+		//	customRule: true,
+		//	//required: true,
+		//	minLength: 4,
+		//},
+		noExistProp: {
+			range: [3, 5],
 		},
 		numberInputName: {
 			range: [3, 5],
@@ -30,8 +36,13 @@ let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElem
 		customRuleInput: {
 			required: "Required custom message from message field of init",
 		},
+		noExistProp: {
+			required: "Custom error message",
+		},
 	},
 	config: {
 		enableDefaultValidationForm: true,
 	},
 });
+
+InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {});
