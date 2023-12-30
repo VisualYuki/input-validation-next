@@ -88,9 +88,11 @@ export class InputWrap {
 				isCorrectValidation = false;
 
 				if (!isCorrectValidation) {
-					let errorNode = this.inputNode.parentElement?.querySelector(".input-validation-next__error");
+					let errorNode: null | HTMLParagraphElement = (
+						this.inputNode.parentElement as HTMLDivElement
+					).querySelector(".input-validation-next__error");
 
-					this.inputNode.parentElement?.classList.add("input-validation-next_error");
+					(this.inputNode.parentElement as HTMLDivElement).classList.add("input-validation-next_error");
 
 					let errorMessage;
 
@@ -110,11 +112,13 @@ export class InputWrap {
 					if (errorNode) {
 						errorNode.textContent = errorMessage;
 					} else {
-						let errorNode = document.createElement("p");
+						errorNode = document.createElement("p");
 						errorNode.className = "input-validation-next__error";
-						this.inputNode.parentElement?.appendChild(errorNode);
+						(this.inputNode.parentElement as HTMLDivElement).appendChild(errorNode);
 						errorNode.textContent = errorMessage;
 					}
+
+					errorNode.style.height = `${errorNode.scrollHeight}px`;
 
 					return;
 				}
@@ -124,8 +128,19 @@ export class InputWrap {
 		});
 
 		if (isCorrectValidation) {
-			this.inputNode.parentElement?.querySelector(".input-validation-next__error")?.remove();
-			this.inputNode.parentElement?.classList.remove("input-validation-next_error");
+			let errorNode: null | HTMLParagraphElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
+				".input-validation-next__error"
+			);
+
+			if (errorNode) {
+				errorNode.style.height = "0px";
+
+				errorNode.addEventListener("transitionend", () => {
+					errorNode?.remove();
+				});
+			}
+
+			(this.inputNode.parentElement as HTMLDivElement).classList.remove("input-validation-next_error");
 		}
 
 		return isCorrectValidation;
