@@ -1,15 +1,14 @@
 import {InputWrap} from "./InputWrap";
 import {TMessages} from "./localization/messages_en";
-import {consoleWarning} from "./utils";
 
 export class FormWrap {
 	private formElement: HTMLFormElement;
 	private inputs: InputWrap[] = [];
-	private userConfig: Config;
+	private mergedConfig: Config;
 
-	constructor(formElement: HTMLFormElement, userConfig: Config) {
+	constructor(formElement: HTMLFormElement, mergedConfig: Config) {
 		this.formElement = formElement;
-		this.userConfig = userConfig;
+		this.mergedConfig = mergedConfig;
 		this.init();
 	}
 
@@ -19,29 +18,37 @@ export class FormWrap {
 			.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("select, input, textarea")
 			.forEach((input) => {
 				let inputName: string = input.getAttribute("name") || "";
-				let inputRules = this.userConfig.rules?.[inputName] || {};
+				let inputRules = this.mergedConfig.rules?.[inputName] || {};
 
-				let inputMessages: TMessages = this.userConfig.messages?.[inputName] || {};
+				let inputMessages: TMessages = this.mergedConfig.messages?.[inputName] || {};
+				let inputWrap = new InputWrap(input, inputRules, inputMessages);
 
-				if (inputRules) {
-					input.parentElement?.classList.add("input-validation-next");
-					input.classList.add("input-validation-next__input");
+				input.parentElement?.classList.add("input-validation-next");
+				input.classList.add("input-validation-next__input");
 
-					this.inputs.push(new InputWrap(input, inputRules, inputMessages));
-				}
+				this.inputs.push(inputWrap);
 			});
 
 		// On submit form event, validate all inputs
 		this.formElement.addEventListener("submit", (e: SubmitEvent) => {
-			if (this.userConfig.config?.disableFormSubmitEvent) {
+			if (this.mergedConfig.config?.disableFormSubmitEvent) {
 				e.preventDefault();
 			}
 
-			this.validate();
+			let isCorrectForm = this.validate();
+
+			if (!isCorrectForm) {
+				e.preventDefault();
+			} else {
+				this.mergedConfig.submitHandler?.();
+				//this.mergedConfig.submitHandler?.call({}, this.formElement, event);
+			}
 		});
 
 		// Add novalidate form attr
-		if (!this.userConfig.config?.enableDefaultValidationForm) {
+		if (this.mergedConfig.config?.enableDefaultValidationForm) {
+			this.formElement.removeAttribute("novalidate");
+		} else {
 			this.formElement.setAttribute("novalidate", "");
 		}
 	}
@@ -57,13 +64,6 @@ export class FormWrap {
 			}
 		});
 
-		if (isCorrectForm) {
-			if (this.userConfig.debug) {
-				if (typeof this.userConfig.submitHandler !== "function") {
-					consoleWarning("not function");
-				}
-			}
-			this.userConfig.submitHandler?.();
-		}
+		return isCorrectForm;
 	}
 }

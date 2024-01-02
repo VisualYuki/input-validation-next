@@ -22,6 +22,10 @@ function findInput(name: string) {
 	return document.querySelector(`input[name="${name}"]`) as HTMLInputElement;
 }
 
+function getErrorText(input: HTMLElement) {
+	return input.parentElement?.querySelector(".input-validation-next__error")?.textContent;
+}
+
 function initPlugin(formId: string, config = {}) {
 	document.body.innerHTML = getFileContent("../src/demo/index.html");
 	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
@@ -63,7 +67,9 @@ describe("form-1", () => {
 				},
 			},
 		});
+
 		const input = findInput("customRuleInput");
+
 		await user.type(input, "qwe12");
 		expect(isThereError(input)).toBe(true);
 		await user.type(input, "3");
@@ -90,22 +96,13 @@ describe("form-1", () => {
 		const input = findInput("defaultAttrInput");
 
 		pluginInstance?.validate();
-		let isRequiredError = input.parentElement
-			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("This field is required.");
-		expect(isRequiredError).toBe(true);
+		expect(getErrorText(input)).toBe("This field is required.");
+
 		await user.type(input, "q");
-		let isMinLengthError = input.parentElement
-			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("Please enter at least 4 characters.");
-		expect(isMinLengthError).toBe(true);
+		expect(getErrorText(input)).toBe("Please enter at least 4 characters.");
+
 		await user.type(input, "we12");
-
-		let isCustomRuleError = input.parentElement
-			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("qwe123");
-
-		expect(isCustomRuleError).toBe(true);
+		expect(getErrorText(input)).toBe("qwe123");
 
 		await user.type(input, "3");
 		expect(isThereError(input)).toBe(false);
@@ -120,6 +117,9 @@ describe("form-1", () => {
 				},
 			},
 			messages: {
+				defaultAttrInput: {
+					required: "Required custom message for defaultAttrInput input",
+				},
 				defaultInput: {
 					required: "Required custom message from message field of init",
 					minLength: "minLegnth custom rule error text",
@@ -128,25 +128,21 @@ describe("form-1", () => {
 		});
 
 		const input = findInput("defaultInput");
-
 		pluginInstance?.validate();
-		let isCustomRuleError = input.parentElement
-			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("Required custom message from message field of init");
-		expect(isCustomRuleError).toBe(true);
+
+		expect(getErrorText(input)).toBe("Required custom message from message field of init");
 
 		await user.type(input, "123");
 		pluginInstance?.validate();
 		expect(isThereError(input)).toBe(true);
-
-		let isMinLengthError = input.parentElement
-			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("minLegnth custom rule error text");
-		expect(isMinLengthError).toBe(true);
+		expect(getErrorText(input)).toBe("minLegnth custom rule error text");
 
 		await user.type(input, "4");
 		pluginInstance?.validate();
 		expect(isThereError(input)).toBe(false);
+
+		const input2 = findInput("defaultAttrInput");
+		expect(getErrorText(input2)).toBe("Required custom message for defaultAttrInput input");
 	});
 
 	test("test localization", async () => {
@@ -157,10 +153,10 @@ describe("form-1", () => {
 		const input = findInput("requiredInput");
 		input.dispatchEvent(new Event("focusout"));
 
-		let isRequiredError = input.parentElement
-			?.querySelector(".input-validation-next__error")
-			?.textContent?.includes("Это поле обязательно.");
+		expect(getErrorText(input)).toBe("Это поле обязательно.");
+	});
 
-		expect(isRequiredError).toBe(true);
+	test("success validation", async () => {
+		let pluginInstance = initPlugin("form-2");
 	});
 });

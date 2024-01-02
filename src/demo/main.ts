@@ -11,8 +11,8 @@ globalInputValidationNext.addValidator(
 );
 
 // @ts-ignore
-let test = InputValidationNext(document.getElementById("form-112") as HTMLFormElement, {
-	debug: false,
+let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
+	//debug: false,
 	errorClass: "errorClass",
 	submitHandler: function () {
 		console.log("form is submited");
@@ -35,6 +35,9 @@ let test = InputValidationNext(document.getElementById("form-112") as HTMLFormEl
 		},
 	},
 	messages: {
+		defaultAttrInput: {
+			required: "Required custom message for defaultAttrInput input",
+		},
 		customRuleInput: {
 			required: "Required custom message",
 		},

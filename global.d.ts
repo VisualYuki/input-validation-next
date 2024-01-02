@@ -12,8 +12,9 @@ declare global {
 	};
 
 	type Config = {
-		submitHandler?: () => void;
 		debug?: boolean;
+		submitHandler?: () => void;
+		errorClass?: string;
 		rules?: {
 			[index: string]: ConfigRule;
 		};

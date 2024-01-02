@@ -1,7 +1,7 @@
 {
 	"name": "input-validation-next",
 	"private": true,
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -10,7 +10,7 @@
 		"preview": "vite preview",
 		"docs:dev": "vuepress dev docs",
 		"docs:build": "vuepress build docs",
-		"lint": "npx eslint ./src && tsc --noEmit",
+		"lint": "npx eslint ./src && tsc --noEmit && vitest run",
 		"prepare": "husky install"
 	},
 	"devDependencies": {

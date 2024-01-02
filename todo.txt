@@ -1,6 +1,19 @@
-- проверять config от user'а в init function.
+Current
+- проверять rules и messages, когда добавяться через tag attr.
 
-- сравнить названия с jquery-validation.
+
+Other
+- проверять config от user'а в init function.
+- что добавить из jquery-validation.
+-
+
+Production
+- подробная документация.
+- компиляция в библиотеку.
+- npm пакет.
+- полный функционал.
+- спросить мнение со стороны про плагин.
+
 
 
 
