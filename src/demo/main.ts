@@ -7,11 +7,13 @@ globalInputValidationNext.addValidator(
 	function (value: string) {
 		return value === "qwe123";
 	},
-	"qwe123"
+	"Value isn't equal to 'qwe123'"
 );
 
 // @ts-ignore
-let test = InputValidationNext(document.getElementById("form-12") as HTMLFormElement, {
+let test = InputValidationNext(document.getElementById("form-112") as HTMLFormElement, {
+	debug: false,
+	errorClass: "errorClass",
 	submitHandler: function () {
 		console.log("form is submited");
 	},
@@ -29,20 +31,25 @@ let test = InputValidationNext(document.getElementById("form-12") as HTMLFormEle
 		},
 		customRuleInput: {
 			required: true,
-			minLength: 4,
+			customRule: true,
 		},
 	},
 	messages: {
 		customRuleInput: {
-			required: "Required custom message from message field of init",
+			required: "Required custom message",
 		},
 		noExistProp: {
 			required: "Custom error message",
 		},
 	},
 	config: {
-		enableDefaultValidationForm: true,
+		enableDefaultValidationForm: false,
+		disableFormSubmitEvent: true,
 	},
 });
 
-InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {});
+InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {
+	submitHandler: function () {
+		console.log("form is submited");
+	},
+});
