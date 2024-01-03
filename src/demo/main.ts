@@ -1,6 +1,7 @@
 import {InputValidationNext} from "../index.ts";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
+import "./jquery-validation-test.ts";
 
 globalInputValidationNext.addValidator(
 	"customRule",
@@ -12,7 +13,12 @@ globalInputValidationNext.addValidator(
 
 // @ts-ignore
 let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
-	submitHandler: function () {
+	submitHandler: function (form, event) {
+		// eslint-disable-next-line no-debugger
+		debugger;
+		console.log(form);
+		console.log(event);
+
 		console.log("form is submited");
 	},
 	rules: {
@@ -45,14 +51,17 @@ let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElem
 			required: "Custom error message",
 		},
 	},
-	config: {
-		enableDefaultValidationForm: false,
-		disableFormSubmitEvent: true,
-	},
+	enableDefaultValidationForm: false,
+	disableFormSubmitEvent: true,
 });
 
 InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {
-	submitHandler: function () {
+	submitHandler: function (form, event) {
+		// eslint-disable-next-line no-debugger
+		debugger;
+		console.log(form);
+		console.log(event);
+
 		console.log("form is submited");
 	},
 });

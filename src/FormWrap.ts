@@ -1,5 +1,4 @@
 import {InputWrap} from "./InputWrap";
-import {TMessages} from "./localization/messages_en";
 
 export class FormWrap {
 	private formElement: HTMLFormElement;
@@ -17,33 +16,45 @@ export class FormWrap {
 		this.formElement
 			.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("select, input, textarea")
 			.forEach((input) => {
-				let inputName: string = input.getAttribute("name") || "";
-				let inputRules = this.mergedConfig.rules?.[inputName] || {};
+				let inputWrap = new InputWrap(input, this.mergedConfig);
 
-				let inputMessages: TMessages = this.mergedConfig.messages?.[inputName] || {};
-				let inputWrap = new InputWrap(input, inputRules, inputMessages, this.mergedConfig);
-
-				this.inputs.push(inputWrap);
+				if (inputWrap.needValidation) {
+					this.inputs.push(inputWrap);
+				}
 			});
 
 		// On submit form event, validate all inputs
-		this.formElement.addEventListener("submit", (e: SubmitEvent) => {
-			if (this.mergedConfig.config?.disableFormSubmitEvent) {
-				e.preventDefault();
+		this.formElement.addEventListener("submit", (event: SubmitEvent) => {
+			if (this.mergedConfig.disableFormSubmitEvent) {
+				event.preventDefault();
 			}
 
 			let isCorrectForm = this.validate();
 
-			if (!isCorrectForm) {
-				e.preventDefault();
+			if (isCorrectForm) {
+				//this.mergedConfig.submitHandler?.();
+				this.mergedConfig.submitHandler?.call(
+					{
+						config: {
+							...this.mergedConfig,
+						},
+						// TODO: currentElements - инпуты в форме
+						// currentForm
+						// submitButton
+						//
+						formElement: "",
+						inputList: "",
+					},
+					this.formElement,
+					event
+				);
 			} else {
-				this.mergedConfig.submitHandler?.();
-				//this.mergedConfig.submitHandler?.call({}, this.formElement, event);
+				event.preventDefault();
 			}
 		});
 
 		// Add novalidate form attr
-		if (this.mergedConfig.config?.enableDefaultValidationForm) {
+		if (this.mergedConfig.enableDefaultValidationForm) {
 			this.formElement.removeAttribute("novalidate");
 		} else {
 			this.formElement.setAttribute("novalidate", "");
@@ -60,6 +71,10 @@ export class FormWrap {
 				isCorrectForm = false;
 			}
 		});
+
+		if (!isCorrectForm && this.mergedConfig.onSubmitFocusInvalid) {
+			(this.formElement.querySelector("." + this.mergedConfig.inputElementErrorClass) as HTMLElement).focus();
+		}
 
 		return isCorrectForm;
 	}

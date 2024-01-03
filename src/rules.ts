@@ -11,6 +11,10 @@ globalInputValidationNext.addValidator(
 			return !isDisabledOption;
 		}
 
+		if (element.getAttribute("type") === "checkbox") {
+			return (element as HTMLInputElement).checked;
+		}
+
 		return !!value;
 	},
 	""

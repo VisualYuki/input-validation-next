@@ -22,7 +22,7 @@ export abstract class GlobalInputValidationNext {
 	/**
 	 * Set default or custom validator messages
 	 */
-	static setValidatorMessages(validatorMessages: TMessages) {
+	static setValidatorMessages(validatorMessages: Messages) {
 		for (let prop in validatorMessages) {
 			this.messages.set(prop, validatorMessages[prop]);
 		}

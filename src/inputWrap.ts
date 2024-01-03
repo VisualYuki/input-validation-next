@@ -2,16 +2,18 @@ import globalInputValidationNext from "./global";
 import {consoleWarning} from "./utils";
 
 export class InputWrap {
-	validators: string[] = [];
-	configRule: ConfigRule;
+	inputRulesNames: string[] = [];
+	inputConfigRules: ConfigRule;
 	inputNode!: FormElements;
-	messages: TMessages = {};
+	inputConfigMessages: Messages = {};
 	mergedConfig: localConfig;
+	needValidation: boolean = true;
 
-	constructor(input: FormElements, validators: ConfigRule, messages: TMessages, mergedConfig: localConfig) {
+	constructor(input: FormElements, mergedConfig: localConfig) {
+		let inputName: string = input.getAttribute("name") || "";
 		let globalValidators = globalInputValidationNext.validators;
-
-		this.messages = messages;
+		this.inputConfigRules = mergedConfig.rules?.[inputName] || {};
+		this.inputConfigMessages = mergedConfig.messages?.[inputName] || {};
 		this.mergedConfig = mergedConfig;
 
 		input.classList.add(this.mergedConfig.inputElementClass);
@@ -22,14 +24,14 @@ export class InputWrap {
 			// типы не определены точно.
 			switch (inputAttrName) {
 				case "required":
-					validators["required"] = true;
+					this.inputConfigRules["required"] = true;
 
 					break;
 				case "min-length":
 					attrValue = input.getAttribute(inputAttrName);
 
 					if (attrValue) {
-						validators["minLength"] = +attrValue;
+						this.inputConfigRules["minLength"] = +attrValue;
 					}
 
 					break;
@@ -37,7 +39,7 @@ export class InputWrap {
 					attrValue = input.getAttribute(inputAttrName);
 
 					if (attrValue) {
-						validators["maxLength"] = +attrValue;
+						this.inputConfigRules["maxLength"] = +attrValue;
 					}
 
 					break;
@@ -45,10 +47,10 @@ export class InputWrap {
 		});
 
 		// Compare attr, object rules with existing rules.
-		if (validators instanceof Object) {
-			for (const property in validators) {
+		if (this.inputConfigRules instanceof Object) {
+			for (const property in this.inputConfigRules) {
 				if (globalValidators.get(property)) {
-					this.validators.push(property);
+					this.inputRulesNames.push(property);
 				} else {
 					consoleWarning(
 						`rule '${property}' doesn't exist. [config.rules.${input.getAttribute("name")}.${property}]`
@@ -57,7 +59,7 @@ export class InputWrap {
 
 				switch (property) {
 					case "required":
-						if (typeof validators[property] !== "boolean") {
+						if (typeof this.inputConfigRules[property] !== "boolean") {
 							consoleWarning(`required rule param '${property}' isn't boolean.`);
 						}
 				}
@@ -65,7 +67,7 @@ export class InputWrap {
 		}
 
 		// Sort rules by order; default attr, custom rules.
-		this.validators.sort((firstValidator: string, secondValidator: string) => {
+		this.inputRulesNames.sort((firstValidator: string, secondValidator: string) => {
 			let firstValidatorIndex = globalValidators.get(firstValidator)?.index as number;
 			let secondValidatorIndex = globalValidators.get(secondValidator)?.index as number;
 
@@ -76,8 +78,11 @@ export class InputWrap {
 			return 1;
 		});
 
-		this.configRule = validators;
 		this.inputNode = input;
+
+		if (this.inputRulesNames.length === 0) {
+			this.needValidation = false;
+		}
 
 		this.setInputValidation();
 	}
@@ -97,8 +102,8 @@ export class InputWrap {
 		let isCorrectValidation = true;
 		let globalValidators = globalInputValidationNext.validators;
 
-		this.validators.every((validatorName) => {
-			let validatorParam = this.configRule[validatorName];
+		this.inputRulesNames.every((validatorName) => {
+			let validatorParam = this.inputConfigRules[validatorName];
 
 			if (!globalValidators.get(validatorName)?.["validator"](inputValue, validatorParam || null, this.inputNode)) {
 				isCorrectValidation = false;
@@ -113,8 +118,8 @@ export class InputWrap {
 
 					let errorMessage;
 
-					if (this.messages[validatorName]) {
-						errorMessage = this.messages[validatorName];
+					if (this.inputConfigMessages[validatorName]) {
+						errorMessage = this.inputConfigMessages[validatorName];
 					} else {
 						errorMessage = globalInputValidationNext.messages.get(validatorName) as string;
 					}

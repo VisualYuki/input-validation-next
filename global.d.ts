@@ -12,31 +12,32 @@ declare global {
 	};
 
 	type UserConfig = {
+		// todo: event не уверен, что точный.
+		submitHandler?: (form: HTMLFormElement, event: SubmitEvent) => void;
+		rules?: {
+			[index: string]: ConfigRule;
+		};
+
+		messages?: {
+			[index: string]: Messages;
+		};
 		debug?: boolean;
-		submitHandler?: () => void;
 		inputElementClass?: string;
 		inputElementErrorClass?: string;
 		inputElementSuccessClass?: string;
 		errorElementClass?: string;
 		errorElementTag?: string;
-		rules?: {
-			[index: string]: ConfigRule;
-		};
-		config?: {
-			//validateOnSubmit: boolean;
-			enableDefaultValidationForm: boolean;
-			disableFormSubmitEvent: boolean;
-		};
-		messages?: {
-			[index: string]: TMessages;
-		};
+		onSubmitFocusInvalid?: boolean;
+		enableDefaultValidationForm?: boolean;
+		disableFormSubmitEvent?: boolean;
+		//onFocusCleanup?: boolean;
 	};
 
 	type localConfig = {
 		[Property in keyof UserConfig]-?: UserConfig[Property];
 	};
 
-	type TMessages = TMessages;
+	type Messages = Messages;
 
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;

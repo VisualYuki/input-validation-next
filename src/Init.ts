@@ -25,12 +25,12 @@ export let defaultConfig: localConfig = {
 	inputElementSuccessClass: "validation-input_success",
 	errorElementClass: "validation-error-label",
 	errorElementTag: "p",
+	onSubmitFocusInvalid: true,
+	//onFocusCleanup: false,
 	rules: {},
 	messages: {},
-	config: {
-		disableFormSubmitEvent: false,
-		enableDefaultValidationForm: false,
-	},
+	enableDefaultValidationForm: false,
+	disableFormSubmitEvent: false,
 };
 
 export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) {
@@ -47,21 +47,12 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 	if (mergedConfig.debug) {
 		for (let prop in userConfig) {
 			switch (prop) {
-				case "debug":
-					if (typeof userConfig[prop] !== "boolean") {
-						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
-					}
-					break;
 				case "submitHandler":
 					if (typeof mergedConfig.submitHandler !== "function") {
 						consoleWarning("submitHandler option is not function");
 					}
 					break;
-				case "errorElementClass":
-					if (typeof userConfig[prop] !== "string") {
-						consoleWarning("field " + `'${prop}'` + " doesn't string type");
-					}
-					break;
+
 				case "rules":
 					if (typeof userConfig[prop] !== "object") {
 						consoleWarning("field " + `'${prop}'` + " doesn't object type");
@@ -72,11 +63,25 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 						consoleWarning("field " + `'${prop}'` + " doesn't object type");
 					}
 					break;
-				case "config":
-					if (typeof userConfig[prop] !== "object") {
-						consoleWarning("field " + `'${prop}'` + " doesn't object type");
+
+				case "debug":
+				case "onSubmitFocusInvalid":
+				case "enableDefaultValidationForm":
+				case "disableFormSubmitEvent":
+					if (typeof userConfig[prop] !== "boolean") {
+						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
 					}
 					break;
+				case "inputElementClass":
+				case "inputElementSuccessClass":
+				case "errorElementTag":
+				case "errorElementClass":
+				case "inputElementErrorClass":
+					if (typeof userConfig[prop] !== "string") {
+						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
+					}
+					break;
+
 				default:
 					consoleWarning("field " + `'${prop}'` + " doesn't exist in config");
 			}

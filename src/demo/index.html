@@ -88,6 +88,44 @@
 							<p class="form-label">textarea</p>
 							<textarea required></textarea>
 						</div>
+
+						<div class="mb-3 form-check">
+							<input type="checkbox" class="form-check-input" id="exampleCheck1" required />
+							<label class="form-check-label" for="exampleCheck1">required checkbox</label>
+						</div>
+					</div>
+				</div>
+
+				<button class="btn btn-primary mx-auto d-block" type="submit">Submit form</button>
+			</form>
+
+			<form id="form-3" action="/index" method="GET">
+				<div class="container">
+					<div class="inputs-wrap row">
+						<div class="col-4">
+							<p class="form-label">default required attr</p>
+							<input type="text" class="form-control" required name="requiredInput" />
+						</div>
+
+						<div class="col-4">
+							<p class="form-label">Select</p>
+							<select name="dropdownSelect" class="form-control" required>
+								<option selected disabled>choose option</option>
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+							</select>
+						</div>
+
+						<div class="col-4">
+							<p class="form-label">textarea</p>
+							<textarea required></textarea>
+						</div>
+
+						<div class="mb-3 form-check">
+							<input type="checkbox" class="form-check-input" id="exampleCheck1" required />
+							<label class="form-check-label" for="exampleCheck1">required checkbox</label>
+						</div>
 					</div>
 				</div>
 
@@ -95,8 +133,7 @@
 			</form>
 		</div>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 		<script type="module" src="main.ts"></script>
-		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-		<script type="module" src="main-test.ts"></script>-->
 	</body>
 </html>
