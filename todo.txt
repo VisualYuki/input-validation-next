@@ -1,11 +1,10 @@
 Current
-- проверять rules и messages, когда добавяться через tag attr.
-
+- не все поля в userconfig идут как в jquery-validation
+- обработка конфига в inputWrap, а не в formWrap.
+- что добавить из jquery-validation.
 
 Other
-- проверять config от user'а в init function.
-- что добавить из jquery-validation.
--
+- проверка типы передеанного в методе валидации. required: 12,
 
 Production
 - подробная документация.

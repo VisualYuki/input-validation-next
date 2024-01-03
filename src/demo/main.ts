@@ -12,8 +12,6 @@ globalInputValidationNext.addValidator(
 
 // @ts-ignore
 let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
-	//debug: false,
-	errorClass: "errorClass",
 	submitHandler: function () {
 		console.log("form is submited");
 	},
@@ -25,12 +23,14 @@ let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElem
 		//},
 		noExistProp: {
 			range: [3, 5],
+			rqeuid: true,
 		},
 		numberInputName: {
 			range: [3, 5],
 		},
 		customRuleInput: {
-			required: true,
+			//@ts-ignore
+			required: 12,
 			customRule: true,
 		},
 	},

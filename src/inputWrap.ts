@@ -1,21 +1,25 @@
 import globalInputValidationNext from "./global";
-//import {objectIsEmpty} from "./utils";
+import {consoleWarning} from "./utils";
 
 export class InputWrap {
 	validators: string[] = [];
 	configRule: ConfigRule;
 	inputNode!: FormElements;
 	messages: TMessages = {};
+	mergedConfig: localConfig;
 
-	constructor(input: FormElements, validators: ConfigRule, messages: TMessages) {
+	constructor(input: FormElements, validators: ConfigRule, messages: TMessages, mergedConfig: localConfig) {
 		let globalValidators = globalInputValidationNext.validators;
 
 		this.messages = messages;
+		this.mergedConfig = mergedConfig;
+
+		input.classList.add(this.mergedConfig.inputElementClass);
 
 		// Get default rules via input attrs.
 		input.getAttributeNames().forEach((inputAttrName) => {
 			let attrValue;
-
+			// типы не определены точно.
 			switch (inputAttrName) {
 				case "required":
 					validators["required"] = true;
@@ -45,6 +49,17 @@ export class InputWrap {
 			for (const property in validators) {
 				if (globalValidators.get(property)) {
 					this.validators.push(property);
+				} else {
+					consoleWarning(
+						`rule '${property}' doesn't exist. [config.rules.${input.getAttribute("name")}.${property}]`
+					);
+				}
+
+				switch (property) {
+					case "required":
+						if (typeof validators[property] !== "boolean") {
+							consoleWarning(`required rule param '${property}' isn't boolean.`);
+						}
 				}
 			}
 		}
@@ -89,11 +104,12 @@ export class InputWrap {
 				isCorrectValidation = false;
 
 				if (!isCorrectValidation) {
-					let errorNode: null | HTMLParagraphElement = (
-						this.inputNode.parentElement as HTMLDivElement
-					).querySelector(".input-validation-next__error");
+					let errorNode: null | HTMLElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
+						"." + this.mergedConfig.errorElementClass
+					);
 
-					(this.inputNode.parentElement as HTMLDivElement).classList.add("input-validation-next_error");
+					this.inputNode.classList.remove(this.mergedConfig.inputElementSuccessClass);
+					this.inputNode.classList.add(this.mergedConfig.inputElementErrorClass);
 
 					let errorMessage;
 
@@ -113,8 +129,8 @@ export class InputWrap {
 					if (errorNode) {
 						errorNode.textContent = errorMessage;
 					} else {
-						errorNode = document.createElement("p");
-						errorNode.className = "input-validation-next__error";
+						errorNode = document.createElement(this.mergedConfig.errorElementTag);
+						errorNode.className = this.mergedConfig.errorElementClass;
 						(this.inputNode.parentElement as HTMLDivElement).appendChild(errorNode);
 						errorNode.textContent = errorMessage;
 					}
@@ -130,18 +146,21 @@ export class InputWrap {
 
 		if (isCorrectValidation) {
 			let errorNode: null | HTMLParagraphElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
-				".input-validation-next__error"
+				"." + this.mergedConfig.errorElementClass
 			);
 
-			if (errorNode) {
+			if (errorNode && this.mergedConfig.errorElementClass === "validation-error-label") {
 				errorNode.style.height = "0px";
 
 				errorNode.addEventListener("transitionend", () => {
 					errorNode?.remove();
 				});
+			} else {
+				errorNode?.remove();
 			}
 
-			(this.inputNode.parentElement as HTMLDivElement).classList.remove("input-validation-next_error");
+			this.inputNode.classList.remove(this.mergedConfig.inputElementErrorClass);
+			this.inputNode.classList.add(this.mergedConfig.inputElementSuccessClass);
 		}
 
 		return isCorrectValidation;

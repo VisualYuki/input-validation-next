@@ -6,16 +6,15 @@ import {InputValidationNext, globalInputValidationNext} from "../src/index";
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
 import {messages_ru} from "../src/localization/messages_ru";
+import type UserConfig from "../global";
+import {defaultConfig} from "../src/Init";
 
 function getFileContent(relPath) {
 	return fs.readFileSync(path.join(__dirname, relPath), {encoding: "utf8"}).toString();
 }
 
 function isThereError(input: HTMLInputElement) {
-	let parentNode = input.parentElement;
-	let isThereParentErrorSelector = parentNode?.classList.contains("input-validation-next_error");
-
-	return !!isThereParentErrorSelector;
+	return input.classList.contains(defaultConfig.inputElementErrorClass);
 }
 
 function findInput(name: string) {
@@ -23,10 +22,10 @@ function findInput(name: string) {
 }
 
 function getErrorText(input: HTMLElement) {
-	return input.parentElement?.querySelector(".input-validation-next__error")?.textContent;
+	return input.parentElement?.querySelector("." + defaultConfig.errorElementClass)?.textContent;
 }
 
-function initPlugin(formId: string, config = {}) {
+function initPlugin(formId: string, config: UserConfig = {}) {
 	document.body.innerHTML = getFileContent("../src/demo/index.html");
 	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
 
@@ -154,6 +153,32 @@ describe("form-1", () => {
 		input.dispatchEvent(new Event("focusout"));
 
 		expect(getErrorText(input)).toBe("Это поле обязательно.");
+	});
+
+	test("customize error", async () => {
+		let pluginInstance = initPlugin("form-1", {
+			errorElementClass: "errorElementClass",
+			errorElementTag: "label",
+			inputElementClass: "inputElementClass",
+			inputElementErrorClass: "inputElementErrorClass",
+			inputElementSuccessClass: "inputElementSuccessClass",
+		});
+
+		pluginInstance?.validate();
+		const input = findInput("requiredInput");
+		let errorNode = input.parentElement?.querySelector(".errorElementClass");
+
+		expect(errorNode).toBeTruthy();
+		expect(errorNode?.tagName).toBe("LABEL");
+		expect(input.classList.contains("inputElementClass")).toBe(true);
+		expect(input.classList.contains("inputElementErrorClass")).toBe(true);
+		expect(input.classList.contains("inputElementSuccessClass")).toBe(false);
+
+		await user.type(input, "12");
+		expect(input.classList.contains("inputElementClass")).toBe(true);
+		expect(input.classList.contains("inputElementErrorClass")).toBe(false);
+		expect(input.classList.contains("inputElementSuccessClass")).toBe(true);
+		expect(input.parentElement?.querySelector(".errorElementClass")).toBeNull();
 	});
 
 	test("success validation", async () => {

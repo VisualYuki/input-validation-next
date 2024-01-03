@@ -4,9 +4,9 @@ import {TMessages} from "./localization/messages_en";
 export class FormWrap {
 	private formElement: HTMLFormElement;
 	private inputs: InputWrap[] = [];
-	private mergedConfig: Config;
+	private mergedConfig: localConfig;
 
-	constructor(formElement: HTMLFormElement, mergedConfig: Config) {
+	constructor(formElement: HTMLFormElement, mergedConfig: localConfig) {
 		this.formElement = formElement;
 		this.mergedConfig = mergedConfig;
 		this.init();
@@ -21,10 +21,7 @@ export class FormWrap {
 				let inputRules = this.mergedConfig.rules?.[inputName] || {};
 
 				let inputMessages: TMessages = this.mergedConfig.messages?.[inputName] || {};
-				let inputWrap = new InputWrap(input, inputRules, inputMessages);
-
-				input.parentElement?.classList.add("input-validation-next");
-				input.classList.add("input-validation-next__input");
+				let inputWrap = new InputWrap(input, inputRules, inputMessages, this.mergedConfig);
 
 				this.inputs.push(inputWrap);
 			});

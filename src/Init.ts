@@ -8,26 +8,34 @@ import {consoleWarning} from "./utils";
 class Init {
 	private formWrap!: FormWrap;
 
-	constructor(formElement: HTMLFormElement, userConfig: Config) {
+	constructor(formElement: HTMLFormElement, userConfig: localConfig) {
 		this.formWrap = new FormWrap(formElement, userConfig);
 	}
 
 	validate() {
-		this.formWrap.validate();
+		return this.formWrap.validate();
 	}
 }
 
-let defaultConfig: Config = {
+export let defaultConfig: localConfig = {
+	submitHandler() {},
 	debug: true,
-	errorClass: "input-validation-next__error",
+	inputElementClass: "validation-input",
+	inputElementErrorClass: "validation-input_error",
+	inputElementSuccessClass: "validation-input_success",
+	errorElementClass: "validation-error-label",
+	errorElementTag: "p",
+	rules: {},
+	messages: {},
 	config: {
 		disableFormSubmitEvent: false,
 		enableDefaultValidationForm: false,
 	},
 };
 
-export function init(formElement: HTMLFormElement, userConfig: Config = {}) {
-	let mergedConfig = deepMerge(defaultConfig, userConfig);
+export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) {
+	let clonedDefaultConfig = JSON.parse(JSON.stringify(defaultConfig));
+	let mergedConfig: localConfig = deepMerge(clonedDefaultConfig, userConfig);
 
 	if (mergedConfig.debug && !(formElement instanceof HTMLFormElement)) {
 		consoleWarning("root parameter is not form");
@@ -49,7 +57,7 @@ export function init(formElement: HTMLFormElement, userConfig: Config = {}) {
 						consoleWarning("submitHandler option is not function");
 					}
 					break;
-				case "errorClass":
+				case "errorElementClass":
 					if (typeof userConfig[prop] !== "string") {
 						consoleWarning("field " + `'${prop}'` + " doesn't string type");
 					}
@@ -76,7 +84,15 @@ export function init(formElement: HTMLFormElement, userConfig: Config = {}) {
 
 		for (let prop in userConfig.rules) {
 			if (!formElement.querySelector(`[name='${prop}']`)) {
-				consoleWarning("input name " + `'${prop}'` + " doesn't exist in the document");
+				consoleWarning("input name " + `'${prop}'` + " doesn't exist in the document. [config.rules]");
+				delete userConfig.rules[prop];
+			}
+		}
+
+		for (let prop in userConfig.messages) {
+			if (!formElement.querySelector(`[name='${prop}']`)) {
+				consoleWarning("input name " + `'${prop}'` + " doesn't exist in the document. [config.messages]");
+				delete userConfig.messages[prop];
 			}
 		}
 	}

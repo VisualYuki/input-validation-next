@@ -11,21 +11,29 @@ declare global {
 		[index?: string]: boolean | number | Array | string;
 	};
 
-	type Config = {
+	type UserConfig = {
 		debug?: boolean;
 		submitHandler?: () => void;
-		errorClass?: string;
+		inputElementClass?: string;
+		inputElementErrorClass?: string;
+		inputElementSuccessClass?: string;
+		errorElementClass?: string;
+		errorElementTag?: string;
 		rules?: {
 			[index: string]: ConfigRule;
 		};
 		config?: {
 			//validateOnSubmit: boolean;
-			enableDefaultValidationForm?: boolean;
-			disableFormSubmitEvent?: boolean;
+			enableDefaultValidationForm: boolean;
+			disableFormSubmitEvent: boolean;
 		};
 		messages?: {
 			[index: string]: TMessages;
 		};
+	};
+
+	type localConfig = {
+		[Property in keyof UserConfig]-?: UserConfig[Property];
 	};
 
 	type TMessages = TMessages;
