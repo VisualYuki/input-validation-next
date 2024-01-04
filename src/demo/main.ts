@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
 import "./jquery-validation-test.ts";
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"customRule",
 	function (value: string) {
 		return value === "qwe123";
@@ -13,12 +13,7 @@ globalInputValidationNext.addValidator(
 
 // @ts-ignore
 let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
-	submitHandler: function (form, event) {
-		// eslint-disable-next-line no-debugger
-		debugger;
-		console.log(form);
-		console.log(event);
-
+	submitHandler: function () {
 		console.log("form is submited");
 	},
 	rules: {
@@ -56,12 +51,10 @@ let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElem
 });
 
 InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {
-	submitHandler: function (form, event) {
-		// eslint-disable-next-line no-debugger
-		debugger;
-		console.log(form);
-		console.log(event);
-
+	submitHandler: function () {
+		console.log("form is submited");
+	},
+	invalidHandler: function () {
 		console.log("form is submited");
 	},
 });

@@ -11,9 +11,40 @@ declare global {
 		[index?: string]: boolean | number | Array | string;
 	};
 
+	type handlerThis = {
+		config: {
+			submitHandler: (this: handlerThis, event: SubmitEvent) => void;
+			invalidHandler: (this: handlerThis, event: SubmitEvent) => void;
+			rules: {
+				[index: string]: ConfigRule;
+			};
+			messages: {
+				[index: string]: any;
+			};
+			debug: boolean;
+			inputElementClass: string;
+			inputElementErrorClass: string;
+			inputElementSuccessClass: string;
+			errorElementClass: string;
+			errorElementTag: string;
+			onSubmitFocusInvalid: boolean;
+			enableDefaultValidationForm: boolean;
+			disableFormSubmitEvent: boolean;
+		};
+		formElement: HTMLFormElement;
+		submitButton: HTMLInputElement | HTMLButtonElement | null;
+		inputList: FormElements[];
+		successList: FormElements[];
+		errorList: {
+			element: FormElements;
+			message: string;
+			rule: string;
+		}[];
+	};
+
 	type UserConfig = {
-		// todo: event не уверен, что точный.
-		submitHandler?: (form: HTMLFormElement, event: SubmitEvent) => void;
+		submitHandler?: (this: handlerThis, event: SubmitEvent) => void;
+		invalidHandler?: (this: handlerThis, event: SubmitEvent) => void;
 		rules?: {
 			[index: string]: ConfigRule;
 		};

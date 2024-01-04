@@ -6,7 +6,6 @@ import "./styles.css";
 //@ts-ignore
 $("#form-3").validate({
 	//@ts-ignore
-	submitHandler: function (form, event) {
-		//debugger;
-	},
+	submitHandler: function () {},
+	invalidHandler: function () {},
 });

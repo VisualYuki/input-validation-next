@@ -1,7 +1,7 @@
 import globalInputValidationNext from "./global";
 //import {consoleWarning} from "./utils";
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"required",
 	// @ts-ignore
 	(value, params, element) => {
@@ -20,7 +20,7 @@ globalInputValidationNext.addValidator(
 	""
 );
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"minLength",
 	(value, params) => {
 		return params <= value.length;
@@ -28,7 +28,7 @@ globalInputValidationNext.addValidator(
 	""
 );
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"maxLength",
 	(value, params) => {
 		return value.length <= params;
@@ -36,7 +36,7 @@ globalInputValidationNext.addValidator(
 	""
 );
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"maxLength",
 	(value, params) => {
 		return value.length <= params;
@@ -44,7 +44,7 @@ globalInputValidationNext.addValidator(
 	""
 );
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"digits",
 	(value) => {
 		return /^\d+$/.test(value);
@@ -52,7 +52,7 @@ globalInputValidationNext.addValidator(
 	""
 );
 
-globalInputValidationNext.addValidator(
+globalInputValidationNext.addRule(
 	"range",
 	(value, params) => {
 		if (params[0] <= +value && +value <= params[1]) {

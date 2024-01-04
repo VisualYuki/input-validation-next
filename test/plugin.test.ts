@@ -52,7 +52,7 @@ describe("form-1", () => {
 	});
 
 	test("custom rule", async () => {
-		globalInputValidationNext.addValidator(
+		globalInputValidationNext.addRule(
 			"customRule",
 			function (value: any, element: any) {
 				return value === "qwe123";
@@ -76,7 +76,7 @@ describe("form-1", () => {
 	});
 
 	test("rule order: requied, min-length, custom rule", async () => {
-		globalInputValidationNext.addValidator(
+		globalInputValidationNext.addRule(
 			"customRule",
 			function (value: any, element: any) {
 				return value === "qwe123";
@@ -145,7 +145,7 @@ describe("form-1", () => {
 	});
 
 	test("test localization", async () => {
-		globalInputValidationNext.setValidatorMessages(messages_ru);
+		globalInputValidationNext.setRuleMessages(messages_ru);
 
 		let pluginInstance = initPlugin("form-1");
 
@@ -155,7 +155,7 @@ describe("form-1", () => {
 		expect(getErrorText(input)).toBe("Это поле обязательно.");
 	});
 
-	test("customize error", async () => {
+	test("customize classes", async () => {
 		let pluginInstance = initPlugin("form-1", {
 			errorElementClass: "errorElementClass",
 			errorElementTag: "label",

@@ -7,18 +7,20 @@ import {consoleWarning} from "./utils";
  */
 class Init {
 	private formWrap!: FormWrap;
+	isValid: boolean = false;
 
 	constructor(formElement: HTMLFormElement, userConfig: localConfig) {
 		this.formWrap = new FormWrap(formElement, userConfig);
 	}
 
 	validate() {
-		return this.formWrap.validate();
+		this.isValid = this.formWrap.validate();
 	}
 }
 
 export let defaultConfig: localConfig = {
 	submitHandler() {},
+	invalidHandler() {},
 	debug: true,
 	inputElementClass: "validation-input",
 	inputElementErrorClass: "validation-input_error",

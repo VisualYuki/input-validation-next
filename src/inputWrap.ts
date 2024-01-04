@@ -9,11 +9,16 @@ export class InputWrap {
 	mergedConfig: localConfig;
 	needValidation: boolean = true;
 
+	isValid: boolean = false;
+	invalidRule: string = "";
+	invalidRuleMessage: string = "";
+	inputName: string = "";
+
 	constructor(input: FormElements, mergedConfig: localConfig) {
-		let inputName: string = input.getAttribute("name") || "";
+		this.inputName = input.getAttribute("name") || "";
 		let globalValidators = globalInputValidationNext.validators;
-		this.inputConfigRules = mergedConfig.rules?.[inputName] || {};
-		this.inputConfigMessages = mergedConfig.messages?.[inputName] || {};
+		this.inputConfigRules = mergedConfig.rules?.[this.inputName] || {};
+		this.inputConfigMessages = mergedConfig.messages?.[this.inputName] || {};
 		this.mergedConfig = mergedConfig;
 
 		input.classList.add(this.mergedConfig.inputElementClass);
@@ -142,6 +147,9 @@ export class InputWrap {
 
 					errorNode.style.height = `${errorNode.scrollHeight}px`;
 
+					this.invalidRule = validatorName;
+					this.invalidRuleMessage = errorMessage;
+
 					return;
 				}
 			}
@@ -150,6 +158,10 @@ export class InputWrap {
 		});
 
 		if (isCorrectValidation) {
+			this.isValid = true;
+			this.invalidRule = "";
+			this.invalidRuleMessage = "";
+
 			let errorNode: null | HTMLParagraphElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
 				"." + this.mergedConfig.errorElementClass
 			);
