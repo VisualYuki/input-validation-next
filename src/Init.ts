@@ -7,14 +7,35 @@ import {consoleWarning} from "./utils";
  */
 class Init {
 	private formWrap!: FormWrap;
-	isValid: boolean = false;
 
 	constructor(formElement: HTMLFormElement, userConfig: localConfig) {
 		this.formWrap = new FormWrap(formElement, userConfig);
 	}
 
+	isValidForm() {
+		return this.formWrap.validate(false);
+	}
+
 	validate() {
-		this.isValid = this.formWrap.validate();
+		this.formWrap.validate();
+	}
+
+	removeRules(
+		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		/* eslint-disable @typescript-eslint/ban-types */
+		rules?: Array<keyof TMessagesOptional | (string & {})>
+	) {
+		this.formWrap.removeRules(input, rules);
+	}
+
+	addRules(
+		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		rules: {
+			rules?: ConfigRule;
+			messages?: TMessagesOptionalAny;
+		}
+	) {
+		this.formWrap.addRules(input, rules);
 	}
 }
 
@@ -28,7 +49,6 @@ export let defaultConfig: localConfig = {
 	errorElementClass: "validation-error-label",
 	errorElementTag: "p",
 	onSubmitFocusInvalid: true,
-	//onFocusCleanup: false,
 	rules: {},
 	messages: {},
 	enableDefaultValidationForm: false,
@@ -50,8 +70,9 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 		for (let prop in userConfig) {
 			switch (prop) {
 				case "submitHandler":
+				case "invalidHandler":
 					if (typeof mergedConfig.submitHandler !== "function") {
-						consoleWarning("submitHandler option is not function");
+						consoleWarning(`'${prop}' option is not function`);
 					}
 					break;
 

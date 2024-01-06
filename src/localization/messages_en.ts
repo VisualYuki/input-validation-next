@@ -5,22 +5,10 @@ export let messages_en = {
 	range: "Please enter a value between {0} and {1}.",
 };
 
-export type TMessages = typeof messages_en;
-
-export type TMessagesOptional = {
-	[Property in keyof TMessages]?: TMessages[Property];
+export type _TMessagesOptional = {
+	[Property in keyof _TMessages]?: _TMessages[Property];
 };
+export type _TMessages = typeof messages_en;
 
-//remote: "Please fix this field.",5
-//email: "Please enter a valid email address.",
-//url: "Please enter a valid URL.",
-//date: "Please enter a valid date.",
-//dateISO: "Please enter a valid date (ISO).",
-//number: "Please enter a valid number.",
-//digits: "Please enter only digits.",
-//equalTo: "Please enter the same value again.",
-//rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
-//range: $.validator.format( "Please enter a value between {0} and {1}." ),
-//max: $.validator.format( "Please enter a value less than or equal to {0}." ),
-//min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
-//step: $.validator.format( "Please enter a multiple of {0}." )
+export type _TMessagesAny = _TMessages & {[index: string]: any};
+export type _TMessagesOptionalAny = _TMessagesOptional & {[index: string]: string};

@@ -76,21 +76,59 @@ export class FormWrap {
 		}
 	}
 
-	validate() {
+	validate(showErrors: boolean = true) {
 		let isCorrectForm = true;
 
 		this.inputs.forEach((inputWrap) => {
-			let inputValidationCorrect = inputWrap.validate();
+			let inputValidationCorrect = inputWrap.validate(showErrors);
 
 			if (!inputValidationCorrect) {
 				isCorrectForm = false;
 			}
 		});
 
-		if (!isCorrectForm && this.mergedConfig.onSubmitFocusInvalid) {
+		if (!isCorrectForm && this.mergedConfig.onSubmitFocusInvalid && showErrors) {
 			(this.formElement.querySelector("." + this.mergedConfig.inputElementErrorClass) as HTMLElement).focus();
 		}
 
 		return isCorrectForm;
+	}
+
+	removeRules(
+		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		rules?: Array<keyof TMessagesOptionalAny | (string & {})>
+	) {
+		for (let i = 0; i < this.inputs.length; i++) {
+			if (this.inputs[i].inputNode === input) {
+				this.inputs[i].removeRules(rules);
+				break;
+			}
+		}
+	}
+
+	addRules(
+		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		config: {
+			rules?: ConfigRule;
+			messages?: TMessagesOptional;
+		}
+	) {
+		let isThere = false;
+
+		for (let i = 0; i < this.inputs.length; i++) {
+			if (this.inputs[i].inputNode === input) {
+				this.inputs[i].addRules(config);
+				isThere = true;
+				break;
+			}
+		}
+
+		if (!isThere) {
+			let inputWrap = new InputWrap(input, this.mergedConfig);
+
+			this.inputs.push(inputWrap);
+			inputWrap.addRules(config);
+		}
 	}
 }

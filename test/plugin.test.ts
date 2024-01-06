@@ -1,12 +1,11 @@
 import fs from "fs";
 import path from "path";
 
-import {describe, expect, test} from "vitest";
+import {describe, expect, test, vi} from "vitest";
 import {InputValidationNext, globalInputValidationNext} from "../src/index";
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
 import {messages_ru} from "../src/localization/messages_ru";
-import type UserConfig from "../global";
 import {defaultConfig} from "../src/Init";
 
 function getFileContent(relPath) {
@@ -18,14 +17,14 @@ function isThereError(input: HTMLInputElement) {
 }
 
 function findInput(name: string) {
-	return document.querySelector(`input[name="${name}"]`) as HTMLInputElement;
+	return document.querySelector(`[name="${name}"]`) as HTMLInputElement;
 }
 
 function getErrorText(input: HTMLElement) {
 	return input.parentElement?.querySelector("." + defaultConfig.errorElementClass)?.textContent;
 }
 
-function initPlugin(formId: string, config: UserConfig = {}) {
+function initPlugin(formId: string, config: any = {}) {
 	document.body.innerHTML = getFileContent("../src/demo/index.html");
 	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
 
@@ -180,8 +179,54 @@ describe("form-1", () => {
 		expect(input.classList.contains("inputElementSuccessClass")).toBe(true);
 		expect(input.parentElement?.querySelector(".errorElementClass")).toBeNull();
 	});
+});
 
-	test("success validation", async () => {
-		let pluginInstance = initPlugin("form-2");
+describe("form-2", () => {
+	test("dfgdfg", async () => {
+		function _invalidHandler() {}
+		function _submitHandler() {}
+		const invalidHandler = vi.fn(_invalidHandler);
+		const submitHandler = vi.fn(_submitHandler);
+
+		let pluginInstance = initPlugin("form-2", {
+			invalidHandler: invalidHandler,
+			submitHandler: submitHandler,
+		});
+
+		const input = findInput("requiredInput2");
+
+		pluginInstance?.addRules(input, {
+			rules: {
+				minLength: 4,
+			},
+			messages: {
+				minLength: "custom error",
+			},
+		});
+
+		expect(pluginInstance?.isValidForm()).toBe(false);
+		expect(getErrorText(input)).toBeFalsy();
+
+		document.querySelector("form#form-2")?.querySelector("button").click();
+
+		await user.type(input, "1");
+		expect(getErrorText(input)).toBe("custom error");
+		await user.type(input, "234");
+		expect(isThereError(input)).toBe(false);
+
+		const input2 = findInput("dropdownSelect");
+		pluginInstance?.removeRules(input2, ["required"]);
+
+		const input3 = findInput("checkboxInput");
+		pluginInstance?.removeRules(input3);
+
+		const input4 = findInput("textarea");
+		await user.type(input4, "1");
+
+		document.querySelector("form#form-2")?.querySelector("button").click();
+		expect(pluginInstance?.isValidForm()).toBe(true);
+
+		expect(invalidHandler).toHaveReturned();
+		expect(submitHandler).toHaveReturned();
 	});
 });

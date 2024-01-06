@@ -1,5 +1,5 @@
 import {globalInputValidationNext} from "./src/global";
-
+import {TMessages, TMessagesOptional} from "./src/localization/messages_en";
 declare global {
 	let globalInputValidationNext: globalInputValidationNext;
 
@@ -68,7 +68,10 @@ declare global {
 		[Property in keyof UserConfig]-?: UserConfig[Property];
 	};
 
-	type Messages = Messages;
+	type TMessagesOptional = _TMessagesOptional;
+	type TMessagesOptionalAny = _TMessagesOptionalAny;
+	type TMessagesAny = _TMessagesAny;
+	type TMessages = _TMessages;
 
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;

@@ -1,11 +1,10 @@
 Current
-- не все поля в userconfig идут как в jquery-validation
-- обработка конфига в inputWrap, а не в formWrap.
+- глобальный рефакторинг (тесты, баги) &&
 - что добавить из jquery-validation.
 
 Other
 - проверка типы передеанного в методе валидации. required: 12,
-- покрытие кода тестами.
+- проверка addRules, removeRules.
 
 Production
 - подробная документация.

@@ -12,7 +12,7 @@ globalInputValidationNext.addRule(
 );
 
 // @ts-ignore
-let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
+let form1 = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
 	submitHandler: function () {
 		console.log("form is submited");
 	},
@@ -50,11 +50,22 @@ let test = InputValidationNext(document.getElementById("form-1") as HTMLFormElem
 	disableFormSubmitEvent: true,
 });
 
-InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {
+let form2 = InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {
 	submitHandler: function () {
 		console.log("form is submited");
+		console.log(form2?.isValidForm());
 	},
 	invalidHandler: function () {
-		console.log("form is submited");
+		console.log("form isn't submited");
+		console.log(form2?.isValidForm());
+	},
+});
+
+form1?.removeRules(document.querySelector("#form-1 [name='defaultAttrInput']") as HTMLInputElement, ["minLength"]);
+form1?.addRules(document.querySelector("#form-1 [name='defaultInput']") as HTMLInputElement, {
+	rules: {minLength: 4},
+	messages: {
+		minLength: "custom minLenght message from addRules",
+		dsdf: "12",
 	},
 });

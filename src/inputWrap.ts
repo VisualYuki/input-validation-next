@@ -3,9 +3,9 @@ import {consoleWarning} from "./utils";
 
 export class InputWrap {
 	inputRulesNames: string[] = [];
+	inputRulesMessages: TMessagesAny;
 	inputConfigRules: ConfigRule;
 	inputNode!: FormElements;
-	inputConfigMessages: Messages = {};
 	mergedConfig: localConfig;
 	needValidation: boolean = true;
 
@@ -18,7 +18,7 @@ export class InputWrap {
 		this.inputName = input.getAttribute("name") || "";
 		let globalValidators = globalInputValidationNext.validators;
 		this.inputConfigRules = mergedConfig.rules?.[this.inputName] || {};
-		this.inputConfigMessages = mergedConfig.messages?.[this.inputName] || {};
+		this.inputRulesMessages = mergedConfig.messages?.[this.inputName] || {};
 		this.mergedConfig = mergedConfig;
 
 		input.classList.add(this.mergedConfig.inputElementClass);
@@ -92,6 +92,40 @@ export class InputWrap {
 		this.setInputValidation();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	removeRules(rules?: Array<keyof TMessagesOptional | (string & {})>) {
+		if (rules) {
+			this.inputRulesNames = this.inputRulesNames.filter((ruleName) => {
+				if (rules.includes(ruleName)) {
+					return false;
+				}
+
+				return true;
+			});
+		} else {
+			this.inputRulesNames = [];
+		}
+	}
+
+	addRules(config: {rules?: ConfigRule; messages?: TMessagesOptional}) {
+		for (let prop in config?.rules) {
+			let ruleValue = config?.rules[prop];
+
+			this.inputConfigRules[prop] = ruleValue;
+			if (!this.inputRulesNames.includes(prop)) {
+				this.inputRulesNames.push(prop);
+			}
+		}
+
+		if (config.messages) {
+			for (let prop in config.messages) {
+				let ruleMessage = config.messages[prop];
+
+				this.inputRulesMessages[prop] = ruleMessage;
+			}
+		}
+	}
+
 	setInputValidation() {
 		this.inputNode.addEventListener("focusout", () => {
 			this.validate();
@@ -102,7 +136,7 @@ export class InputWrap {
 		});
 	}
 
-	public validate() {
+	public validate(showErrors: boolean = true) {
 		let inputValue = this.inputNode.value;
 		let isCorrectValidation = true;
 		let globalValidators = globalInputValidationNext.validators;
@@ -113,7 +147,7 @@ export class InputWrap {
 			if (!globalValidators.get(validatorName)?.["validator"](inputValue, validatorParam || null, this.inputNode)) {
 				isCorrectValidation = false;
 
-				if (!isCorrectValidation) {
+				if (!isCorrectValidation && showErrors) {
 					let errorNode: null | HTMLElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
 						"." + this.mergedConfig.errorElementClass
 					);
@@ -123,8 +157,8 @@ export class InputWrap {
 
 					let errorMessage;
 
-					if (this.inputConfigMessages[validatorName]) {
-						errorMessage = this.inputConfigMessages[validatorName];
+					if (this.inputRulesMessages[validatorName]) {
+						errorMessage = this.inputRulesMessages[validatorName];
 					} else {
 						errorMessage = globalInputValidationNext.messages.get(validatorName) as string;
 					}
@@ -162,22 +196,24 @@ export class InputWrap {
 			this.invalidRule = "";
 			this.invalidRuleMessage = "";
 
-			let errorNode: null | HTMLParagraphElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
-				"." + this.mergedConfig.errorElementClass
-			);
+			if (showErrors) {
+				let errorNode: null | HTMLParagraphElement = (this.inputNode.parentElement as HTMLDivElement).querySelector(
+					"." + this.mergedConfig.errorElementClass
+				);
 
-			if (errorNode && this.mergedConfig.errorElementClass === "validation-error-label") {
-				errorNode.style.height = "0px";
+				if (errorNode && this.mergedConfig.errorElementClass === "validation-error-label") {
+					errorNode.style.height = "0px";
 
-				errorNode.addEventListener("transitionend", () => {
+					errorNode.addEventListener("transitionend", () => {
+						errorNode?.remove();
+					});
+				} else {
 					errorNode?.remove();
-				});
-			} else {
-				errorNode?.remove();
-			}
+				}
 
-			this.inputNode.classList.remove(this.mergedConfig.inputElementErrorClass);
-			this.inputNode.classList.add(this.mergedConfig.inputElementSuccessClass);
+				this.inputNode.classList.remove(this.mergedConfig.inputElementErrorClass);
+				this.inputNode.classList.add(this.mergedConfig.inputElementSuccessClass);
+			}
 		}
 
 		return isCorrectValidation;
