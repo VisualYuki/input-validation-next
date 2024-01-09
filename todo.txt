@@ -1,10 +1,9 @@
 Current
-- глобальный рефакторинг (тесты, баги) &&
+- почему типы any в .test.ts
 - что добавить из jquery-validation.
 
 Other
-- проверка типы передеанного в методе валидации. required: 12,
-- проверка addRules, removeRules.
+- валидация не <form> с button[type='submit']
 
 Production
 - подробная документация.

@@ -1,12 +1,14 @@
 import globalInputValidationNext from "./global";
 import {consoleWarning} from "./utils";
 
+let globalValidators = globalInputValidationNext.validators;
+
 export class InputWrap {
 	inputRulesNames: string[] = [];
-	inputRulesMessages: TMessagesAny;
+	inputRulesMessages: MessagesAny;
 	inputConfigRules: ConfigRule;
-	inputNode!: FormElements;
-	mergedConfig: localConfig;
+	inputNode!: FormInput;
+	mergedConfig: LocalConfig;
 	needValidation: boolean = true;
 
 	isValid: boolean = false;
@@ -14,9 +16,10 @@ export class InputWrap {
 	invalidRuleMessage: string = "";
 	inputName: string = "";
 
-	constructor(input: FormElements, mergedConfig: localConfig) {
-		this.inputName = input.getAttribute("name") || "";
-		let globalValidators = globalInputValidationNext.validators;
+	constructor(input: FormInput, mergedConfig: LocalConfig) {
+		this.inputNode = input;
+		this.inputName = this.inputNode.getAttribute("name") || "";
+
 		this.inputConfigRules = mergedConfig.rules?.[this.inputName] || {};
 		this.inputRulesMessages = mergedConfig.messages?.[this.inputName] || {};
 		this.mergedConfig = mergedConfig;
@@ -51,25 +54,8 @@ export class InputWrap {
 			}
 		});
 
-		// Compare attr, object rules with existing rules.
-		if (this.inputConfigRules instanceof Object) {
-			for (const property in this.inputConfigRules) {
-				if (globalValidators.get(property)) {
-					this.inputRulesNames.push(property);
-				} else {
-					consoleWarning(
-						`rule '${property}' doesn't exist. [config.rules.${input.getAttribute("name")}.${property}]`
-					);
-				}
-
-				switch (property) {
-					case "required":
-						if (typeof this.inputConfigRules[property] !== "boolean") {
-							consoleWarning(`required rule param '${property}' isn't boolean.`);
-						}
-				}
-			}
-		}
+		//
+		this.initRules(this.inputConfigRules);
 
 		// Sort rules by order; default attr, custom rules.
 		this.inputRulesNames.sort((firstValidator: string, secondValidator: string) => {
@@ -83,8 +69,6 @@ export class InputWrap {
 			return 1;
 		});
 
-		this.inputNode = input;
-
 		if (this.inputRulesNames.length === 0) {
 			this.needValidation = false;
 		}
@@ -92,8 +76,33 @@ export class InputWrap {
 		this.setInputValidation();
 	}
 
+	private initRules = (inputConfigRules?: ConfigRule) => {
+		for (const property in inputConfigRules) {
+			if (globalValidators.get(property)) {
+				this.inputRulesNames.push(property);
+				this.inputConfigRules[property] = inputConfigRules[property];
+			} else {
+				consoleWarning(`rule param '${property}' doesn't exist with value '${inputConfigRules[property]}'`);
+			}
+
+			switch (property) {
+				case "required":
+					if (typeof inputConfigRules[property] !== "boolean") {
+						consoleWarning(`rule param '${property}' isn't boolean with value '${inputConfigRules[property]}'`);
+					}
+					break;
+				case "minLegnth":
+				case "maxLegnth":
+					if (typeof inputConfigRules[property] !== "number") {
+						consoleWarning(`rule param '${property}' isn't number with value '${inputConfigRules[property]}'`);
+					}
+					break;
+			}
+		}
+	};
+
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	removeRules(rules?: Array<keyof TMessagesOptional | (string & {})>) {
+	removeRules(rules?: Array<keyof MessagesOptional | (string & {})>) {
 		if (rules) {
 			this.inputRulesNames = this.inputRulesNames.filter((ruleName) => {
 				if (rules.includes(ruleName)) {
@@ -107,15 +116,8 @@ export class InputWrap {
 		}
 	}
 
-	addRules(config: {rules?: ConfigRule; messages?: TMessagesOptional}) {
-		for (let prop in config?.rules) {
-			let ruleValue = config?.rules[prop];
-
-			this.inputConfigRules[prop] = ruleValue;
-			if (!this.inputRulesNames.includes(prop)) {
-				this.inputRulesNames.push(prop);
-			}
-		}
+	addRules(config: {rules?: ConfigRule; messages?: MessagesOptional}) {
+		this.initRules(config.rules);
 
 		if (config.messages) {
 			for (let prop in config.messages) {
@@ -139,7 +141,6 @@ export class InputWrap {
 	public validate(showErrors: boolean = true) {
 		let inputValue = this.inputNode.value;
 		let isCorrectValidation = true;
-		let globalValidators = globalInputValidationNext.validators;
 
 		this.inputRulesNames.every((validatorName) => {
 			let validatorParam = this.inputConfigRules[validatorName];

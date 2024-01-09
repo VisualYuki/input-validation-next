@@ -3,10 +3,10 @@ import {InputWrap} from "./InputWrap";
 export class FormWrap {
 	private formElement: HTMLFormElement;
 	private inputs: InputWrap[] = [];
-	private mergedConfig: localConfig;
+	private mergedConfig: LocalConfig;
 	private submitButton: HTMLInputElement | HTMLButtonElement | null;
 
-	constructor(formElement: HTMLFormElement, mergedConfig: localConfig) {
+	constructor(formElement: HTMLFormElement, mergedConfig: LocalConfig) {
 		this.formElement = formElement;
 		this.mergedConfig = mergedConfig;
 		this.submitButton = this.formElement.querySelector("input[type='submit'], button[type='submit']");
@@ -15,15 +15,13 @@ export class FormWrap {
 
 	private init() {
 		// Create inputWrap from form
-		this.formElement
-			.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("select, input, textarea")
-			.forEach((input) => {
-				let inputWrap = new InputWrap(input, this.mergedConfig);
+		this.formElement.querySelectorAll<FormInput>("select, input, textarea").forEach((input) => {
+			let inputWrap = new InputWrap(input, this.mergedConfig);
 
-				if (inputWrap.needValidation) {
-					this.inputs.push(inputWrap);
-				}
-			});
+			if (inputWrap.needValidation) {
+				this.inputs.push(inputWrap);
+			}
+		});
 
 		// On submit form event, validate all inputs
 		this.formElement.addEventListener("submit", (event: SubmitEvent) => {
@@ -63,8 +61,8 @@ export class FormWrap {
 			if (isCorrectForm) {
 				this.mergedConfig.submitHandler?.call(createCallbackConfig(), event);
 			} else {
-				event.preventDefault();
 				this.mergedConfig.invalidHandler?.call(createCallbackConfig(), event);
+				event.preventDefault();
 			}
 		});
 
@@ -95,9 +93,9 @@ export class FormWrap {
 	}
 
 	removeRules(
-		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		input: FormInput,
 		// eslint-disable-next-line @typescript-eslint/ban-types
-		rules?: Array<keyof TMessagesOptionalAny | (string & {})>
+		rules?: Array<keyof MessagesOptionalAny | (string & {})>
 	) {
 		for (let i = 0; i < this.inputs.length; i++) {
 			if (this.inputs[i].inputNode === input) {
@@ -108,10 +106,10 @@ export class FormWrap {
 	}
 
 	addRules(
-		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		input: FormInput,
 		config: {
 			rules?: ConfigRule;
-			messages?: TMessagesOptional;
+			messages?: MessagesOptional;
 		}
 	) {
 		let isThere = false;

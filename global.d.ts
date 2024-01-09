@@ -1,9 +1,7 @@
 import {globalInputValidationNext} from "./src/global";
-import {TMessages, TMessagesOptional} from "./src/localization/messages_en";
+import {Messages, MessagesOptional} from "./src/localization/messages_en";
 declare global {
 	let globalInputValidationNext: globalInputValidationNext;
-
-	type FormElements = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 	type ConfigRule = {
 		required?: boolean;
@@ -33,10 +31,10 @@ declare global {
 		};
 		formElement: HTMLFormElement;
 		submitButton: HTMLInputElement | HTMLButtonElement | null;
-		inputList: FormElements[];
-		successList: FormElements[];
+		inputList: FormInput[];
+		successList: FormInput[];
 		errorList: {
-			element: FormElements;
+			element: FormInput;
 			message: string;
 			rule: string;
 		}[];
@@ -64,14 +62,16 @@ declare global {
 		//onFocusCleanup?: boolean;
 	};
 
-	type localConfig = {
+	type LocalConfig = {
 		[Property in keyof UserConfig]-?: UserConfig[Property];
 	};
 
-	type TMessagesOptional = _TMessagesOptional;
-	type TMessagesOptionalAny = _TMessagesOptionalAny;
-	type TMessagesAny = _TMessagesAny;
-	type TMessages = _TMessages;
+	type MessagesOptional = _MessagesOptional;
+	type MessagesOptionalAny = _MessagesOptionalAny;
+	type MessagesAny = _MessagesAny;
+	type Messages = _Messages;
+
+	type FormInput = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;

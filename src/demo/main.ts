@@ -1,4 +1,4 @@
-import {InputValidationNext} from "../index.ts";
+import {InputValidationNext} from "../index";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
 import "./jquery-validation-test.ts";
@@ -35,6 +35,7 @@ let form1 = InputValidationNext(document.getElementById("form-1") as HTMLFormEle
 			customRule: true,
 		},
 	},
+	dsflsdf: 12,
 	messages: {
 		defaultAttrInput: {
 			required: "Required custom message for defaultAttrInput input",
@@ -63,7 +64,7 @@ let form2 = InputValidationNext(document.getElementById("form-2") as HTMLFormEle
 
 form1?.removeRules(document.querySelector("#form-1 [name='defaultAttrInput']") as HTMLInputElement, ["minLength"]);
 form1?.addRules(document.querySelector("#form-1 [name='defaultInput']") as HTMLInputElement, {
-	rules: {minLength: 4},
+	rules: {minLength: 4, required12: 14},
 	messages: {
 		minLength: "custom minLenght message from addRules",
 		dsdf: "12",

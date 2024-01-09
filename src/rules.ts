@@ -36,13 +36,13 @@ globalInputValidationNext.addRule(
 	""
 );
 
-globalInputValidationNext.addRule(
-	"maxLength",
-	(value, params) => {
-		return value.length <= params;
-	},
-	""
-);
+//globalInputValidationNext.addRule(
+//	"maxLength",
+//	(value, params) => {
+//		return value.length <= params;
+//	},
+//	""
+//);
 
 globalInputValidationNext.addRule(
 	"digits",

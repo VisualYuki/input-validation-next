@@ -1,14 +1,33 @@
 import {FormWrap} from "./FormWrap";
-import deepMerge from "lodash.merge";
+//import deepMerge from "lodash.merge";
 import {consoleWarning} from "./utils";
+
+export function isObject(item: any) {
+	return item && typeof item === "object" && !Array.isArray(item);
+}
+
+export default function deepMerge(target: any, source: any) {
+	let output = Object.assign({}, target);
+	if (isObject(target) && isObject(source)) {
+		Object.keys(source).forEach((key) => {
+			if (isObject(source[key])) {
+				if (!(key in target)) Object.assign(output, {[key]: source[key]});
+				else output[key] = deepMerge(target[key], source[key]);
+			} else {
+				Object.assign(output, {[key]: source[key]});
+			}
+		});
+	}
+	return output;
+}
 
 /**
  * Public class for user.
  */
 class Init {
-	private formWrap!: FormWrap;
+	private formWrap: FormWrap;
 
-	constructor(formElement: HTMLFormElement, userConfig: localConfig) {
+	constructor(formElement: HTMLFormElement, userConfig: LocalConfig) {
 		this.formWrap = new FormWrap(formElement, userConfig);
 	}
 
@@ -21,25 +40,25 @@ class Init {
 	}
 
 	removeRules(
-		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		input: FormInput,
 		/* eslint-disable @typescript-eslint/ban-types */
-		rules?: Array<keyof TMessagesOptional | (string & {})>
+		rules?: Array<keyof MessagesOptional | (string & {})>
 	) {
 		this.formWrap.removeRules(input, rules);
 	}
 
 	addRules(
-		input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+		input: FormInput,
 		rules: {
 			rules?: ConfigRule;
-			messages?: TMessagesOptionalAny;
+			messages?: MessagesOptionalAny;
 		}
 	) {
 		this.formWrap.addRules(input, rules);
 	}
 }
 
-export let defaultConfig: localConfig = {
+export let defaultConfig: LocalConfig = {
 	submitHandler() {},
 	invalidHandler() {},
 	debug: true,
@@ -57,7 +76,7 @@ export let defaultConfig: localConfig = {
 
 export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) {
 	let clonedDefaultConfig = JSON.parse(JSON.stringify(defaultConfig));
-	let mergedConfig: localConfig = deepMerge(clonedDefaultConfig, userConfig);
+	let mergedConfig: LocalConfig = deepMerge(clonedDefaultConfig, userConfig);
 
 	if (mergedConfig.debug && !(formElement instanceof HTMLFormElement)) {
 		consoleWarning("root parameter is not form");
@@ -67,22 +86,22 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 	}
 
 	if (mergedConfig.debug) {
-		for (let prop in userConfig) {
+		for (let prop in mergedConfig) {
 			switch (prop) {
 				case "submitHandler":
 				case "invalidHandler":
 					if (typeof mergedConfig.submitHandler !== "function") {
-						consoleWarning(`'${prop}' option is not function`);
+						consoleWarning(`field '${prop}' is not function`);
 					}
 					break;
 
 				case "rules":
-					if (typeof userConfig[prop] !== "object") {
+					if (typeof mergedConfig[prop] !== "object") {
 						consoleWarning("field " + `'${prop}'` + " doesn't object type");
 					}
 					break;
 				case "messages":
-					if (typeof userConfig[prop] !== "object") {
+					if (typeof mergedConfig[prop] !== "object") {
 						consoleWarning("field " + `'${prop}'` + " doesn't object type");
 					}
 					break;
@@ -91,7 +110,7 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 				case "onSubmitFocusInvalid":
 				case "enableDefaultValidationForm":
 				case "disableFormSubmitEvent":
-					if (typeof userConfig[prop] !== "boolean") {
+					if (typeof mergedConfig[prop] !== "boolean") {
 						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
 					}
 					break;
@@ -100,27 +119,28 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 				case "errorElementTag":
 				case "errorElementClass":
 				case "inputElementErrorClass":
-					if (typeof userConfig[prop] !== "string") {
+					if (typeof mergedConfig[prop] !== "string") {
 						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
 					}
 					break;
 
 				default:
 					consoleWarning("field " + `'${prop}'` + " doesn't exist in config");
+					delete mergedConfig[prop as keyof typeof mergedConfig];
 			}
 		}
 
-		for (let prop in userConfig.rules) {
+		for (let prop in mergedConfig.rules) {
 			if (!formElement.querySelector(`[name='${prop}']`)) {
-				consoleWarning("input name " + `'${prop}'` + " doesn't exist in the document. [config.rules]");
-				delete userConfig.rules[prop];
+				consoleWarning("input with name " + `'${prop}'` + " doesn't exist in the document.");
+				delete mergedConfig.rules[prop];
 			}
 		}
 
-		for (let prop in userConfig.messages) {
+		for (let prop in mergedConfig.messages) {
 			if (!formElement.querySelector(`[name='${prop}']`)) {
-				consoleWarning("input name " + `'${prop}'` + " doesn't exist in the document. [config.messages]");
-				delete userConfig.messages[prop];
+				consoleWarning("input with name " + `'${prop}'` + " doesn't exist in the document.");
+				delete mergedConfig.messages[prop];
 			}
 		}
 	}

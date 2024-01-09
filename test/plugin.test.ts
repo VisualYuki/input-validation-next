@@ -2,11 +2,11 @@ import fs from "fs";
 import path from "path";
 
 import {describe, expect, test, vi} from "vitest";
-import {InputValidationNext, globalInputValidationNext} from "../src/index";
+import {InputValidationNext} from "../src/index";
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
 import {messages_ru} from "../src/localization/messages_ru";
-import {defaultConfig} from "../src/Init";
+import {defaultConfig} from "../src/init";
 
 function getFileContent(relPath) {
 	return fs.readFileSync(path.join(__dirname, relPath), {encoding: "utf8"}).toString();
@@ -207,7 +207,7 @@ describe("form-2", () => {
 		expect(pluginInstance?.isValidForm()).toBe(false);
 		expect(getErrorText(input)).toBeFalsy();
 
-		document.querySelector("form#form-2")?.querySelector("button").click();
+		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
 
 		await user.type(input, "1");
 		expect(getErrorText(input)).toBe("custom error");
@@ -223,10 +223,31 @@ describe("form-2", () => {
 		const input4 = findInput("textarea");
 		await user.type(input4, "1");
 
-		document.querySelector("form#form-2")?.querySelector("button").click();
+		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
 		expect(pluginInstance?.isValidForm()).toBe(true);
 
 		expect(invalidHandler).toHaveReturned();
 		expect(submitHandler).toHaveReturned();
 	});
 });
+
+//describe("should mock console.log", () => {
+//	const consoleMock = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+
+//	afterAll(() => {
+//		consoleMock.mockReset();
+//	});
+
+//	test("should log `sample output`", () => {
+//		let pluginInstance = initPlugin("form-1", {});
+
+//		//pluginInstance?.validate();
+
+//		//console.log("hello1");
+
+//		//console.log("sample output");
+//		//expect(consoleMock).toHaveBeenCalledOnce();
+//		expect(consoleMock).toHaveBeenLastCalledWith("hello");
+//		//expect(consoleMock).toHaveBeenLastCalledWith("input-validation-next: field 'dsflsdf' doesn't exist in config");
+//	});
+//});
