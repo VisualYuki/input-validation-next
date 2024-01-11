@@ -1,5 +1,5 @@
 import globalInputValidationNext from "./global";
-//import {consoleWarning} from "./utils";
+import isUrl from "is-url";
 
 globalInputValidationNext.addRule(
 	"required",
@@ -52,18 +52,53 @@ globalInputValidationNext.addRule(
 	""
 );
 
-//globalInputValidationNext.addRule(
-//	"maxLength",
-//	(value, params) => {
-//		return value.length <= params;
-//	},
-//	""
-//);
+globalInputValidationNext.addRule(
+	"email",
+	(value) => {
+		// eslint-disable-next-line no-useless-escape
+		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+			value
+		);
+	},
+	""
+);
+
+globalInputValidationNext.addRule(
+	"url",
+	(value) => {
+		return isUrl(value);
+	},
+	""
+);
 
 globalInputValidationNext.addRule(
 	"digits",
 	(value) => {
 		return /^\d+$/.test(value);
+	},
+	""
+);
+
+globalInputValidationNext.addRule(
+	"min",
+	(value, params) => {
+		return params <= value;
+	},
+	""
+);
+
+globalInputValidationNext.addRule(
+	"max",
+	(value, params) => {
+		return value <= params;
+	},
+	""
+);
+
+globalInputValidationNext.addRule(
+	"date",
+	(value) => {
+		return !/Invalid|NaN/.test(new Date(value).toString());
 	},
 	""
 );
@@ -79,3 +114,11 @@ globalInputValidationNext.addRule(
 	},
 	""
 );
+
+//globalInputValidationNext.addRule(
+//	"number",
+//	(value) => {
+//		return /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
+//	},
+//	""
+//);

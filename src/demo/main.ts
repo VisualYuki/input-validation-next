@@ -73,3 +73,20 @@ form1?.addRules(document.querySelector("#form-1 [name='defaultInput']") as HTMLI
 		dsdf: "12",
 	},
 });
+
+// @ts-ignore
+let form4 = InputValidationNext(document.getElementById("form-4") as HTMLFormElement, {
+	submitHandler: function () {
+		console.log("form is submited");
+		console.log(form2?.isValidForm());
+	},
+	invalidHandler: function () {
+		console.log("form isn't submited");
+		console.log(form2?.isValidForm());
+	},
+	rules: {
+		requiredInput: {
+			url: true,
+		},
+	},
+});
