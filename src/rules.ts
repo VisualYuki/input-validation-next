@@ -15,6 +15,22 @@ globalInputValidationNext.addRule(
 			return (element as HTMLInputElement).checked;
 		}
 
+		if (element.getAttribute("type") === "radio") {
+			let radioElements = document.querySelectorAll<HTMLInputElement>(
+				`input[name='${element.getAttribute("name")}']`
+			);
+
+			let isValid = false;
+
+			radioElements.forEach((element) => {
+				if (element.checked) {
+					isValid = true;
+				}
+			});
+
+			return isValid;
+		}
+
 		return !!value;
 	},
 	""

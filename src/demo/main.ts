@@ -62,6 +62,9 @@ let form2 = InputValidationNext(document.getElementById("form-2") as HTMLFormEle
 	},
 });
 
+form2?.validate();
+form2?.destroy();
+
 form1?.removeRules(document.querySelector("#form-1 [name='defaultAttrInput']") as HTMLInputElement, ["minLength"]);
 form1?.addRules(document.querySelector("#form-1 [name='defaultInput']") as HTMLInputElement, {
 	rules: {minLength: 4, required12: 14},

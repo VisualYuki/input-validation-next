@@ -223,6 +223,9 @@ describe("form-2", () => {
 		const input4 = findInput("textarea");
 		await user.type(input4, "1");
 
+		const input5 = findInput("radio-input");
+		input5.click();
+
 		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
 		expect(pluginInstance?.isValidForm()).toBe(true);
 

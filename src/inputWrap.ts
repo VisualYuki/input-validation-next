@@ -54,7 +54,6 @@ export class InputWrap {
 			}
 		});
 
-		//
 		this.initRules(this.inputConfigRules);
 
 		// Sort rules by order; default attr, custom rules.
@@ -69,11 +68,17 @@ export class InputWrap {
 			return 1;
 		});
 
-		if (this.inputRulesNames.length === 0) {
-			this.needValidation = false;
+		if (this.inputNode.getAttribute("type") === "radio") {
+			document.querySelectorAll<HTMLInputElement>(`input[name='${this.inputName}']`).forEach((element) => {
+				element.addEventListener("input", this.inputEvent);
+			});
 		}
 
-		this.setInputValidation();
+		if (this.inputRulesNames.length === 0) {
+			this.needValidation = false;
+		} else {
+			this.setInputValidationEvents();
+		}
 	}
 
 	private initRules = (inputConfigRules?: ConfigRule) => {
@@ -128,14 +133,19 @@ export class InputWrap {
 		}
 	}
 
-	setInputValidation() {
-		this.inputNode.addEventListener("focusout", () => {
-			this.validate();
-		});
+	inputEvent = () => {
+		this.validate();
+	};
 
-		this.inputNode.addEventListener("input", () => {
-			this.validate();
-		});
+	setInputValidationEvents() {
+		this.inputNode.addEventListener("focusout", this.inputEvent);
+
+		this.inputNode.addEventListener("input", this.inputEvent);
+	}
+
+	destroy() {
+		this.inputNode.removeEventListener("focusout", this.inputEvent);
+		this.inputNode.removeEventListener("input", this.inputEvent);
 	}
 
 	public validate(showErrors: boolean = true) {

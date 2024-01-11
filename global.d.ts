@@ -1,5 +1,6 @@
 import {globalInputValidationNext} from "./src/global";
 import {Messages, MessagesOptional} from "./src/localization/messages_en";
+
 declare global {
 	let globalInputValidationNext: globalInputValidationNext;
 

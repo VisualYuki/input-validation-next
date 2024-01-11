@@ -36,6 +36,10 @@ class Init {
 	) {
 		this.formWrap.addRules(input, rules);
 	}
+
+	destroy() {
+		this.formWrap.destroy();
+	}
 }
 
 export let defaultConfig: LocalConfig = {

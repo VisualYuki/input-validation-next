@@ -13,6 +13,48 @@ export class FormWrap {
 		this.init();
 	}
 
+	submitEventCallback = (event: SubmitEvent) => {
+		if (this.mergedConfig.disableFormSubmitEvent) {
+			event.preventDefault();
+		}
+
+		let createCallbackConfig: () => handlerThis = () => {
+			return {
+				config: {
+					...this.mergedConfig,
+				},
+				formElement: this.formElement,
+				submitButton: this.submitButton,
+				inputList: this.inputs.map((inputWrap) => {
+					return inputWrap.inputNode;
+				}),
+				successList: this.inputs
+					.filter((inputWrap) => inputWrap.isValid)
+					.map((inputWrap) => {
+						return inputWrap.inputNode;
+					}),
+				errorList: this.inputs
+					.filter((inputWrap) => !inputWrap.isValid)
+					.map((inputWrap) => {
+						return {
+							element: inputWrap.inputNode,
+							message: inputWrap.invalidRuleMessage,
+							rule: inputWrap.invalidRule,
+						};
+					}),
+			};
+		};
+
+		let isCorrectForm = this.validate();
+
+		if (isCorrectForm) {
+			this.mergedConfig.submitHandler?.call(createCallbackConfig(), event);
+		} else {
+			this.mergedConfig.invalidHandler?.call(createCallbackConfig(), event);
+			event.preventDefault();
+		}
+	};
+
 	private init() {
 		// Create inputWrap from form
 		this.formElement.querySelectorAll<FormInput>("select, input, textarea").forEach((input) => {
@@ -24,47 +66,7 @@ export class FormWrap {
 		});
 
 		// On submit form event, validate all inputs
-		this.formElement.addEventListener("submit", (event: SubmitEvent) => {
-			if (this.mergedConfig.disableFormSubmitEvent) {
-				event.preventDefault();
-			}
-
-			let createCallbackConfig: () => handlerThis = () => {
-				return {
-					config: {
-						...this.mergedConfig,
-					},
-					formElement: this.formElement,
-					submitButton: this.submitButton,
-					inputList: this.inputs.map((inputWrap) => {
-						return inputWrap.inputNode;
-					}),
-					successList: this.inputs
-						.filter((inputWrap) => inputWrap.isValid)
-						.map((inputWrap) => {
-							return inputWrap.inputNode;
-						}),
-					errorList: this.inputs
-						.filter((inputWrap) => !inputWrap.isValid)
-						.map((inputWrap) => {
-							return {
-								element: inputWrap.inputNode,
-								message: inputWrap.invalidRuleMessage,
-								rule: inputWrap.invalidRule,
-							};
-						}),
-				};
-			};
-
-			let isCorrectForm = this.validate();
-
-			if (isCorrectForm) {
-				this.mergedConfig.submitHandler?.call(createCallbackConfig(), event);
-			} else {
-				this.mergedConfig.invalidHandler?.call(createCallbackConfig(), event);
-				event.preventDefault();
-			}
-		});
+		this.formElement.addEventListener("submit", this.submitEventCallback);
 
 		// Add novalidate form attr
 		if (this.mergedConfig.enableDefaultValidationForm) {
@@ -128,5 +130,13 @@ export class FormWrap {
 			this.inputs.push(inputWrap);
 			inputWrap.addRules(config);
 		}
+	}
+
+	destroy() {
+		this.inputs.forEach((element) => {
+			element.destroy();
+		});
+
+		this.formElement.removeEventListener("submit", this.submitEventCallback);
 	}
 }

@@ -69,6 +69,12 @@
 			<form id="form-2" action="/index" method="GET">
 				<div class="container">
 					<div class="inputs-wrap row">
+						<div>
+							<input type="radio" name="radio-input" value="1" />
+							<input type="radio" name="radio-input" value="2" required />
+							<input type="radio" name="radio-input" value="3" />
+						</div>
+
 						<div class="col-4">
 							<p class="form-label">default required attr</p>
 							<input type="text" class="form-control" required name="requiredInput2" />
@@ -102,6 +108,12 @@
 			<form id="form-3" action="/index" method="GET">
 				<div class="container">
 					<div class="inputs-wrap row">
+						<!--<div class="col-4">
+							<input type="radio" name="radio-input" value="1" required />
+							<input type="radio" name="radio-input" value="2" />
+							<input type="radio" name="radio-input" value="3" />
+						</div>-->
+
 						<div class="col-4">
 							<p class="form-label">default required attr</p>
 							<input type="text" class="form-control" required name="requiredInput" />
