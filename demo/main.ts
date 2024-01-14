@@ -1,7 +1,7 @@
 import {InputValidationNext} from "../src/index";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
-import "./jquery-validation-test.ts";
+//import "./jquery-validation-test.ts";
 
 globalInputValidationNext.addRule(
 	"customRule",
