@@ -28,3 +28,4 @@ package-lock.json
 /temp
 coverage
 cache
+!/demo/dist
