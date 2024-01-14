@@ -215,9 +215,10 @@ export class InputWrap {
 				if (errorNode && this.mergedConfig.errorElementClass === "validation-error-label") {
 					errorNode.style.height = "0px";
 
-					errorNode.addEventListener("transitionend", () => {
-						errorNode?.remove();
-					});
+					//errorNode.addEventListener("transitionend", () => {
+					//	debugger;
+					//	errorNode?.remove();
+					//});
 				} else {
 					errorNode?.remove();
 				}

@@ -1,4 +1,4 @@
-import {InputValidationNext} from "../index";
+import {InputValidationNext} from "../src/index";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
 import "./jquery-validation-test.ts";
@@ -16,6 +16,7 @@ let form1 = InputValidationNext(document.getElementById("form-1") as HTMLFormEle
 	submitHandler: function () {
 		console.log("form is submited");
 	},
+
 	rules: {
 		//defaultAttrInput: {
 		//	customRule: true,
@@ -60,10 +61,11 @@ let form2 = InputValidationNext(document.getElementById("form-2") as HTMLFormEle
 		console.log("form isn't submited");
 		console.log(form2?.isValidForm());
 	},
+	disableFormSubmitEvent: true,
 });
 
-form2?.validate();
-form2?.destroy();
+//form2?.validate();
+//form2?.destroy();
 
 form1?.removeRules(document.querySelector("#form-1 [name='defaultAttrInput']") as HTMLInputElement, ["minLength"]);
 form1?.addRules(document.querySelector("#form-1 [name='defaultInput']") as HTMLInputElement, {

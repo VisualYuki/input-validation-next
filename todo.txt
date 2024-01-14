@@ -1,5 +1,5 @@
 Current
-- почему типы any в .test.ts
+- сделать covarage 100%
 - что добавить из jquery-validation.
 
 Other

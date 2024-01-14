@@ -80,14 +80,12 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 					break;
 
 				case "rules":
-					if (typeof mergedConfig[prop] !== "object") {
-						consoleWarning("field " + `'${prop}'` + " doesn't object type");
-					}
-					break;
 				case "messages":
 					if (typeof mergedConfig[prop] !== "object") {
 						consoleWarning("field " + `'${prop}'` + " doesn't object type");
+						mergedConfig[prop] = {};
 					}
+
 					break;
 
 				case "debug":

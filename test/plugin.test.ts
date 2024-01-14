@@ -8,7 +8,7 @@ const user = userEvent.setup();
 import {messages_ru} from "../src/localization/messages_ru";
 import {defaultConfig} from "../src/init";
 
-function getFileContent(relPath) {
+function getFileContent(relPath: string) {
 	return fs.readFileSync(path.join(__dirname, relPath), {encoding: "utf8"}).toString();
 }
 
@@ -24,8 +24,8 @@ function getErrorText(input: HTMLElement) {
 	return input.parentElement?.querySelector("." + defaultConfig.errorElementClass)?.textContent;
 }
 
-function initPlugin(formId: string, config: any = {}) {
-	document.body.innerHTML = getFileContent("../src/demo/index.html");
+function initPlugin(formId: string, config: UserConfig = {}) {
+	document.body.innerHTML = getFileContent("../demo/index.html");
 	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
 
 	return pluginInstance;
@@ -39,7 +39,7 @@ describe("form-1", () => {
 	});
 
 	test("after focusout", async () => {
-		let pluginInstance = initPlugin("form-1");
+		initPlugin("form-1");
 
 		const input = findInput("requiredInput");
 
@@ -53,12 +53,13 @@ describe("form-1", () => {
 	test("custom rule", async () => {
 		globalInputValidationNext.addRule(
 			"customRule",
-			function (value: any, element: any) {
+			function (value: any) {
 				return value === "qwe123";
 			},
 			"Должны быть цифры и буквы."
 		);
-		let pluginInstance = initPlugin("form-1", {
+
+		initPlugin("form-1", {
 			rules: {
 				customRuleInput: {
 					customRule: true,
@@ -75,9 +76,10 @@ describe("form-1", () => {
 	});
 
 	test("rule order: requied, min-length, custom rule", async () => {
+		//@ts-ignore
 		globalInputValidationNext.addRule(
 			"customRule",
-			function (value: any, element: any) {
+			function (value: any) {
 				return value === "qwe123";
 			},
 			"qwe123"
@@ -144,9 +146,10 @@ describe("form-1", () => {
 	});
 
 	test("test localization", async () => {
+		//@ts-ignore
 		globalInputValidationNext.setRuleMessages(messages_ru);
 
-		let pluginInstance = initPlugin("form-1");
+		initPlugin("form-1");
 
 		const input = findInput("requiredInput");
 		input.dispatchEvent(new Event("focusout"));
@@ -182,7 +185,7 @@ describe("form-1", () => {
 });
 
 describe("form-2", () => {
-	test("dfgdfg", async () => {
+	test("rules, config", async () => {
 		function _invalidHandler() {}
 		function _submitHandler() {}
 		const invalidHandler = vi.fn(_invalidHandler);
@@ -191,6 +194,11 @@ describe("form-2", () => {
 		let pluginInstance = initPlugin("form-2", {
 			invalidHandler: invalidHandler,
 			submitHandler: submitHandler,
+			rules: {
+				textarea: {
+					range: [5, 15],
+				},
+			},
 		});
 
 		const input = findInput("requiredInput2");
@@ -222,6 +230,9 @@ describe("form-2", () => {
 
 		const input4 = findInput("textarea");
 		await user.type(input4, "1");
+		expect(isThereError(input4)).toBe(true);
+		await user.type(input4, "5");
+		expect(isThereError(input4)).toBe(false);
 
 		const input5 = findInput("radio-input");
 		input5.click();
@@ -234,23 +245,86 @@ describe("form-2", () => {
 	});
 });
 
-//describe("should mock console.log", () => {
-//	const consoleMock = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+describe("full covarage", () => {
+	test("only for results", async () => {
+		let pluginInstance = initPlugin("form-2", {
+			enableDefaultValidationForm: true,
+			//@ts-ignore
+			submitHandler: 12,
+			//@ts-ignore
+			rules: "no object",
+			//@ts-ignore
+			messages: "no object",
+			//@ts-ignore
+			debug: 12,
+			//@ts-ignore
+			inputElementClass: 12,
+			"invalid prop config": "1212",
+		});
 
-//	afterAll(() => {
-//		consoleMock.mockReset();
-//	});
+		const input = findInput("requiredInput2");
 
-//	test("should log `sample output`", () => {
-//		let pluginInstance = initPlugin("form-1", {});
+		pluginInstance?.removeRules(input, ["dfdf"]);
 
-//		//pluginInstance?.validate();
+		pluginInstance?.destroy();
+	});
 
-//		//console.log("hello1");
+	test("only for results", async () => {
+		initPlugin("form-2", {
+			rules: {
+				"no name input": {
+					required: true,
+				},
+			},
+			messages: {
+				"no name input 2": "fdgdfg",
+			},
+		});
+	});
 
-//		//console.log("sample output");
-//		//expect(consoleMock).toHaveBeenCalledOnce();
-//		expect(consoleMock).toHaveBeenLastCalledWith("hello");
-//		//expect(consoleMock).toHaveBeenLastCalledWith("input-validation-next: field 'dsflsdf' doesn't exist in config");
-//	});
-//});
+	test("disableFormSubmitEvent: true", async () => {
+		initPlugin("form-2", {
+			disableFormSubmitEvent: true,
+		});
+
+		let _formSubmitEventCallback = () => {
+			console.log("submit");
+		};
+
+		const market = {
+			_formSubmitEventCallback,
+		};
+
+		const buySpy = vi.spyOn(market, "_formSubmitEventCallback");
+		expect(buySpy).not.toHaveBeenCalled();
+
+		document.querySelector("#form-2")?.addEventListener("submit", market._formSubmitEventCallback);
+
+		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
+
+		expect(buySpy).not.toHaveBeenCalled();
+	});
+
+	test("disableFormSubmitEvent: false", async () => {
+		initPlugin("form-2", {
+			disableFormSubmitEvent: false,
+		});
+
+		let _formSubmitEventCallback = () => {
+			console.log("submit");
+		};
+
+		const market = {
+			_formSubmitEventCallback,
+		};
+
+		const buySpy = vi.spyOn(market, "_formSubmitEventCallback");
+		expect(buySpy).not.toHaveBeenCalled();
+
+		document.querySelector("#form-2")?.addEventListener("submit", market._formSubmitEventCallback);
+
+		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
+
+		expect(buySpy).toHaveBeenCalled();
+	});
+});

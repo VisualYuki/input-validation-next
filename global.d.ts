@@ -41,7 +41,7 @@ declare global {
 		}[];
 	};
 
-	type UserConfig = {
+	export type UserConfig = {
 		submitHandler?: (this: handlerThis, event: SubmitEvent) => void;
 		invalidHandler?: (this: handlerThis, event: SubmitEvent) => void;
 		rules?: {

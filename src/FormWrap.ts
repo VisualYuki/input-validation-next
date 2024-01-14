@@ -16,6 +16,7 @@ export class FormWrap {
 	submitEventCallback = (event: SubmitEvent) => {
 		if (this.mergedConfig.disableFormSubmitEvent) {
 			event.preventDefault();
+			event.stopImmediatePropagation();
 		}
 
 		let createCallbackConfig: () => handlerThis = () => {
@@ -52,6 +53,10 @@ export class FormWrap {
 		} else {
 			this.mergedConfig.invalidHandler?.call(createCallbackConfig(), event);
 			event.preventDefault();
+		}
+
+		if (this.mergedConfig.disableFormSubmitEvent) {
+			return;
 		}
 	};
 
@@ -114,22 +119,22 @@ export class FormWrap {
 			messages?: MessagesOptional;
 		}
 	) {
-		let isThere = false;
+		//let isThere = false;
 
 		for (let i = 0; i < this.inputs.length; i++) {
 			if (this.inputs[i].inputNode === input) {
 				this.inputs[i].addRules(config);
-				isThere = true;
+				//isThere = true;
 				break;
 			}
 		}
 
-		if (!isThere) {
-			let inputWrap = new InputWrap(input, this.mergedConfig);
+		//if (!isThere) {
+		//	let inputWrap = new InputWrap(input, this.mergedConfig);
 
-			this.inputs.push(inputWrap);
-			inputWrap.addRules(config);
-		}
+		//	this.inputs.push(inputWrap);
+		//	inputWrap.addRules(config);
+		//}
 	}
 
 	destroy() {
