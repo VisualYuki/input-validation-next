@@ -10,6 +10,7 @@ export class InputWrap {
 	inputNode!: FormInput;
 	mergedConfig: LocalConfig;
 	needValidation: boolean = true;
+	localValidators: any = {};
 
 	isValid: boolean = false;
 	invalidRule: string = "";
@@ -86,6 +87,9 @@ export class InputWrap {
 			if (globalValidators.get(property)) {
 				this.inputRulesNames.push(property);
 				this.inputConfigRules[property] = inputConfigRules[property];
+			} else if (typeof inputConfigRules[property] === "function") {
+				this.inputRulesNames.push(property);
+				this.localValidators[property] = inputConfigRules[property];
 			} else {
 				consoleWarning(`rule param '${property}' doesn't exist with value '${inputConfigRules[property]}'`);
 			}
@@ -155,7 +159,25 @@ export class InputWrap {
 		this.inputRulesNames.every((validatorName) => {
 			let validatorParam = this.inputConfigRules[validatorName];
 
-			if (!globalValidators.get(validatorName)?.["validator"](inputValue, validatorParam || null, this.inputNode)) {
+			let invalidGlobalValidator = undefined;
+
+			if (globalValidators.get(validatorName)) {
+				invalidGlobalValidator = !globalValidators
+					.get(validatorName)
+					?.["validator"](inputValue, validatorParam || null, this.inputNode);
+			}
+
+			let invalidLocalValidator = undefined;
+
+			if (this.localValidators[validatorName]) {
+				invalidLocalValidator = !this.localValidators[validatorName](
+					inputValue,
+					validatorParam || null,
+					this.inputNode
+				);
+			}
+
+			if (invalidGlobalValidator || invalidLocalValidator) {
 				isCorrectValidation = false;
 
 				if (!isCorrectValidation && showErrors) {

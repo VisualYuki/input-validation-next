@@ -12,17 +12,11 @@ hero:
         link: /getting-started
 features:
    - title: Low build size
-     details: Total bundle weigths about ~10kb
-     icon:
-        src: /images/file.svg
+     details: Total bundle weigths about ~12kb
    - title: Built-in input validators
      details: phone, email, date, url, ...
-     icon:
-        src: /images/box.svg
-   - title: Full type checking
-     details: Full type checking of the values, coming from the user in browser and typescript types for intelisense.
-     icon:
-        src: /images/ts.svg
+   - title: User type checking
+     details: Full type checking of the values, coming from the user in browser (config, functions params)
 ---
 
 <style>

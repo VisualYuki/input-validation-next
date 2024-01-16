@@ -13,12 +13,18 @@ export default defineConfig({
 
 		sidebar: [
 			{
-				text: "Getting Started",
-				link: "/getting-started",
-				//items: [
-				//	{text: "Markdown Examples", link: "/markdown-examples"},
-				//	{text: "Runtime API Examples", link: "/api-examples"},
-				//],
+				text: "Guide",
+				items: [
+					{text: "Getting-started", link: "/getting-started"},
+					//{text: "Runtime API Examples", link: "/api-examples"},
+				],
+			},
+			{
+				text: "Api",
+				items: [
+					{text: "Markdown Examples", link: "/markdown-examples"},
+					{text: "Runtime API Examples", link: "/api-examples"},
+				],
 			},
 		],
 

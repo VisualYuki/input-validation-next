@@ -327,4 +327,35 @@ describe("full covarage", () => {
 
 		expect(buySpy).toHaveBeenCalled();
 	});
+
+	test("inline custom rule", async () => {
+		let form2 = initPlugin("form-2", {
+			rules: {
+				requiredInput2: {
+					custom: (value: string) => {
+						return value === "qwe123";
+					},
+				},
+			},
+			messages: {
+				requiredInput2: {
+					custom: "custom error message for inline rule",
+				},
+			},
+		});
+
+		const input = findInput("requiredInput2");
+
+		await user.type(input, "qwe12");
+
+		expect(isThereError(input)).toBe(true);
+
+		expect(getErrorText(input)).toBe("custom error message for inline rule");
+
+		await user.type(input, "3");
+
+		form2?.validate();
+
+		expect(isThereError(input)).toBe(false);
+	});
 });

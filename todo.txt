@@ -1,4 +1,5 @@
 Current
+- типы для inline custom function
 - сделать covarage 100%
 - что добавить из jquery-validation.
 
