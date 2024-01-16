@@ -1,26 +1,51 @@
-# This workflow will do a clean install of node dependencies, build the source code, and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actionsname: Node.js CIon:
-push:
-   branches: [ master ]
+# Name your workflow
+name: CI
+
+# Set on which events you want run the actions.
+# In this case the workflow will run on push for master and on pull request for master and develop branches
+on:
+   push:
+      branches: [master]
    pull_request:
-   branches: [ master ]jobs:
-   build:
-   runs-on: ubuntu-latest  strategy:
-   matrix:
-      node-version: [10.x, 12.x, 14.x]
+      branches: [master, develop]
 
-   steps:
-   - uses: actions/checkout@v2
-   - name: Use Node.js ${{ matrix.node-version }}
-   uses: actions/setup-node@v1
-   with:
-      node-version: ${{ matrix.node-version }}  - run: npm ci
-   - run: npm install
-   - run: npm run build:demo
-   - run: npm run build:docs
-   - run: npm run build
+jobs:
+   # This workflow contains a job called "integration"
+   integration:
+      strategy:
+         matrix:
+            os: [ubuntu-latest, macos-latest, windows-latest]
+            node: [12]
+      # The runners that the job will run on
+      runs-on: ${{ matrix.os }}
 
+      # Steps represent a sequence of tasks that will be executed as part of the job
+      steps:
+         - name: Setup Node.js environment
+           uses: actions/setup-node@v1.4.3
+           with:
+              node-version: ${{ matrix.node }}
 
+         - name: Checkout master branch
+           uses: actions/checkout@v2
 
+         - name: Cache node_modules
+           uses: actions/cache@v2.1.0
+           with:
+              # A list of files, directories, and wildcard patterns to cache and restore
+              path: node_modules
+              # An explicit key for restoring and saving the cache
+              key: ${{ matrix.os }}-node-v${{ matrix.node }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/package-lock.json')) }}
 
+         - name: Install dependencies
+           if: steps.cache.outputs.cache-hit != 'true'
+           run: npm install
 
+         - name: 1
+           run: npm run build:docs
+
+         - name: 2
+           run: npm run build
+
+         - name: 3
+           run: npm run build:demo
