@@ -18,10 +18,10 @@ jobs:
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
          # Runs a single command using the runners shell
-         - uses: actions/checkout@v2.1.0
-         - uses: actions/setup-node@v1
+         - uses: actions/checkout@v4.1.1
+         - uses: actions/setup-node@v4.0.1
            with:
-              node-version: "14.16.1"
+              node-version: "20"
          - name: deploy
            run: |
               npm install
