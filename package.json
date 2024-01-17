@@ -8,6 +8,7 @@
 		"type": "git",
 		"url": "https://github.com/VisualYuki/input-validation-next"
 	},
+	"homepage": "https://visualyuki.github.io/input-validation-next/",
 	"scripts": {
 		"dev": "vite --config vite.config.dev.ts",
 		"dev:docs": "vitepress dev docs",
