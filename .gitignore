@@ -24,8 +24,8 @@ dist-ssr
 *.sw?
 
 #custom
-package-lock.json
-/temp
+#package-lock.json
+temp
 coverage
 cache
-!/demo/dist
+
