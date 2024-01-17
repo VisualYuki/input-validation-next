@@ -13,7 +13,7 @@
 		"dev": "vite --config vite.config.dev.ts",
 		"dev:docs": "vitepress dev docs",
 		"build": "vite build --config vite.config.prod.ts",
-		"docs:build": "vitepress build --outDir docs/.vitepress/dist --base /input-validation-next",
+		"docs:build": "vitepress build --outDir docs/.vitepress/dist --base /input-validation-next/",
 		"lint": "npx eslint ./src && tsc --noEmit && vitest run",
 		"test": "vitest run",
 		"coverage": "vitest run --coverage",
