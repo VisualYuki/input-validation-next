@@ -4,7 +4,7 @@ hero:
    name: input-validation-next
    tagline: Form validation without jQuery.
    image:
-      src: /images/logo.png
+      src: /public/images/logo.png
       alt: input-validation-next logo
    actions:
       - theme: brand
