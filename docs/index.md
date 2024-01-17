@@ -9,7 +9,7 @@ hero:
    actions:
       - theme: brand
         text: Get Started
-        link: /getting-started
+        link: /guide
 features:
    - title: Low build size
      details: Total bundle weigths about ~12kb
