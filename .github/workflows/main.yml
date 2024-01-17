@@ -9,4 +9,3 @@ jobs:
               node-version: "18"
          - run: npm install
          - run: npm run build:docs
-         - run: cd docs; cd dist; cd docs; ls;
