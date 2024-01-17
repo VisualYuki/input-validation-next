@@ -3,16 +3,22 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"description": "Simple, lightweight form validation without jQuery",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/VisualYuki/input-validation-next"
+	},
 	"scripts": {
 		"dev": "vite --config vite.config.dev.ts",
 		"dev:docs": "vitepress dev docs",
 		"build": "vite build --config vite.config.prod.ts",
-		"build:docs": "vitepress build",
+		"build:docs": "vitepress build --outDir ./docs/dist",
 		"bulid:demo": "vite build demo --base https://visualyuki.github.io/input-validation-next/demo/dist/",
 		"lint": "npx eslint ./src && tsc --noEmit && vitest run",
 		"test": "vitest run",
 		"coverage": "vitest run --coverage",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"types": "typedoc global.d.ts --json out.json"
 	},
 	"devDependencies": {
 		"@testing-library/user-event": "^14.5.1",
@@ -25,6 +31,7 @@
 		"jquery": "^3.7.1",
 		"jquery-validation": "^1.20.0",
 		"jsdom": "^22.1.0",
+		"typedoc": "^0.25.7",
 		"typescript": "^5.0.2",
 		"vite": "^5.0.11",
 		"vitepress": "^1.0.0-rc.36",
