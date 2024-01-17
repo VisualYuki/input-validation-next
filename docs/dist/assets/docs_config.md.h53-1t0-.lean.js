@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as a,U as t}from"./chunks/framework.s-vJCezn.js";const c=JSON.parse('{"title":"Config","description":"","frontmatter":{},"headers":[],"relativePath":"docs/config.md","filePath":"docs/config.md"}'),n={name:"docs/config.md"},l=t("",33),e=[l];function h(p,r,k,o,E,d){return a(),i("div",null,e)}const u=s(n,[["render",h]]);export{c as __pageData,u as default};
