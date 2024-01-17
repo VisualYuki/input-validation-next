@@ -1,6 +1,6 @@
 {
 	"name": "input-validation-next",
-	"private": true,
+	"private": false,
 	"version": "0.0.1",
 	"type": "module",
 	"description": "Simple, lightweight form validation without jQuery",
@@ -8,7 +8,22 @@
 		"type": "git",
 		"url": "https://github.com/VisualYuki/input-validation-next"
 	},
+	"keywords": [
+		"validation",
+		"validate",
+		"form",
+		"input"
+	],
 	"homepage": "https://visualyuki.github.io/input-validation-next/",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://www.opensource.org/licenses/MIT"
+		}
+	],
+	"bugs": {
+		"url": "https://visualyuki.github.io/input-validation-next/issues"
+	},
 	"scripts": {
 		"dev": "vite --config vite.config.dev.ts",
 		"dev:docs": "vitepress dev docs",
