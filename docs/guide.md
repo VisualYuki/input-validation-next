@@ -11,7 +11,7 @@ npm install input-validation-next;
 After that, import plugin in your code. Required any bundler (webpack, vite, rollup);
 
 ```js
-import {InputValidationNext} from "input-validation-next";
+import {InputValidationNext, globalInputValidationNext} from "input-validation-next";
 ```
 
 ## Using CDN
@@ -19,8 +19,7 @@ import {InputValidationNext} from "input-validation-next";
 Also you can add plugin by cdn direcly in browser without bundler. Add these imports to your html page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/input-validatin-next"></script>
-<script src="https://cdn.jsdelivr.net/npm/input-validatin-next"></script>
+<script src="https://cdn.jsdelivr.net/npm/input-validation-next/dist/input-validation-next.js"></script>
 ```
 
 ## Getting Started

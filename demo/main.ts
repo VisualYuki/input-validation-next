@@ -1,6 +1,7 @@
 import {InputValidationNext} from "../src/index";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
+
 //import "./jquery-validation-test.ts";
 
 //globalInputValidationNext.addRule(
@@ -22,7 +23,7 @@ import "./styles.css";
 //			custom: (value: string, params: any, element: FormInput) => {
 //				return value === "qwe123";
 //			},
-//		}
+//		},
 //		noExistProp: {
 //			range: [3, 5],
 //			rqeuid: true,
@@ -102,7 +103,9 @@ InputValidationNext(document.getElementById("form-4") as HTMLFormElement, {
 		requiredInput: {
 			custom: (value: string) => {
 				return value === "qwe123";
+				//return "fdf";
 			},
+			sdflkdsf: 12,
 		},
 	},
 	messages: {

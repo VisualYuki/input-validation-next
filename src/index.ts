@@ -1,7 +1,7 @@
 import {init} from "./init";
 import globalInputValidationNext from "./globInstance";
 import "./rules.ts";
-import "./styles.scss";
+import "./appendStyles";
 
 window.globalInputValidationNext = globalInputValidationNext;
 export {init as InputValidationNext, globalInputValidationNext};

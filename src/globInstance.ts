@@ -1,6 +1,5 @@
+import {ValidatorFunction} from "./common";
 import {type Messages, messages_en} from "./localization/messages_en";
-
-type ValidatorFunction = (value: any, params: any, element: HTMLElement) => boolean;
 
 export class GlobalInputValidationNext {
 	public validators: Map<string, {validator: ValidatorFunction; errorText: string; index: number}> = new Map();

@@ -1,8 +1,17 @@
-export type ConfigRule = {
+//import type {globalInputValidationNext} from "./globInstance";
+
+export interface ConfigRule {
 	required?: boolean;
 	minLength?: number;
-	[index?: string]: boolean | number | Array | string;
-};
+	maxLength?: number;
+	range?: Array<number>;
+	email?: boolean;
+	url?: boolean;
+	digits?: boolean;
+	max?: number;
+	min?: number;
+	[index?: string]: ValidatorFunction | boolean | number | string | Array<number>;
+}
 
 export type UserConfig = {
 	submitHandler?: (this: handlerThis, event: SubmitEvent) => void;
@@ -63,10 +72,12 @@ type LocalConfig = {
 	[Property in keyof UserConfig]-?: UserConfig[Property];
 };
 
-interface Window {
-	globalInputValidationNext: globalInputValidationNext;
-}
+type ValidatorFunction = (value: any, params: any, element: HTMLElement) => boolean;
 
-declare global {
-	let globalInputValidationNext: globalInputValidationNext;
-}
+//interface Window {
+//	globalInputValidationNext: globalInputValidationNext;
+//}
+
+//declare global {
+//	let globalInputValidationNext: globalInputValidationNext;
+//}
