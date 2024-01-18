@@ -15,10 +15,10 @@ export let messages_en = {
 	//dateISO: "Please enter a valid date (ISO).",
 };
 
-export type _MessagesOptional = {
-	[Property in keyof _Messages]?: _Messages[Property];
+export type MessagesOptional = {
+	[Property in keyof Messages]?: Messages[Property];
 };
-export type _Messages = typeof messages_en;
+export type Messages = typeof messages_en;
 
-export type _MessagesAny = _Messages & {[index: string]: any};
-export type _MessagesOptionalAny = _MessagesOptional & {[index: string]: string};
+export type MessagesAny = Messages & {[index: string]: any};
+export type MessagesOptionalAny = MessagesOptional & {[index: string]: string};

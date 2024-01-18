@@ -1,6 +1,7 @@
 import {FormWrap} from "./FormWrap";
 import {consoleWarning, deepMerge} from "./utils";
-
+import type {ConfigRule, FormInput, LocalConfig, UserConfig} from "./common";
+import type {MessagesOptional, MessagesOptionalAny} from "./localization/messages_en";
 /**
  * Public class for user.
  */

@@ -1,4 +1,4 @@
-import globalInputValidationNext from "./global";
+import globalInputValidationNext from "./globInstance";
 import isUrl from "is-url";
 
 globalInputValidationNext.addRule(

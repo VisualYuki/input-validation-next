@@ -23,6 +23,6 @@
 			"root/*": ["./*"]
 		}
 	},
-	"include": ["src", "global.d.ts", "demo", "test"],
+	"include": ["src", "global", "demo", "test", "global.d.ts"],
 	"exclude": ["temp"]
 }

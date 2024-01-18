@@ -1,4 +1,6 @@
 import {InputWrap} from "./InputWrap";
+import type {ConfigRule, FormInput, LocalConfig, handlerThis} from "./common";
+import {MessagesOptional, MessagesOptionalAny} from "./localization/messages_en";
 
 export class FormWrap {
 	private formElement: HTMLFormElement;

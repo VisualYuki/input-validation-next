@@ -1,5 +1,7 @@
-import globalInputValidationNext from "./global";
+import globalInputValidationNext from "./globInstance";
 import {consoleWarning} from "./utils";
+import type {ConfigRule, FormInput, LocalConfig} from "./common";
+import {MessagesAny, MessagesOptional, MessagesOptionalAny} from "./localization/messages_en";
 
 let globalValidators = globalInputValidationNext.validators;
 
@@ -111,7 +113,7 @@ export class InputWrap {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	removeRules(rules?: Array<keyof MessagesOptional | (string & {})>) {
+	removeRules(rules?: Array<keyof MessagesOptionalAny | (string & {})>) {
 		if (rules) {
 			this.inputRulesNames = this.inputRulesNames.filter((ruleName) => {
 				if (rules.includes(ruleName)) {
@@ -130,7 +132,7 @@ export class InputWrap {
 
 		if (config.messages) {
 			for (let prop in config.messages) {
-				let ruleMessage = config.messages[prop];
+				let ruleMessage = config.messages[prop as keyof typeof config.messages];
 
 				this.inputRulesMessages[prop] = ruleMessage;
 			}

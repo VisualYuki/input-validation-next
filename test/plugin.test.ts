@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
 import {messages_ru} from "../src/localization/messages_ru";
 import {defaultConfig} from "../src/init";
+import {UserConfig} from "@/common";
 
 function getFileContent(relPath: string) {
 	return fs.readFileSync(path.join(__dirname, relPath), {encoding: "utf8"}).toString();
