@@ -77,7 +77,7 @@ Plugin support default validation attributes: required, min-length, max-length,
 ## Adding rules
 
 You can add local or global validators.
-For global, there is `globalInputValidationNext` class with `addRule` method.
+For global, there is [globalInputValidationNext](/globalInputValidationNext) class with `addRule` method.
 
 -  first argument (value) - input value.
 -  second argument (params) - params of rule.
