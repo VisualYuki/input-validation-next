@@ -19,7 +19,7 @@ import {InputValidationNext, globalInputValidationNext} from "input-validation-n
 Also you can add plugin by cdn direcly in browser without bundler. Add these imports to your html page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/input-validation-next/dist/input-validation-next.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/input-validation-next@latest/dist/input-validation-next.iife.js"></script>
 ```
 
 ## Getting Started
@@ -27,7 +27,7 @@ Also you can add plugin by cdn direcly in browser without bundler. Add these imp
 There is [InputValidationNext](https://nodejs.org/) function for plugin initialization.
 
 -  First argument is form element.
--  Second argument is [config](https://nodejs.org/).
+-  Second argument is [config](/config.html).
 
 ```js
 let myform = InputValidationNext(document.getElementById("myform"), {
@@ -53,7 +53,7 @@ Plugin support default validation attributes: required, min-length, max-length,
 	<head> </head>
 	<body>
 		<!-- form tag is required -->
-		<form>
+		<form id="myform">
 			<div>
 				<input type="text" name="inputName1" required min-length="4" />
 			</div>
@@ -70,18 +70,20 @@ Plugin support default validation attributes: required, min-length, max-length,
 
 <div class="tip custom-block" style="padding-top: 8px">
 
-[Example](https://ya.ru/) in online editor.
+[Example](https://jsfiddle.net/VisualYuki/m9saLz4q/3/) in online editor.
 
 </div>
 
 ## Adding rules
 
 You can add local or global validators.
-For global, there is `globalInputValidationNext` class, which exported default.
+For global, there is `globalInputValidationNext` class with `addRule` method.
 
 -  first argument (value) - input value.
 -  second argument (params) - params of rule.
 -  third argument (element) - input node.
+
+For local, you can define inline function direcly in rules. Ex: customName
 
 ```js
 globalInputValidationNext.addRule(
@@ -98,13 +100,18 @@ let myform = InputValidationNext(document.getElementById("myform"), {
 		console.log(event);
 	},
 	rules: {
-		userName: {
+		inputName1: {
 			firstUppercaseLetter: true,
 		},
-		userCaptcha: {
+		inputName2: {
 			customName: (value, params, element) => {
 				return value === "Gf56Gj5";
 			},
+		},
+	},
+	messages: {
+		inputName2: {
+			customName: "sdflsdf",
 		},
 	},
 });
@@ -114,12 +121,12 @@ let myform = InputValidationNext(document.getElementById("myform"), {
 <html>
 	<head> </head>
 	<body>
-		<form>
+		<form id="myform">
 			<div>
-				<input type="text" name="userName" />
+				<input type="text" name="inputName1" />
 			</div>
 			<div>
-				<input type="text" name="userCaptcha" />
+				<input type="text" name="inputName2" />
 			</div>
 
 			<button type="submit">submit form</button>
@@ -130,7 +137,7 @@ let myform = InputValidationNext(document.getElementById("myform"), {
 
 <div class="tip custom-block" style="padding-top: 8px">
 
-[Example](https://ya.ru/) in online editor.
+[Example](https://jsfiddle.net/VisualYuki/h0ryxqfd/14/) in online editor.
 
 </div>
 
@@ -144,7 +151,7 @@ let myform = InputValidationNext(document.getElementById("myform"), {});
 myform.validate();
 ```
 
-if form is valid or not?.
+Is form valid or not?.
 
 ```js
 let myform = InputValidationNext(document.getElementById("myform"), {});

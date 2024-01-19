@@ -8,7 +8,7 @@ export default defineConfig({
 			entry: resolve(__dirname, "./src/index.ts"),
 			name: "inputValidationNext",
 			fileName: "input-validation-next",
-			formats: ["es", "umd"],
+			formats: ["es", "umd", "cjs", "iife"],
 		},
 		outDir: resolve(__dirname, "dist"),
 	},

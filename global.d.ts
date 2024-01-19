@@ -6,5 +6,6 @@ declare global {
 
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;
+		InputValidationNext: InputValidationNext;
 	}
 }

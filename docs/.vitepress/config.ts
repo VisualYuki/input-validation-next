@@ -16,18 +16,13 @@ export default defineConfig({
 			{
 				text: "Guide",
 				link: "/guide",
-				//items: [
-				//	{text: "Getting-started", link: "/getting-started"},
-				//	//{text: "Runtime API Examples", link: "/api-examples"},
-				//],
 			},
 			{
 				text: "Api",
-
 				items: [
 					{text: "Config", link: "/config"},
-					{text: "GlobalInputValidationNext ", link: "/GlobalInputValidationNext "},
-					{text: "InputValidationNext ", link: "/InputValidationNext "},
+					{text: "GlobalInputValidationNext ", link: "/globalInputValidationNext "},
+					{text: "InputValidationNext ", link: "/inputValidationNext "},
 				],
 			},
 		],
