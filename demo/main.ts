@@ -105,6 +105,7 @@ InputValidationNext(document.getElementById("form-4") as HTMLFormElement, {
 				return value === "qwe123";
 				//return "fdf";
 			},
+
 			sdflkdsf: 12,
 		},
 	},

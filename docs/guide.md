@@ -24,25 +24,25 @@ Also you can add plugin by cdn direcly in browser without bundler. Add these imp
 
 ## Getting Started
 
-There is [InputValidationNext](https://nodejs.org/) function for plugin initialization.
+There is [InputValidationNext](https://visualyuki.github.io/input-validation-next/inputValidationNext.html) function for plugin initialization.
 
 -  First argument is form element.
 -  Second argument is [config](/config.html).
 
 ```js
 let myform = InputValidationNext(document.getElementById("myform"), {
-	submitHandler: function (event) {
-		console.log(this); // `this` contain many common info.
-		console.log(event); // event of form submit
-	},
-	rules: {
-		inputName2: {
-			email: true,
-		},
-	},
-	messages: {
-		inputName2: "Custom error message for userEmail input.",
-	},
+   submitHandler: function (event) {
+      console.log(this); // `this` contain many common info.
+      console.log(event); // event of form submit
+   },
+   rules: {
+      inputName2: {
+         email: true,
+      },
+   },
+   messages: {
+      inputName2: "Custom error message for userEmail input.",
+   },
 });
 ```
 
@@ -50,21 +50,21 @@ Plugin support default validation attributes: required, min-length, max-length,
 
 ```html
 <html>
-	<head> </head>
-	<body>
-		<!-- form tag is required -->
-		<form id="myform">
-			<div>
-				<input type="text" name="inputName1" required min-length="4" />
-			</div>
-			<div>
-				<input type="text" name="inputName2" />
-			</div>
+   <head> </head>
+   <body>
+      <!-- form tag is required -->
+      <form id="myform">
+         <div>
+            <input type="text" name="inputName1" required min-length="4" />
+         </div>
+         <div>
+            <input type="text" name="inputName2" />
+         </div>
 
-			<!-- submit button or submit link is required -->
-			<button type="submit">submit form</button>
-		</form>
-	</body>
+         <!-- submit button or submit link is required -->
+         <button type="submit">submit form</button>
+      </form>
+   </body>
 </html>
 ```
 
@@ -87,51 +87,51 @@ For local, you can define inline function direcly in rules. Ex: customName
 
 ```js
 globalInputValidationNext.addRule(
-	"firstUppercaseLetter",
-	function (value, params, element) {
-		return value[0] === value[0].toUpperCase();
-	},
-	"First letter is not uppercase"
+   "firstUppercaseLetter",
+   function (value, params, element) {
+      return value[0] === value[0].toUpperCase();
+   },
+   "First letter is not uppercase"
 );
 
 let myform = InputValidationNext(document.getElementById("myform"), {
-	submitHandler: function (event) {
-		console.log(this);
-		console.log(event);
-	},
-	rules: {
-		inputName1: {
-			firstUppercaseLetter: true,
-		},
-		inputName2: {
-			customName: (value, params, element) => {
-				return value === "Gf56Gj5";
-			},
-		},
-	},
-	messages: {
-		inputName2: {
-			customName: "sdflsdf",
-		},
-	},
+   submitHandler: function (event) {
+      console.log(this);
+      console.log(event);
+   },
+   rules: {
+      inputName1: {
+         firstUppercaseLetter: true,
+      },
+      inputName2: {
+         customName: (value, params, element) => {
+            return value === "Gf56Gj5";
+         },
+      },
+   },
+   messages: {
+      inputName2: {
+         customName: "sdflsdf",
+      },
+   },
 });
 ```
 
 ```html
 <html>
-	<head> </head>
-	<body>
-		<form id="myform">
-			<div>
-				<input type="text" name="inputName1" />
-			</div>
-			<div>
-				<input type="text" name="inputName2" />
-			</div>
+   <head> </head>
+   <body>
+      <form id="myform">
+         <div>
+            <input type="text" name="inputName1" />
+         </div>
+         <div>
+            <input type="text" name="inputName2" />
+         </div>
 
-			<button type="submit">submit form</button>
-		</form>
-	</body>
+         <button type="submit">submit form</button>
+      </form>
+   </body>
 </html>
 ```
 

@@ -23,6 +23,7 @@ export default defineConfig({
 					{text: "Config", link: "/config"},
 					{text: "GlobalInputValidationNext ", link: "/globalInputValidationNext "},
 					{text: "InputValidationNext ", link: "/inputValidationNext "},
+					{text: "Validators ", link: "/validators "},
 				],
 			},
 		],

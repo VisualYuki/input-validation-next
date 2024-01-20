@@ -1,13 +1,13 @@
 //import type {globalInputValidationNext} from "./globInstance";
 
 export interface ConfigRule {
-	required?: boolean;
+	required?: any;
 	minLength?: number;
 	maxLength?: number;
-	range?: Array<number>;
-	email?: boolean;
-	url?: boolean;
-	digits?: boolean;
+	range?: [number, number];
+	email?: any;
+	url?: any;
+	digits?: any;
 	max?: number;
 	min?: number;
 	[index?: string]: ValidatorFunction | boolean | number | string | Array<number>;
