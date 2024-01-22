@@ -12,7 +12,7 @@ export let messages_en = {
 	max: "Please enter a value less than or equal to {0}.",
 	min: "Please enter a value greater than or equal to {0}.",
 	//step: "Please enter a multiple of {0}.",
-	//dateISO: "Please enter a valid date (ISO).",
+	date: "Please enter a valid date.",
 };
 
 export type MessagesOptional = {

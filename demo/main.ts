@@ -101,12 +101,13 @@ import "./styles.css";
 InputValidationNext(document.getElementById("form-4") as HTMLFormElement, {
 	rules: {
 		requiredInput: {
-			custom: (value: string) => {
-				return value === "qwe123";
-				//return "fdf";
-			},
+			//custom: (value: string) => {
+			//	return value === "qwe123";
+			//	//return "fdf";
+			//},
 
-			sdflkdsf: 12,
+			//sdflkdsf: 12,
+			date: true,
 		},
 	},
 	messages: {
