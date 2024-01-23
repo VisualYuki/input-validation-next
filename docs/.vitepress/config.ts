@@ -21,8 +21,8 @@ export default defineConfig({
 				text: "Api",
 				items: [
 					{text: "Config", link: "/config"},
-					{text: "GlobalInputValidationNext ", link: "/globalInputValidationNext "},
-					{text: "InputValidationNext ", link: "/inputValidationNext "},
+					//{text: "GlobalInputValidationNext ", link: "/globalInputValidationNext "},
+					//{text: "InputValidationNext ", link: "/inputValidationNext "},
 					{text: "Validators ", link: "/validators "},
 				],
 			},
