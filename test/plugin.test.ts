@@ -5,7 +5,8 @@ import {describe, expect, test, vi} from "vitest";
 import {InputValidationNext} from "../src/index";
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
-import {messages_ru} from "../src/localization/messages_ru";
+//@ts-ignore
+import "../src/localization/messages_ru";
 import {defaultConfig} from "../src/init";
 import {UserConfig} from "@/common";
 

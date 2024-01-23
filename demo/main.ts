@@ -1,3 +1,4 @@
+//import {messages_ru} from "./../src/localization/messages_ru";
 import {InputValidationNext} from "../src/index";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
@@ -98,6 +99,8 @@ import "./styles.css";
 //	},
 //});
 
+//globalInputValidationNext.setRuleMessages(messages_ru);
+
 InputValidationNext(document.getElementById("form-4") as HTMLFormElement, {
 	rules: {
 		requiredInput: {
@@ -107,12 +110,7 @@ InputValidationNext(document.getElementById("form-4") as HTMLFormElement, {
 			//},
 
 			//sdflkdsf: 12,
-			date: true,
-		},
-	},
-	messages: {
-		requiredInput: {
-			custom: "Custom error message for local validator",
+			max: 5,
 		},
 	},
 });

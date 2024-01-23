@@ -158,3 +158,25 @@ let myform = InputValidationNext(document.getElementById("myform"), {});
 
 myform.isValidForm();
 ```
+
+## Localization
+
+There are two ways.
+
+1. Import object from node_modules by bundler.
+
+```js
+import {messages_ru} from "input-validation-next/dist";
+
+globalInputValidationNext.setRuleMessages(messages_ru);
+```
+
+OR 2. Import object via cdn in browser.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/input-validation-next/dist/localization/messages_ru.js"></script>
+```
+
+```js
+globalInputValidationNext.setRuleMessages(messages_ru);
+```
