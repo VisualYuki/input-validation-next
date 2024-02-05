@@ -1,4 +1,4 @@
-export let messages_en = {
+export const messages_en = {
 	required: "This field is required.",
 	minLength: "Please enter at least {0} characters.",
 	maxLength: "Please enter max {0} characters.",

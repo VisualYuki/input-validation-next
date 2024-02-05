@@ -16,7 +16,7 @@ globalInputValidationNext.addRule(
 		}
 
 		if (element.getAttribute("type") === "radio") {
-			let radioElements = document.querySelectorAll<HTMLInputElement>(
+			const radioElements = document.querySelectorAll<HTMLInputElement>(
 				`input[name='${element.getAttribute("name")}']`
 			);
 

@@ -1,7 +1,7 @@
 import {ValidatorFunction} from "./common";
 import {type Messages, messages_en} from "./localization/messages_en";
 
-export class GlobalInputValidationNext {
+class GlobalInputValidationNext {
 	public validators: Map<string, {validator: ValidatorFunction; errorText: string; index: number}> = new Map();
 	public messages: Map<string, string> = new Map();
 	public index: number = 0;
@@ -28,7 +28,7 @@ export class GlobalInputValidationNext {
 	}
 }
 
-let globalInputValidationNext = new GlobalInputValidationNext();
+const globalInputValidationNext = new GlobalInputValidationNext();
 
 globalInputValidationNext.setRuleMessages(messages_en);
 

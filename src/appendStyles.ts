@@ -1,4 +1,4 @@
-let style = document.createElement("style");
+const style = document.createElement("style");
 
 style.innerText = `
 .validation-error-label {

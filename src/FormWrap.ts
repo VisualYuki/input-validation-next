@@ -21,7 +21,7 @@ export class FormWrap {
 			event.stopImmediatePropagation();
 		}
 
-		let createCallbackConfig: () => handlerThis = () => {
+		const createCallbackConfig: () => handlerThis = () => {
 			return {
 				config: {
 					...this.mergedConfig,
@@ -48,7 +48,7 @@ export class FormWrap {
 			};
 		};
 
-		let isCorrectForm = this.validate();
+		const isCorrectForm = this.validate();
 
 		if (isCorrectForm) {
 			this.mergedConfig.submitHandler?.call(createCallbackConfig(), event);

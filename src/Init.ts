@@ -43,9 +43,8 @@ class Init {
 	}
 }
 
-export let defaultConfig: LocalConfig = {
-	submitHandler() {},
-	invalidHandler() {},
+// @ts-ignore
+export const defaultConfig: LocalConfig = {
 	debug: true,
 	inputElementClass: "validation-input",
 	inputElementErrorClass: "validation-input_error",
@@ -60,8 +59,11 @@ export let defaultConfig: LocalConfig = {
 };
 
 export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) {
-	let clonedDefaultConfig = JSON.parse(JSON.stringify(defaultConfig));
-	let mergedConfig: LocalConfig = deepMerge(clonedDefaultConfig, userConfig);
+	const clonedDefaultConfig = structuredClone(defaultConfig);
+	clonedDefaultConfig.submitHandler = () => {};
+	clonedDefaultConfig.invalidHandler = () => {};
+
+	const mergedConfig: LocalConfig = deepMerge(clonedDefaultConfig, userConfig);
 
 	if (mergedConfig.debug && !(formElement instanceof HTMLFormElement)) {
 		consoleWarning("root parameter is not form");
