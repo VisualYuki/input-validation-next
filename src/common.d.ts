@@ -36,25 +36,7 @@ export type UserConfig = {
 };
 
 export type handlerThis = {
-	config: {
-		submitHandler: (this: handlerThis, event: SubmitEvent) => void;
-		invalidHandler: (this: handlerThis, event: SubmitEvent) => void;
-		rules: {
-			[index: string]: ConfigRule;
-		};
-		messages: {
-			[index: string]: any;
-		};
-		debug: boolean;
-		inputElementClass: string;
-		inputElementErrorClass: string;
-		inputElementSuccessClass: string;
-		errorElementClass: string;
-		errorElementTag: string;
-		onSubmitFocusInvalid: boolean;
-		enableDefaultValidationForm: boolean;
-		disableFormSubmitEvent: boolean;
-	};
+	config: LocalConfig;
 	formElement: HTMLFormElement;
 	submitButton: HTMLInputElement | HTMLButtonElement | null;
 	inputList: FormInput[];
