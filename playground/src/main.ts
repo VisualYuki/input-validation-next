@@ -2,10 +2,16 @@ import {InputValidationNext} from "../../src/index";
 
 const mySymbol = Symbol("my-symbol");
 
-let plugin = InputValidationNext(document.querySelector("form.test") as HTMLFormElement, {
+let test = document.getElementById("form-2");
+
+let plugin = InputValidationNext(document.getElementById("form-2"), {
+	disableFormSubmitEvent: true,
 	rules: {
-		[mySymbol]: {
+		["date-input"]: {
 			required: true,
 		},
+		// ["unchecked-radio-input"]: {
+		// 	required: true,
+		// },
 	},
 });

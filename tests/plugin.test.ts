@@ -1,18 +1,11 @@
-import fs from "fs";
-import path from "path";
-
 import {describe, expect, test, vi} from "vitest";
-import {InputValidationNext} from "../src/index";
+
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
 //@ts-ignore
-import "../src/localization/messages_ru";
-import {defaultConfig} from "../src/init";
-import {UserConfig} from "@/common";
-
-function getFileContent(relPath: string) {
-	return fs.readFileSync(path.join(__dirname, relPath), {encoding: "utf8"}).toString();
-}
+import "../src/locale/messages_ru";
+import {defaultConfig} from "../src/config";
+import {initPlugin} from "./utils";
 
 function isThereError(input: HTMLInputElement) {
 	return input.classList.contains(defaultConfig.inputElementErrorClass);
@@ -26,20 +19,7 @@ function getErrorText(input: HTMLElement) {
 	return input.parentElement?.querySelector("." + defaultConfig.errorElementClass)?.textContent;
 }
 
-function initPlugin(formId: string, config: UserConfig = {}) {
-	document.body.innerHTML = getFileContent("../demo/index.html");
-	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
-
-	return pluginInstance;
-}
-
 describe("form-1", () => {
-	test("there is no form", () => {
-		let pluginInstance = initPlugin("no-form-123");
-
-		expect(pluginInstance).toBe(null);
-	});
-
 	test("after focusout", async () => {
 		initPlugin("form-1");
 

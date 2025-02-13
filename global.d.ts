@@ -1,4 +1,4 @@
-import {globalInputValidationNext} from "./src/globInstance";
+import {globalInputValidationNext} from "./src/global-instance";
 //import {Messages, MessagesOptional} from "./src/localization/messages_en";
 
 declare global {
@@ -7,5 +7,6 @@ declare global {
 	interface Window {
 		globalInputValidationNext: globalInputValidationNext;
 		InputValidationNext: InputValidationNext;
+		messages_ru: any;
 	}
 }

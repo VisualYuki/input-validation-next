@@ -17,7 +17,7 @@ export default defineConfig({
 			exclude: ["demo", "test", "./src/localization/messages_ru.ts", "./src/appendStyles.ts"],
 			outDir: "dist/types/",
 			copyDtsFiles: true,
-			//include: ["src", "src/init.ts"],
+			include: ["src"],
 			//rollupTypes: true,
 			//insertTypesEntry: true,
 		}),

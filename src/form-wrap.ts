@@ -1,18 +1,40 @@
-import {InputWrap} from "./InputWrap";
-import type {ConfigRule, FormInput, LocalConfig, handlerThis} from "./common";
-import {MessagesOptional, MessagesOptionalAny} from "./localization/messages_en";
+import {InputWrap} from "./input-wrap";
+import type {FormInput, handlerThis} from "./common";
+import {MessagesOptional, MessagesOptionalAny} from "./locale/messages_en";
+import {ConfigRule, LocalConfig} from "./config";
 
 export class FormWrap {
-	private formElement: HTMLFormElement;
+	private formNode: HTMLFormElement;
 	private inputs: InputWrap[] = [];
 	private mergedConfig: LocalConfig;
 	private submitButton: HTMLInputElement | HTMLButtonElement | null;
 
-	constructor(formElement: HTMLFormElement, mergedConfig: LocalConfig) {
-		this.formElement = formElement;
+	constructor(formNode: HTMLFormElement, mergedConfig: LocalConfig) {
+		this.formNode = formNode;
 		this.mergedConfig = mergedConfig;
-		this.submitButton = this.formElement.querySelector("input[type='submit'], button[type='submit']");
+		this.submitButton = this.formNode.querySelector("input[type='submit'], button[type='submit']");
 		this.init();
+	}
+
+	private init() {
+		// process inputs inside form
+		this.formNode.querySelectorAll<FormInput>("select, input, textarea").forEach((input) => {
+			let inputWrap = new InputWrap(input, this.mergedConfig);
+
+			if (inputWrap.needValidation) {
+				this.inputs.push(inputWrap);
+			}
+		});
+
+		// On submit form event, validate all inputs
+		this.formNode.addEventListener("submit", this.submitEventCallback);
+
+		// Add novalidate form attr
+		if (this.mergedConfig.enableDefaultValidationForm) {
+			this.formNode.removeAttribute("novalidate");
+		} else {
+			this.formNode.setAttribute("novalidate", "");
+		}
 	}
 
 	submitEventCallback = (event: SubmitEvent) => {
@@ -26,7 +48,7 @@ export class FormWrap {
 				config: {
 					...this.mergedConfig,
 				},
-				formElement: this.formElement,
+				formElement: this.formNode,
 				submitButton: this.submitButton,
 				inputList: this.inputs.map((inputWrap) => {
 					return inputWrap.inputNode;
@@ -62,27 +84,6 @@ export class FormWrap {
 		}
 	};
 
-	private init() {
-		// Create inputWrap from form
-		this.formElement.querySelectorAll<FormInput>("select, input, textarea").forEach((input) => {
-			let inputWrap = new InputWrap(input, this.mergedConfig);
-
-			if (inputWrap.needValidation) {
-				this.inputs.push(inputWrap);
-			}
-		});
-
-		// On submit form event, validate all inputs
-		this.formElement.addEventListener("submit", this.submitEventCallback);
-
-		// Add novalidate form attr
-		if (this.mergedConfig.enableDefaultValidationForm) {
-			this.formElement.removeAttribute("novalidate");
-		} else {
-			this.formElement.setAttribute("novalidate", "");
-		}
-	}
-
 	validate(showErrors: boolean = true) {
 		let isCorrectForm = true;
 
@@ -95,7 +96,7 @@ export class FormWrap {
 		});
 
 		if (!isCorrectForm && this.mergedConfig.onSubmitFocusInvalid && showErrors) {
-			(this.formElement.querySelector("." + this.mergedConfig.inputElementErrorClass) as HTMLElement).focus();
+			(this.formNode.querySelector("." + this.mergedConfig.inputElementErrorClass) as HTMLElement).focus();
 		}
 
 		return isCorrectForm;
@@ -140,10 +141,10 @@ export class FormWrap {
 	}
 
 	destroy() {
-		this.inputs.forEach((element) => {
-			element.destroy();
+		this.inputs.forEach((item) => {
+			item.destroy();
 		});
 
-		this.formElement.removeEventListener("submit", this.submitEventCallback);
+		this.formNode.removeEventListener("submit", this.submitEventCallback);
 	}
 }

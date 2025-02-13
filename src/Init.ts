@@ -1,7 +1,10 @@
-import {FormWrap} from "./FormWrap";
-import {consoleWarning, deepMerge} from "./utils";
-import type {ConfigRule, FormInput, LocalConfig, UserConfig} from "./common";
-import type {MessagesOptional, MessagesOptionalAny} from "./localization/messages_en";
+import {FormWrap} from "./form-wrap";
+import {consoleWarning} from "./utils";
+import type {FormInput} from "./common";
+import type {MessagesOptional, MessagesOptionalAny} from "./locale/messages_en";
+import mergeDeep from "deepmerge";
+import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config";
+
 /**
  * Public class for user.
  */
@@ -20,11 +23,7 @@ class Init {
 		this.formWrap.validate();
 	}
 
-	removeRules(
-		input: FormInput,
-		/* eslint-disable @typescript-eslint/ban-types */
-		rules?: Array<keyof MessagesOptional | (string & {})>
-	) {
+	removeRules(input: FormInput, rules?: Array<keyof MessagesOptional | (string & {})>) {
 		this.formWrap.removeRules(input, rules);
 	}
 
@@ -43,52 +42,32 @@ class Init {
 	}
 }
 
-// @ts-ignore
-export const defaultConfig: LocalConfig = {
-	debug: true,
-	inputElementClass: "validation-input",
-	inputElementErrorClass: "validation-input_error",
-	inputElementSuccessClass: "validation-input_success",
-	errorElementClass: "validation-error-label",
-	errorElementTag: "p",
-	onSubmitFocusInvalid: true,
-	rules: {},
-	messages: {},
-	enableDefaultValidationForm: false,
-	disableFormSubmitEvent: false,
-};
-
-export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) {
-	const clonedDefaultConfig = structuredClone(defaultConfig);
-	clonedDefaultConfig.submitHandler = () => {};
-	clonedDefaultConfig.invalidHandler = () => {};
-
-	const mergedConfig: LocalConfig = deepMerge(clonedDefaultConfig, userConfig);
-
-	if (mergedConfig.debug && !(formElement instanceof HTMLFormElement)) {
-		consoleWarning("root parameter is not form");
-		consoleWarning("root parameter type is " + formElement);
-
-		return null;
-	}
+export function init(formElement: HTMLFormElement | HTMLElement | null, userConfig: UserConfig = {}) {
+	const mergedConfig: LocalConfig = mergeDeep(defaultConfig, userConfig);
 
 	if (mergedConfig.debug) {
+		if (!(formElement instanceof HTMLFormElement)) {
+			consoleWarning("root parameter is not form");
+			consoleWarning("root parameter type is " + formElement);
+
+			return null;
+		}
+
 		for (let prop in mergedConfig) {
 			switch (prop) {
 				case "submitHandler":
 				case "invalidHandler":
 					if (typeof mergedConfig.submitHandler !== "function") {
-						consoleWarning(`field '${prop}' is not function`);
+						consoleWarning(`field '${prop}' is not function type`);
 					}
 					break;
 
 				case "rules":
 				case "messages":
 					if (typeof mergedConfig[prop] !== "object") {
-						consoleWarning("field " + `'${prop}'` + " doesn't object type");
+						consoleWarning("field " + `'${prop}'` + " is not object type");
 						mergedConfig[prop] = {};
 					}
-
 					break;
 
 				case "debug":
@@ -96,16 +75,17 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 				case "enableDefaultValidationForm":
 				case "disableFormSubmitEvent":
 					if (typeof mergedConfig[prop] !== "boolean") {
-						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
+						consoleWarning("field " + `'${prop}'` + " is not boolean type");
 					}
 					break;
+
 				case "inputElementClass":
 				case "inputElementSuccessClass":
 				case "errorElementTag":
 				case "errorElementClass":
 				case "inputElementErrorClass":
 					if (typeof mergedConfig[prop] !== "string") {
-						consoleWarning("field " + `'${prop}'` + " doesn't boolean type");
+						consoleWarning("field " + `'${prop}'` + " is not string type");
 					}
 					break;
 
@@ -130,5 +110,5 @@ export function init(formElement: HTMLFormElement, userConfig: UserConfig = {}) 
 		}
 	}
 
-	return new Init(formElement, mergedConfig);
+	return new Init(formElement as HTMLFormElement, mergedConfig);
 }

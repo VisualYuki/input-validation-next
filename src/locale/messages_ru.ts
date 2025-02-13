@@ -17,5 +17,4 @@ const messages_ru = {
 	//rangelength: $.validator.format("Пожалуйста, введите значение длиной от {0} до {1} символов."),
 };
 
-//@ts-ignore
 window.messages_ru = messages_ru;

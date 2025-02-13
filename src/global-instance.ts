@@ -1,5 +1,5 @@
-import {ValidatorFunction} from "./common";
-import {type Messages, messages_en} from "./localization/messages_en";
+import {type ValidatorFunction} from "./config";
+import {type Messages, messages_en} from "./locale/messages_en";
 
 class GlobalInputValidationNext {
 	public validators: Map<string, {validator: ValidatorFunction; errorText: string; index: number}> = new Map();

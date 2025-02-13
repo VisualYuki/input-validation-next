@@ -1,5 +1,4 @@
 {
 	"printWidth": 120,
-	"bracketSpacing": false,
-	"vueIndentScriptAndStyle": true
+	"bracketSpacing": false
 }

@@ -9,4 +9,9 @@ export default defineConfig({
 			include: ["**/src/**"],
 		},
 	},
+	resolve: {
+		alias: {
+			"@": "/src",
+		},
+	},
 });
