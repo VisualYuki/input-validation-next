@@ -10,13 +10,12 @@ import {
 	range,
 	required,
 	url,
-	date,
 	number,
 } from "@/rules";
 import {describe, expect, test} from "vitest";
 import {getFileContent} from "./utils";
 
-document.body.innerHTML = getFileContent("./rules.html");
+document.body.innerHTML = getFileContent("./examples.html");
 
 describe("", () => {
 	let fakeInputNode = document.createElement("input");
@@ -115,12 +114,4 @@ describe("", () => {
 		expect(number(5, undefined, fakeInputNode)).toBe(true);
 		expect(number("-1.1", undefined, fakeInputNode)).toBe(true);
 	});
-
-	// test("date", () => {
-	// 	expect(date("", undefined, fakeInputNode)).toBe(true);
-	// 	expect(date("2020-02-20T10:00:00Z", undefined, fakeInputNode)).toBe(true);
-	// 	expect(date("12.12.2012", undefined, fakeInputNode)).toBe(true);
-
-	// 	//expect(date(5, undefined, fakeInputNode)).toBe(false);
-	// });
 });

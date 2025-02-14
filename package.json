@@ -39,7 +39,6 @@
 	"scripts": {
 		"dev": "vite --config vite.config.dev.ts",
 		"dev:docs": "vitepress dev docs",
-		"play": "vite dev --base /playground",
 		"build": "vite build --config vite.config.prod.ts",
 		"docs:build": "vitepress build docs --base /input-validation-next/",
 		"lint": " npm run typing && npm run tests && npm run eslint",

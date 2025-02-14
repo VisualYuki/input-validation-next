@@ -1,7 +1,6 @@
 import {FormWrap} from "./form-wrap";
 import {consoleWarning} from "./utils";
-import type {FormInput} from "./common";
-import type {MessagesOptional, MessagesOptionalAny} from "./locale/messages_en";
+import type {FormInput, MessagesOptional, MessagesOptionalAny} from "./common";
 import mergeDeep from "deepmerge";
 import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config";
 

@@ -1,7 +1,7 @@
 import {InputWrap} from "./input-wrap";
 import type {FormInput, handlerThis} from "./common";
-import {MessagesOptional, MessagesOptionalAny} from "./locale/messages_en";
-import {ConfigRule, LocalConfig} from "./config";
+import type {MessagesOptional, MessagesOptionalAny} from "./common";
+import type {ConfigRule, LocalConfig} from "./config";
 
 export class FormWrap {
 	private formNode: HTMLFormElement;
@@ -102,11 +102,7 @@ export class FormWrap {
 		return isCorrectForm;
 	}
 
-	removeRules(
-		input: FormInput,
-		// eslint-disable-next-line @typescript-eslint/ban-types
-		rules?: Array<keyof MessagesOptionalAny | (string & {})>
-	) {
+	removeRules(input: FormInput, rules?: Array<keyof MessagesOptionalAny>) {
 		for (let i = 0; i < this.inputs.length; i++) {
 			if (this.inputs[i].inputNode === input) {
 				this.inputs[i].removeRules(rules);

@@ -1,40 +1,211 @@
-import {describe, expect, test, vi} from "vitest";
+import {describe, expect, test} from "vitest";
 import {InputWrap} from "../src/input-wrap";
-import {type Config, defaultConfig, UserConfig} from "../src/config";
+import {defaultConfig, UserConfig} from "../src/config";
 import deepmerge from "deepmerge";
 import "../src/rules";
+import {getFileContent} from "./utils";
+import userEvent from "@testing-library/user-event";
+const user = userEvent.setup();
 
-const INPUT_NAME = "input-name";
-const localDefaultConfig = deepmerge(
-	{
-		rules: {
-			[INPUT_NAME]: {
-				required: true,
-				minLength: 2,
-				maxLength: (value, params) => {
-					console.log("custom maxLength");
-					return value.length <= params;
+document.body.innerHTML = getFileContent("./examples.html");
+
+describe("input-wrap", () => {
+	test("init with default attrs", () => {
+		let inputNode = document.getElementById("text-input") as HTMLInputElement;
+		const inputWrapInstance = new InputWrap(inputNode, defaultConfig);
+
+		expect(inputWrapInstance.configRules).toEqual({required: true, minLength: 1, maxLength: 2});
+		expect(inputWrapInstance.ruleNames).toEqual(["required", "minLength", "maxLength"]);
+	});
+
+	test("init with default attrs, custom rules", () => {
+		let inputNode = document.getElementById("text-input-2") as HTMLInputElement;
+
+		function containPoint(value: string) {
+			return value.includes(".");
+		}
+
+		const localDefaultConfig = deepmerge(defaultConfig, {
+			rules: {
+				["text-input-2"]: {
+					digits: false,
+					required: true,
+					maxLength: 2,
+					containPoint,
 				},
 			},
-		},
-	} as UserConfig,
-	defaultConfig
-);
+		} as UserConfig);
 
-describe("input-wrap", async () => {
-	let inputNode = document.createElement("input");
-	inputNode.name = INPUT_NAME;
-
-	inputNode.required = true;
-	//inputNode.minLength = 2;
-	inputNode.setAttribute("max-length", "4");
-	//inputNode.maxLength = 4;
-
-	test("init", async () => {
 		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
 
-		expect(inputWrapInstance.inputName).toBe(INPUT_NAME);
-		expect(inputWrapInstance.inputNode).toBe(inputNode);
-		expect(inputWrapInstance.configRules).toEqual({required: true, minLength: 2, maxLength: 4});
+		expect(inputWrapInstance.configRules).toEqual({
+			required: true,
+			minLength: 1,
+			maxLength: 2,
+			digits: false,
+			containPoint,
+		});
+		expect(inputWrapInstance.ruleNames).toEqual(["required", "minLength", "maxLength", "digits", "containPoint"]);
+	});
+
+	test("validate", async () => {
+		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+
+		inputNode.value = "";
+
+		function containPoint(value: string) {
+			return value.includes(".");
+		}
+
+		const localDefaultConfig = deepmerge(defaultConfig, {
+			rules: {
+				["text-input-3"]: {
+					required: true,
+					minLength: 2,
+					maxLength: 4,
+					containPoint,
+				},
+			},
+			messages: {
+				["text-input-3"]: {
+					containPoint: "the text must contain point",
+				},
+			},
+		} as UserConfig);
+
+		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("required");
+		expect(inputWrapInstance.errorNode.textContent).toBe("This field is required.");
+		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementErrorClass);
+
+		await user.type(inputNode, "1");
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("minLength");
+		expect(inputWrapInstance.errorNode.textContent).toBe("Please enter at least 2 characters.");
+		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementErrorClass);
+
+		await user.type(inputNode, "2");
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("containPoint");
+		expect(inputWrapInstance.errorNode.textContent).toBe("the text must contain point");
+
+		await user.type(inputNode, "...");
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("maxLength");
+		expect(inputWrapInstance.errorNode.textContent).toBe("Please enter max 4 characters.");
+		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementErrorClass);
+
+		//TODO: how simply
+		await user.clear(inputNode);
+		await user.type(inputNode, "12..");
+		expect(inputWrapInstance.validate()).toBe(true);
+		expect(inputWrapInstance.invalidRule).toBe("");
+		expect(inputWrapInstance.invalidRuleMessage).toBe("");
+		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementSuccessClass);
+		expect(inputWrapInstance.errorNode.textContent).toBe("");
+
+		await user.type(inputNode, ".");
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("maxLength");
+		expect(inputWrapInstance.errorNode.textContent).toBe("Please enter max 4 characters.");
+		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementErrorClass);
+
+		await user.clear(inputNode);
+		await user.type(inputNode, "12..");
+		expect(inputWrapInstance.validate()).toBe(true);
+		expect(inputWrapInstance.invalidRule).toBe("");
+		expect(inputWrapInstance.invalidRuleMessage).toBe("");
+		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementSuccessClass);
+		expect(inputWrapInstance.errorNode.textContent).toBe("");
+	});
+
+	test("override config", async () => {
+		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+
+		const localDefaultConfig = deepmerge(defaultConfig, {
+			rules: {
+				["text-input-3"]: {
+					minLength: 3,
+					digits: () => {
+						return true;
+					},
+				},
+			},
+			messages: {
+				["text-input-3"]: {
+					minLength: "minLength custom text",
+				},
+			},
+			errorElementClass: "custom-error-element-class",
+			errorElementTag: "span",
+			inputElementSuccessClass: "custom-input-element-success-class",
+			inputElementErrorClass: "custom-input-element-error-class",
+		} as UserConfig);
+
+		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+
+		await user.type(inputNode, "gg");
+		//expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("minLength");
+		expect(inputWrapInstance.errorNode.textContent).toBe("minLength custom text");
+		expect(inputWrapInstance.errorNode.classList).toContain("custom-error-element-class");
+		expect(inputWrapInstance.inputNode.classList).toContain("custom-input-element-error-class");
+		expect(inputWrapInstance.errorNode.nodeName.toLowerCase()).toBe("span");
+
+		await user.type(inputNode, "g");
+		//expect(inputWrapInstance.validate()).toBe(true);
+		expect(inputWrapInstance.invalidRule).toBe("");
+		expect(inputWrapInstance.errorNode.textContent).toBe("");
+		expect(inputWrapInstance.inputNode.classList).toContain("custom-input-element-success-class");
+	});
+
+	test("addRules, removeRules", async () => {
+		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+
+		inputNode.value = "";
+
+		function containPoint(value: string) {
+			return value.includes(".");
+		}
+
+		const localDefaultConfig = deepmerge(defaultConfig, {
+			rules: {
+				["text-input-3"]: {
+					url: true,
+				},
+			},
+		} as UserConfig);
+
+		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+
+		inputWrapInstance.removeRules(["url"]);
+
+		inputWrapInstance.addRules({
+			rules: {
+				minLength: 3,
+				containPoint,
+			},
+			messages: {
+				minLength: "custom minLength text",
+				containPoint: "text must contain point",
+			},
+		});
+
+		inputNode.value = "12";
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("minLength");
+		expect(inputWrapInstance.errorNode.textContent).toBe("custom minLength text");
+
+		inputNode.value = "123";
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("containPoint");
+		expect(inputWrapInstance.errorNode.textContent).toBe("text must contain point");
+
+		inputNode.value = "123.";
+		expect(inputWrapInstance.validate()).toBe(true);
+		expect(inputWrapInstance.invalidRule).toBe("");
+		expect(inputWrapInstance.errorNode.textContent).toBe("");
 	});
 });

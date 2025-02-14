@@ -1,5 +1,5 @@
-import {type handlerThis} from "./common";
-import {type Messages} from "./locale/messages_en";
+import {MessagesOptionalAny, type handlerThis} from "./common";
+import type {Rules} from "./rules";
 
 export const defaultConfig: LocalConfig = {
 	invalidHandler: () => {},
@@ -17,23 +17,17 @@ export const defaultConfig: LocalConfig = {
 	disableFormSubmitEvent: false,
 };
 
-export type ValidatorFunction = (value: any, params: any, element: HTMLElement) => boolean;
+export type ValidatorFunction = (
+	value: any,
+	params: any,
+	element: HTMLElement | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+) => boolean;
 
 export type UserConfig = Partial<Config>;
 
-//TODO: why undefined index signature.
-export interface ConfigRule {
-	required?: any;
-	minLength?: number;
-	maxLength?: number | ValidatorFunction;
-	range?: [number, number];
-	email?: any;
-	url?: any;
-	digits?: any;
-	max?: number;
-	min?: number;
+export type ConfigRule = {
 	[index: string]: ValidatorFunction | boolean | number | string | Array<number> | undefined;
-}
+} & Rules;
 
 export type Config = {
 	submitHandler: (this: handlerThis, event: SubmitEvent) => void;
@@ -42,7 +36,11 @@ export type Config = {
 		[index: string | number]: ConfigRule;
 	};
 	messages: {
-		[index: string | number]: Messages;
+		[index: string | number]: {
+			//[index: string]: string,
+			[prop in keyof MessagesOptionalAny]: string;
+			//[index: string]: string
+		};
 	};
 	debug: boolean;
 	inputElementClass: string;

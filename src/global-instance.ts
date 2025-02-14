@@ -1,10 +1,11 @@
 import {type ValidatorFunction} from "./config";
-import {type Messages, messages_en} from "./locale/messages_en";
+import {messages_en} from "./locale/messages_en";
+import {type Messages} from "./common";
 
 class GlobalInputValidationNext {
 	public validators: Map<string, {validator: ValidatorFunction; errorText: string; index: number}> = new Map();
 	public messages: Map<string, string> = new Map();
-	public index: number = 0;
+	public index: number = 1;
 
 	/**
 	 * Add global custom validator.

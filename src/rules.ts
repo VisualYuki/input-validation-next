@@ -5,8 +5,22 @@ import isString from "is-string";
 import isEmail from "is-email";
 import isNumber from "is-number";
 
+export interface Rules {
+	required?: any;
+	minLength?: number;
+	maxLength?: number | ValidatorFunction;
+	range?: [number, number];
+	email?: any;
+	url?: any;
+	digits?: any;
+	max?: number;
+	min?: number;
+	number?: any;
+}
+
+export type EnumRules = keyof Rules;
+
 export const required: ValidatorFunction = function (value, params, element) {
-	debugger;
 	if (element instanceof HTMLSelectElement) {
 		let isDisabledOption = element.selectedOptions[0]?.hasAttribute("disabled");
 
