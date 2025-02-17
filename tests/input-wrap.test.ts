@@ -1,15 +1,22 @@
-import {describe, expect, test} from "vitest";
+import {afterEach, describe, expect, test} from "vitest";
 import {InputWrap} from "../src/input-wrap";
 import {defaultConfig, UserConfig} from "../src/config";
 import deepmerge from "deepmerge";
 import "../src/rules";
-import {getFileContent} from "./utils";
+import {getFileContent, isThereError} from "./utils";
 import userEvent from "@testing-library/user-event";
+
+import {fireEvent} from "@testing-library/dom";
+
 const user = userEvent.setup();
 
 document.body.innerHTML = getFileContent("./examples.html");
 
 describe("input-wrap", () => {
+	afterEach(() => {
+		(document.getElementById("text-input-3") as HTMLInputElement).value = "";
+	});
+
 	test("init with default attrs", () => {
 		let inputNode = document.getElementById("text-input") as HTMLInputElement;
 		const inputWrapInstance = new InputWrap(inputNode, defaultConfig);
@@ -119,6 +126,8 @@ describe("input-wrap", () => {
 		expect(inputWrapInstance.invalidRuleMessage).toBe("");
 		expect(inputWrapInstance.inputNode.classList).toContain(defaultConfig.inputElementSuccessClass);
 		expect(inputWrapInstance.errorNode.textContent).toBe("");
+
+		inputWrapInstance.destroy();
 	});
 
 	test("override config", async () => {
@@ -207,5 +216,33 @@ describe("input-wrap", () => {
 		expect(inputWrapInstance.validate()).toBe(true);
 		expect(inputWrapInstance.invalidRule).toBe("");
 		expect(inputWrapInstance.errorNode.textContent).toBe("");
+	});
+
+	test("validate after focusout", async () => {
+		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+
+		inputNode.value = "";
+
+		const localDefaultConfig = deepmerge(defaultConfig, {
+			rules: {
+				["text-input-3"]: {
+					required: true,
+				},
+			},
+		} as UserConfig);
+
+		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+
+		expect(isThereError(inputNode)).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("");
+
+		fireEvent(inputNode, new Event("focusout"));
+		expect(isThereError(inputNode)).toBe(true);
+		expect(inputWrapInstance.invalidRule).toBe("required");
+
+		inputNode.value = "1";
+		fireEvent(inputNode, new Event("focusout"));
+		expect(isThereError(inputNode)).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("");
 	});
 });

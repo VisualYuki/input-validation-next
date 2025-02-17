@@ -1,64 +1,17 @@
 import {describe, expect, test, vi} from "vitest";
-
 import userEvent from "@testing-library/user-event";
 const user = userEvent.setup();
-//@ts-ignore
-import "../src/locale/messages_ru";
 import {defaultConfig} from "../src/config";
-import {initPlugin} from "./utils";
-
-function isThereError(input: HTMLInputElement) {
-	return input.classList.contains(defaultConfig.inputElementErrorClass);
-}
-
-function findInput(name: string) {
-	return document.querySelector(`[name="${name}"]`) as HTMLInputElement;
-}
+import {findInput, getFileContent, initPlugin, isThereError} from "./utils";
+import {InputValidationNext} from "@/index";
+import {getSelectorName} from "@/utils";
 
 function getErrorText(input: HTMLElement) {
 	return input.parentElement?.querySelector("." + defaultConfig.errorElementClass)?.textContent;
 }
 
 describe("form-1", () => {
-	test("after focusout", async () => {
-		initPlugin("form-1");
-
-		const input = findInput("requiredInput");
-
-		input.dispatchEvent(new Event("focusout"));
-		expect(isThereError(input)).toBe(true);
-
-		await user.type(input, "1");
-		expect(isThereError(input)).toBe(false);
-	});
-
-	test("custom rule", async () => {
-		globalInputValidationNext.addRule(
-			"customRule",
-			function (value: any) {
-				return value === "qwe123";
-			},
-			"Должны быть цифры и буквы."
-		);
-
-		initPlugin("form-1", {
-			rules: {
-				customRuleInput: {
-					customRule: true,
-				},
-			},
-		});
-
-		const input = findInput("customRuleInput");
-
-		await user.type(input, "qwe12");
-		expect(isThereError(input)).toBe(true);
-		await user.type(input, "3");
-		expect(isThereError(input)).toBe(false);
-	});
-
 	test("rule order: requied, min-length, custom rule", async () => {
-		//@ts-ignore
 		globalInputValidationNext.addRule(
 			"customRule",
 			function (value: any) {
@@ -125,18 +78,6 @@ describe("form-1", () => {
 
 		const input2 = findInput("defaultAttrInput");
 		expect(getErrorText(input2)).toBe("Required custom message for defaultAttrInput input");
-	});
-
-	test("test localization", async () => {
-		//@ts-ignore
-		globalInputValidationNext.setRuleMessages(messages_ru);
-
-		initPlugin("form-1");
-
-		const input = findInput("requiredInput");
-		input.dispatchEvent(new Event("focusout"));
-
-		expect(getErrorText(input)).toBe("Это поле обязательно.");
 	});
 
 	test("customize classes", async () => {
@@ -227,6 +168,40 @@ describe("form-2", () => {
 	});
 });
 
+describe("form-3", () => {
+	test("disableFormSubmitEvent: true", async () => {
+		initPlugin("form-3", {
+			disableFormSubmitEvent: true,
+		});
+		const formNode = document.getElementById("form-3") as HTMLFormElement;
+
+		const submitSpy = vi.fn(() => {
+			console.log("submit");
+		});
+
+		expect(submitSpy).not.toHaveBeenCalled();
+		formNode.addEventListener("submit", submitSpy);
+		(formNode.querySelector("button") as HTMLButtonElement).click();
+		expect(submitSpy).not.toHaveBeenCalled();
+	});
+
+	test("disableFormSubmitEvent: false", async () => {
+		initPlugin("form-3", {
+			disableFormSubmitEvent: false,
+		});
+		const formNode = document.getElementById("form-3") as HTMLFormElement;
+
+		const submitSpy = vi.fn(() => {
+			console.log("submit");
+		});
+
+		expect(submitSpy).not.toHaveBeenCalled();
+		formNode.addEventListener("submit", submitSpy);
+		(formNode.querySelector("button") as HTMLButtonElement).click();
+		expect(submitSpy).toHaveBeenCalled();
+	});
+});
+
 describe("full covarage", () => {
 	test("only for results", async () => {
 		let pluginInstance = initPlugin("form-2", {
@@ -259,55 +234,11 @@ describe("full covarage", () => {
 				},
 			},
 			messages: {
-				"no name input 2": "fdgdfg",
+				"no name input 2": {
+					required: "fdgdfg",
+				},
 			},
 		});
-	});
-
-	test("disableFormSubmitEvent: true", async () => {
-		initPlugin("form-2", {
-			disableFormSubmitEvent: true,
-		});
-
-		let _formSubmitEventCallback = () => {
-			console.log("submit");
-		};
-
-		const market = {
-			_formSubmitEventCallback,
-		};
-
-		const buySpy = vi.spyOn(market, "_formSubmitEventCallback");
-		expect(buySpy).not.toHaveBeenCalled();
-
-		document.querySelector("#form-2")?.addEventListener("submit", market._formSubmitEventCallback);
-
-		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
-
-		expect(buySpy).not.toHaveBeenCalled();
-	});
-
-	test("disableFormSubmitEvent: false", async () => {
-		initPlugin("form-2", {
-			disableFormSubmitEvent: false,
-		});
-
-		let _formSubmitEventCallback = () => {
-			console.log("submit");
-		};
-
-		const market = {
-			_formSubmitEventCallback,
-		};
-
-		const buySpy = vi.spyOn(market, "_formSubmitEventCallback");
-		expect(buySpy).not.toHaveBeenCalled();
-
-		document.querySelector("#form-2")?.addEventListener("submit", market._formSubmitEventCallback);
-
-		(document.querySelector("form#form-2")?.querySelector("button") as HTMLButtonElement).click();
-
-		expect(buySpy).toHaveBeenCalled();
 	});
 
 	test("inline custom rule", async () => {
@@ -339,5 +270,37 @@ describe("full covarage", () => {
 		form2?.validate();
 
 		expect(isThereError(input)).toBe(false);
+	});
+});
+
+describe("multiply forms", () => {
+	test("", () => {
+		document.body.innerHTML = getFileContent(`./multiply-forms.html`);
+		let pluginInstance1 = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {});
+		let pluginInstance2 = InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {});
+
+		const form1Input = pluginInstance1?.formWrap.formNode.querySelector(
+			getSelectorName("input-1")
+		) as HTMLInputElement;
+		const form2Input = pluginInstance2?.formWrap.formNode.querySelector(
+			getSelectorName("input-1")
+		) as HTMLInputElement;
+
+		pluginInstance1?.validate();
+
+		expect(isThereError(form1Input)).toBe(true);
+		expect(isThereError(form2Input)).toBe(false);
+
+		pluginInstance2?.validate();
+		form1Input.value = "1";
+		pluginInstance1?.validate();
+
+		expect(isThereError(form1Input)).toBe(false);
+		expect(isThereError(form2Input)).toBe(true);
+
+		form2Input.value = "1";
+		pluginInstance2?.validate();
+		expect(isThereError(form1Input)).toBe(false);
+		expect(isThereError(form2Input)).toBe(false);
 	});
 });

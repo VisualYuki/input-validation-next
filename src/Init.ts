@@ -1,5 +1,5 @@
 import {FormWrap} from "./form-wrap";
-import {consoleWarning} from "./utils";
+import {consoleWarning, getSelectorName} from "./utils";
 import type {FormInput, MessagesOptional, MessagesOptionalAny} from "./common";
 import mergeDeep from "deepmerge";
 import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config";
@@ -8,7 +8,7 @@ import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config"
  * Public class for user.
  */
 class Init {
-	private formWrap: FormWrap;
+	formWrap: FormWrap;
 
 	constructor(formElement: HTMLFormElement, userConfig: LocalConfig) {
 		this.formWrap = new FormWrap(formElement, userConfig);
@@ -95,14 +95,14 @@ export function init(formElement: HTMLFormElement | HTMLElement | null, userConf
 		}
 
 		for (let prop in mergedConfig.rules) {
-			if (!formElement.querySelector(`[name='${prop}']`)) {
+			if (!formElement.querySelector(getSelectorName(prop))) {
 				consoleWarning("input with name " + `'${prop}'` + " doesn't exist in the document.");
 				delete mergedConfig.rules[prop];
 			}
 		}
 
 		for (let prop in mergedConfig.messages) {
-			if (!formElement.querySelector(`[name='${prop}']`)) {
+			if (!formElement.querySelector(getSelectorName(prop))) {
 				consoleWarning("input with name " + `'${prop}'` + " doesn't exist in the document.");
 				delete mergedConfig.messages[prop];
 			}

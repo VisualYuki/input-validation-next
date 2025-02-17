@@ -37,9 +37,7 @@ export type Config = {
 	};
 	messages: {
 		[index: string | number]: {
-			//[index: string]: string,
 			[prop in keyof MessagesOptionalAny]: string;
-			//[index: string]: string
 		};
 	};
 	debug: boolean;

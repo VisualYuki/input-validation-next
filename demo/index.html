@@ -9,62 +9,6 @@
 	<body>
 		<div class="container">
 			<!--method="GET" action="/test-form"-->
-			<form id="form-1" class="mt-3 mb-5">
-				<div class="row">
-					<div class="col-4">
-						<p class="form-label">default required attr</p>
-						<input type="text" class="form-control" required name="requiredInput" />
-					</div>
-
-					<div class="col-4">
-						<p class="form-label">default required min max length attr</p>
-						<input
-							type="text"
-							class="form-control"
-							required
-							min-length="4"
-							max-length="7"
-							name="defaultAttrInput"
-						/>
-					</div>
-
-					<div class="col-4">
-						<p class="form-label">no validate input</p>
-						<input type="text" class="form-control" name="defaultAttrInput" />
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-4">
-						<p class="form-label">custom rule</p>
-						<input type="text" class="form-control" name="customRuleInput" />
-					</div>
-
-					<div class="col-4">
-						<p class="form-label">default input</p>
-						<input type="text" class="form-control" name="defaultInput" />
-					</div>
-
-					<div class="col-4">
-						<p class="form-label">input without name</p>
-						<input type="text" class="form-control" required />
-					</div>
-
-					<div class="col-4">
-						<p class="form-label">Number</p>
-						<input type="text" class="form-control" name="numberInputName" />
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-4">
-						<p class="form-label">textarea</p>
-						<textarea required></textarea>
-					</div>
-				</div>
-
-				<button class="btn btn-primary mt-3 mx-auto d-block" type="submit">Submit form</button>
-			</form>
 
 			<form id="form-2" action="/index" method="GET">
 				<div class="container">

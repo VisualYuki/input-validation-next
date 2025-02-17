@@ -4,10 +4,10 @@ import type {MessagesOptional, MessagesOptionalAny} from "./common";
 import type {ConfigRule, LocalConfig} from "./config";
 
 export class FormWrap {
-	private formNode: HTMLFormElement;
-	private inputs: InputWrap[] = [];
-	private mergedConfig: LocalConfig;
-	private submitButton: HTMLInputElement | HTMLButtonElement | null;
+	formNode: HTMLFormElement;
+	inputs: InputWrap[] = [];
+	mergedConfig: LocalConfig;
+	submitButton: HTMLInputElement | HTMLButtonElement | null;
 
 	constructor(formNode: HTMLFormElement, mergedConfig: LocalConfig) {
 		this.formNode = formNode;

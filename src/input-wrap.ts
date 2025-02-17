@@ -1,5 +1,5 @@
 import globalInputValidationNext from "./global-instance";
-import {consoleWarning} from "./utils";
+import {consoleWarning, getSelectorName} from "./utils";
 import type {FormInput, MessagesOptionalAny} from "./common";
 import {LocalConfig, type ConfigRule} from "./config";
 import deepmerge from "deepmerge";
@@ -10,8 +10,8 @@ export class InputWrap {
 	ruleNames: string[] = [];
 	ruleMessages: MessagesOptionalAny;
 	configRules: ConfigRule;
-	inputNode!: FormInput;
-	errorNode!: HTMLElement;
+	inputNode: FormInput;
+	errorNode: HTMLElement;
 	mergedConfig: LocalConfig;
 	needValidation: boolean = true;
 	localValidators: any = {};
@@ -32,6 +32,9 @@ export class InputWrap {
 		this.configRules = mergedConfig.rules?.[this.inputName] || {};
 		this.ruleMessages = mergedConfig.messages?.[this.inputName] || {};
 		this.mergedConfig = mergedConfig;
+
+		this.errorNode = document.createElement(this.mergedConfig.errorElementTag);
+		this.errorNode.className = this.mergedConfig.errorElementClass;
 
 		inputNode.classList.add(this.mergedConfig.inputElementClass);
 
@@ -77,7 +80,7 @@ export class InputWrap {
 		});
 
 		if (this.inputNode.getAttribute("type") === "radio") {
-			document.querySelectorAll<HTMLInputElement>(`input[name='${this.inputName}']`).forEach((element) => {
+			document.querySelectorAll<HTMLInputElement>(`input${getSelectorName(this.inputName)}`).forEach((element) => {
 				element.addEventListener("input", this.inputEvent);
 			});
 		}
@@ -142,6 +145,14 @@ export class InputWrap {
 	destroy() {
 		this.inputNode.removeEventListener("focusout", this.inputEvent);
 		this.inputNode.removeEventListener("input", this.inputEvent);
+		this.errorNode?.remove();
+		this.inputNode.classList.remove(
+			...[
+				this.mergedConfig.inputElementErrorClass,
+				this.mergedConfig.inputElementSuccessClass,
+				this.mergedConfig.inputElementClass,
+			]
+		);
 	}
 
 	public validate(showErrors: boolean = true) {
@@ -182,14 +193,11 @@ export class InputWrap {
 						errorMessage = errorMessage.replace("{1}", validatorParam[1]);
 					}
 
-					if (this.errorNode) {
-						this.errorNode.textContent = errorMessage;
-					} else {
-						this.errorNode = document.createElement(this.mergedConfig.errorElementTag);
-						this.errorNode.className = this.mergedConfig.errorElementClass;
+					if (!document.body.contains(this.errorNode)) {
 						(this.inputNode.parentElement as HTMLElement).appendChild(this.errorNode);
-						this.errorNode.textContent = errorMessage;
 					}
+
+					this.errorNode.textContent = errorMessage;
 
 					this.errorNode.style.height = `${this.errorNode.scrollHeight}px`;
 
@@ -207,7 +215,9 @@ export class InputWrap {
 			this.isValid = true;
 			this.invalidRule = "";
 			this.invalidRuleMessage = "";
-			this.errorNode.textContent = "";
+			if (this.errorNode) {
+				this.errorNode.textContent = "";
+			}
 
 			if (showErrors) {
 				if (this.errorNode && this.mergedConfig.errorElementClass === "validation-error-label") {

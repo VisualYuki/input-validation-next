@@ -1,11 +1,12 @@
 import {describe, expect, test, vi} from "vitest";
 import {initPlugin} from "./utils";
+import {InputValidationNext} from "@/index";
 
 describe("invalid inputs", async () => {
 	const consoleWarnMock = vi.spyOn(console, "warn");
 
 	test("there is no form", () => {
-		let pluginInstance = initPlugin("non-existing-form", {
+		let pluginInstance = InputValidationNext(document.querySelector(".non-existing-form"), {
 			submitHandler: () => {
 				console.log("hello");
 			},
@@ -46,7 +47,7 @@ describe("invalid inputs", async () => {
 			},
 			messages: {
 				"non-existing-message-input": {
-					customRule: true,
+					customRule: "some message",
 				},
 			},
 		});

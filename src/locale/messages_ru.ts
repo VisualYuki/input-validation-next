@@ -1,7 +1,7 @@
 import {Messages} from "@/common";
 
 // TODO: sort by alphabet
-const messages_ru: Messages = {
+export const messages_ru: Messages = {
 	required: "Это поле обязательно.",
 	minLength: "Пожалуйста, введите не меньше {0} символов.",
 	maxLength: "Пожалуйста, введите не больше {0} символов.",
