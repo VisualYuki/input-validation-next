@@ -4,7 +4,7 @@ import type {FormInput, OptionalAnyMessages} from "./common";
 import {LocalConfig, type ConfigRule} from "./config";
 import deepmerge from "deepmerge";
 
-let globalValidators = globalInputValidationNext.validators;
+const globalValidators = globalInputValidationNext.validators;
 
 export class InputWrap {
 	ruleNames: string[] = [];
@@ -69,8 +69,8 @@ export class InputWrap {
 
 		// Sort rules by order: default attr, custom rules.
 		this.ruleNames.sort((firstValidator: string, secondValidator: string) => {
-			let firstValidatorIndex = (globalValidators.get(firstValidator)?.index as number) || Number.MAX_VALUE;
-			let secondValidatorIndex = (globalValidators.get(secondValidator)?.index as number) || Number.MAX_VALUE;
+			const firstValidatorIndex = (globalValidators.get(firstValidator)?.index as number) || Number.MAX_VALUE;
+			const secondValidatorIndex = (globalValidators.get(secondValidator)?.index as number) || Number.MAX_VALUE;
 
 			if (firstValidatorIndex < secondValidatorIndex) {
 				return -1;
@@ -125,7 +125,6 @@ export class InputWrap {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	removeRules(rules?: Array<keyof OptionalAnyMessages>) {
 		if (rules) {
 			this.ruleNames = this.ruleNames.filter((ruleName) => (rules.includes(ruleName) ? false : true));
@@ -156,11 +155,11 @@ export class InputWrap {
 	}
 
 	public validate(showErrors: boolean = true) {
-		let inputValue = this.inputNode.value;
+		const inputValue = this.inputNode.value;
 		let isCorrectValidation = true;
 
 		this.ruleNames.every((validatorName) => {
-			let validatorParam = this.configRules[validatorName] as any;
+			const validatorParam = this.configRules[validatorName] as any;
 			let isCorrect = undefined;
 
 			if (this.localValidators[validatorName]) {

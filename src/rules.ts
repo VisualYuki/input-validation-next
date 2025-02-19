@@ -23,7 +23,7 @@ export type EnumRules = keyof Rules;
 
 export const required: ValidatorFunction = function (value, params, element) {
 	if (element instanceof HTMLSelectElement) {
-		let isDisabledOption = element.selectedOptions[0]?.hasAttribute("disabled");
+		const isDisabledOption = element.selectedOptions[0]?.hasAttribute("disabled");
 
 		return !isDisabledOption && !!element.value;
 	}
@@ -125,7 +125,7 @@ export const number: ValidatorFunction = (value, params, element) => {
 globalInputValidationNext.addRule("number", number, "");
 
 export const equalTo: ValidatorFunction = (value, params, element) => {
-	let targetNode = (element.closest("form") as HTMLFormElement).querySelector(params) as HTMLInputElement;
+	const targetNode = (element.closest("form") as HTMLFormElement).querySelector(params) as HTMLInputElement;
 
 	return isOptional(value, params, element) || targetNode.value === value;
 };

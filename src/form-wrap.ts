@@ -19,7 +19,7 @@ export class FormWrap {
 	private init() {
 		// process inputs inside form
 		this.formNode.querySelectorAll<FormInput>("select, input, textarea").forEach((input) => {
-			let inputWrap = new InputWrap(input, this.mergedConfig);
+			const inputWrap = new InputWrap(input, this.mergedConfig);
 
 			if (inputWrap.needValidation) {
 				this.inputs.push(inputWrap);
@@ -89,7 +89,7 @@ export class FormWrap {
 		let isCorrectForm = true;
 
 		this.inputs.forEach((inputWrap) => {
-			let inputValidationCorrect = inputWrap.validate(showErrors);
+			const inputValidationCorrect = inputWrap.validate(showErrors);
 
 			if (!inputValidationCorrect) {
 				isCorrectForm = false;

@@ -12,7 +12,7 @@ export function getFileContent(relPath: string) {
 
 export function initPlugin(formId: string, config: UserConfig = {}) {
 	document.body.innerHTML = getFileContent(`./${formId}.html`);
-	let pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
+	const pluginInstance = InputValidationNext(document.getElementById(formId) as HTMLFormElement, config);
 
 	return pluginInstance;
 }
@@ -26,7 +26,7 @@ export function isThereError(input: HTMLElement) {
 }
 
 export function initInputWrap(input: string, config: UserConfig): [HTMLInputElement, InputWrap] {
-	let inputNode = document.getElementById(input) as HTMLInputElement;
+	const inputNode = document.getElementById(input) as HTMLInputElement;
 	const localDefaultConfig = deepmerge(defaultConfig, config as UserConfig);
 
 	return [inputNode, new InputWrap(inputNode, localDefaultConfig)];

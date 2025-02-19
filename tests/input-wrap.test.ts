@@ -18,7 +18,7 @@ describe("input-wrap", () => {
 	});
 
 	test("init with default attrs", () => {
-		let inputNode = document.getElementById("text-input") as HTMLInputElement;
+		const inputNode = document.getElementById("text-input") as HTMLInputElement;
 		const inputWrapInstance = new InputWrap(inputNode, defaultConfig);
 
 		expect(inputWrapInstance.configRules).toEqual({required: true, minLength: 1, maxLength: 2});
@@ -26,7 +26,7 @@ describe("input-wrap", () => {
 	});
 
 	test("init with default attrs, custom rules", () => {
-		let inputNode = document.getElementById("text-input-2") as HTMLInputElement;
+		const inputNode = document.getElementById("text-input-2") as HTMLInputElement;
 
 		function containPoint(value: string) {
 			return value.includes(".");
@@ -56,7 +56,7 @@ describe("input-wrap", () => {
 	});
 
 	test("validate", async () => {
-		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+		const inputNode = document.getElementById("text-input-3") as HTMLInputElement;
 
 		inputNode.value = "";
 
@@ -131,7 +131,7 @@ describe("input-wrap", () => {
 	});
 
 	test("override config", async () => {
-		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+		const inputNode = document.getElementById("text-input-3") as HTMLInputElement;
 
 		const localDefaultConfig = deepmerge(defaultConfig, {
 			rules: {
@@ -171,7 +171,7 @@ describe("input-wrap", () => {
 	});
 
 	test("addRules, removeRules", async () => {
-		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+		const inputNode = document.getElementById("text-input-3") as HTMLInputElement;
 
 		inputNode.value = "";
 
@@ -219,7 +219,7 @@ describe("input-wrap", () => {
 	});
 
 	test("validate after focusout", async () => {
-		let inputNode = document.getElementById("text-input-3") as HTMLInputElement;
+		const inputNode = document.getElementById("text-input-3") as HTMLInputElement;
 
 		inputNode.value = "";
 
@@ -247,8 +247,8 @@ describe("input-wrap", () => {
 	});
 
 	test("equalTo rule", () => {
-		let comparedNode1 = document.getElementById("password-input-1") as HTMLInputElement;
-		let comparedNode2 = document.getElementById("password-input-2") as HTMLInputElement;
+		const comparedNode1 = document.getElementById("password-input-1") as HTMLInputElement;
+		const comparedNode2 = document.getElementById("password-input-2") as HTMLInputElement;
 
 		comparedNode1.value = "123";
 

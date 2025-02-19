@@ -1,20 +1,20 @@
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import tseslint from "typescript-eslint";
+
+/** @type {import('eslint').Linter.Config[]} */
 export default [
+	//{files: ["**/*.{js,mjs,cjs,ts}"]},
+	{languageOptions: {globals: globals.browser}},
+	pluginJs.configs.recommended,
+	...tseslint.configs.recommended,
 	{
-		extends: [
-			"eslint:recommended",
-			"plugin:@typescript-eslint/recommended",
-			//"plugin:@typescript-eslint/recommended-type-checked",
-			//"plugin:@typescript-eslint/stylistic-type-checked",
-		],
-		parser: "@typescript-eslint/parser",
-		plugins: ["@typescript-eslint"],
-		root: true,
+		ignores: ["node_modules", "dist", "docs", "demo", "playground"],
+	},
+	{
 		rules: {
-			"prefer-const": "off",
 			"@typescript-eslint/ban-ts-comment": "off",
-			"@typescript-eslint/no-unused-vars": "off",
 			"@typescript-eslint/no-explicit-any": "off",
 		},
-		//ignorePatterns: ["temp"],
 	},
 ];

@@ -31,7 +31,7 @@ describe("form-1", () => {
 			"qwe123"
 		);
 
-		let pluginInstance = initPlugin("form-1", {
+		const pluginInstance = initPlugin("form-1", {
 			rules: {
 				defaultAttrInput: {
 					customRule: true,
@@ -55,7 +55,7 @@ describe("form-1", () => {
 	});
 
 	test("custom error message in config", async () => {
-		let pluginInstance = initPlugin("form-1", {
+		const pluginInstance = initPlugin("form-1", {
 			rules: {
 				defaultInput: {
 					required: true,
@@ -92,7 +92,7 @@ describe("form-1", () => {
 	});
 
 	test("customize classes", async () => {
-		let pluginInstance = initPlugin("form-1", {
+		const pluginInstance = initPlugin("form-1", {
 			errorElementClass: "errorElementClass",
 			errorElementTag: "label",
 			inputElementClass: "inputElementClass",
@@ -102,7 +102,7 @@ describe("form-1", () => {
 
 		pluginInstance?.validate();
 		const input = findInput("requiredInput");
-		let errorNode = input.parentElement?.querySelector(".errorElementClass");
+		const errorNode = input.parentElement?.querySelector(".errorElementClass");
 
 		expect(errorNode).toBeTruthy();
 		expect(errorNode?.tagName).toBe("LABEL");
@@ -125,7 +125,7 @@ describe("form-2", () => {
 		const invalidHandler = vi.fn(_invalidHandler);
 		const submitHandler = vi.fn(_submitHandler);
 
-		let pluginInstance = initPlugin("form-2", {
+		const pluginInstance = initPlugin("form-2", {
 			invalidHandler: invalidHandler,
 			submitHandler: submitHandler,
 			rules: {
@@ -215,7 +215,7 @@ describe("form-3", () => {
 
 describe("full covarage", () => {
 	test("only for results", async () => {
-		let pluginInstance = initPlugin("form-2", {
+		const pluginInstance = initPlugin("form-2", {
 			enableDefaultValidationForm: true,
 			//@ts-ignore
 			submitHandler: 12,
@@ -253,7 +253,7 @@ describe("full covarage", () => {
 	});
 
 	test("inline custom rule", async () => {
-		let form2 = initPlugin("form-2", {
+		const form2 = initPlugin("form-2", {
 			rules: {
 				requiredInput2: {
 					custom: (value: string) => {
@@ -287,8 +287,8 @@ describe("full covarage", () => {
 describe("multiply forms", () => {
 	test("", () => {
 		document.body.innerHTML = getFileContent(`./multiply-forms.html`);
-		let pluginInstance1 = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {});
-		let pluginInstance2 = InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {});
+		const pluginInstance1 = InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {});
+		const pluginInstance2 = InputValidationNext(document.getElementById("form-2") as HTMLFormElement, {});
 
 		const form1Input = pluginInstance1?.formWrap.formNode.querySelector(
 			getSelectorName("input-1")

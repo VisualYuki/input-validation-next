@@ -6,7 +6,7 @@ describe("invalid inputs", async () => {
 	const consoleWarnMock = vi.spyOn(console, "warn");
 
 	test("there is no form", () => {
-		let pluginInstance = InputValidationNext(document.querySelector(".non-existing-form"), {
+		const pluginInstance = InputValidationNext(document.querySelector(".non-existing-form"), {
 			submitHandler: () => {
 				console.log("hello");
 			},
@@ -16,7 +16,7 @@ describe("invalid inputs", async () => {
 	});
 
 	test("invalid config prop type", () => {
-		let pluginInstance = initPlugin("form-1", {
+		const pluginInstance = initPlugin("form-1", {
 			//@ts-ignore
 			disableFormSubmitEvent: 12,
 			//@ts-ignore

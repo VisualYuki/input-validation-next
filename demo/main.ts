@@ -34,7 +34,7 @@ import "./styles.css";
 
 //		},
 //		customRuleInput: {
-//			//@ts-ignore
+//			//@ts-expect-ignore
 //			required: 12,
 //			customRule: true,
 //		},

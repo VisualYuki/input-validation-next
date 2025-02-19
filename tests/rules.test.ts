@@ -19,7 +19,7 @@ import {getFileContent} from "./utils";
 document.body.innerHTML = getFileContent("./examples.html");
 
 describe("", () => {
-	let fakeInputNode = document.createElement("input");
+	const fakeInputNode = document.createElement("input");
 
 	test("required", () => {
 		expect(required("", {}, document.getElementById("disabled-select") as HTMLSelectElement)).toBe(false);
@@ -114,8 +114,8 @@ describe("", () => {
 	});
 
 	test("equalTo", () => {
-		let comparedNode1 = document.querySelector("#password-input-1") as HTMLInputElement;
-		let comparedNode2 = document.querySelector("#password-input-2") as HTMLInputElement;
+		const comparedNode1 = document.querySelector("#password-input-1") as HTMLInputElement;
+		const comparedNode2 = document.querySelector("#password-input-2") as HTMLInputElement;
 
 		expect(equalTo("password", "#password-input-2", comparedNode1)).toBe(false);
 

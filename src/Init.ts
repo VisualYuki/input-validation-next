@@ -60,7 +60,7 @@ export function init(formElement: HTMLFormElement | HTMLElement | null, userConf
 			return null;
 		}
 
-		for (let prop in mergedConfig) {
+		for (const prop in mergedConfig) {
 			switch (prop) {
 				case "submitHandler":
 				case "invalidHandler":
@@ -102,14 +102,14 @@ export function init(formElement: HTMLFormElement | HTMLElement | null, userConf
 			}
 		}
 
-		for (let prop in mergedConfig.rules) {
+		for (const prop in mergedConfig.rules) {
 			if (!formElement.querySelector(getSelectorName(prop))) {
 				consoleWarning("input with name " + `'${prop}'` + " doesn't exist in the document.");
 				delete mergedConfig.rules[prop];
 			}
 		}
 
-		for (let prop in mergedConfig.messages) {
+		for (const prop in mergedConfig.messages) {
 			if (!formElement.querySelector(getSelectorName(prop))) {
 				consoleWarning("input with name " + `'${prop}'` + " doesn't exist in the document.");
 				delete mergedConfig.messages[prop];

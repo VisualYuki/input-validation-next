@@ -23,7 +23,7 @@ class GlobalInputValidationNext {
 	 * Set default or custom validator messages
 	 */
 	public setRuleMessages(validatorMessages: Messages) {
-		for (let prop in validatorMessages) {
+		for (const prop in validatorMessages) {
 			this.messages.set(prop, validatorMessages[prop as keyof typeof validatorMessages]);
 		}
 	}
