@@ -35,7 +35,7 @@ describe("input-wrap", () => {
 		const localDefaultConfig = deepmerge(defaultConfig, {
 			rules: {
 				["text-input-2"]: {
-					digits: false,
+					digits: true,
 					required: true,
 					maxLength: 2,
 					containPoint,
@@ -49,7 +49,7 @@ describe("input-wrap", () => {
 			required: true,
 			minLength: 1,
 			maxLength: 2,
-			digits: false,
+			digits: true,
 			containPoint,
 		});
 		expect(inputWrapInstance.ruleNames).toEqual(["required", "minLength", "maxLength", "digits", "containPoint"]);
@@ -244,5 +244,32 @@ describe("input-wrap", () => {
 		fireEvent(inputNode, new Event("focusout"));
 		expect(isThereError(inputNode)).toBe(false);
 		expect(inputWrapInstance.invalidRule).toBe("");
+	});
+
+	test("equalTo rule", () => {
+		let comparedNode1 = document.getElementById("password-input-1") as HTMLInputElement;
+		let comparedNode2 = document.getElementById("password-input-2") as HTMLInputElement;
+
+		comparedNode1.value = "123";
+
+		const localDefaultConfig = deepmerge(defaultConfig, {
+			rules: {
+				["password-input-2"]: {
+					equalTo: "#password-input-1",
+				},
+			},
+		} as UserConfig);
+
+		const inputWrapInstance = new InputWrap(comparedNode2, localDefaultConfig);
+
+		comparedNode2.value = "12";
+		expect(inputWrapInstance.validate()).toBe(false);
+		expect(inputWrapInstance.invalidRule).toBe("equalTo");
+		expect(inputWrapInstance.invalidRuleMessage).toBe("Please enter the same value again.");
+
+		comparedNode2.value = "123";
+		expect(inputWrapInstance.validate()).toBe(true);
+		expect(inputWrapInstance.invalidRule).toBe("");
+		expect(inputWrapInstance.invalidRuleMessage).toBe("");
 	});
 });

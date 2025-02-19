@@ -1,6 +1,6 @@
 import {FormWrap} from "./form-wrap";
 import {consoleWarning, getSelectorName} from "./utils";
-import type {FormInput, MessagesOptional, MessagesOptionalAny} from "./common";
+import type {FormInput, MessagesOptional, OptionalAnyMessages} from "./common";
 import mergeDeep from "deepmerge";
 import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config";
 
@@ -30,7 +30,7 @@ class Init {
 		input: FormInput,
 		rules: {
 			rules?: ConfigRule;
-			messages?: MessagesOptionalAny;
+			messages?: OptionalAnyMessages;
 		}
 	) {
 		this.formWrap.addRules(input, rules);
@@ -43,6 +43,14 @@ class Init {
 
 export function init(formElement: HTMLFormElement | HTMLElement | null, userConfig: UserConfig = {}) {
 	const mergedConfig: LocalConfig = mergeDeep(defaultConfig, userConfig);
+
+	if (!(formElement instanceof HTMLFormElement)) {
+		return null;
+	} else {
+		if (formElement["input-validation-next"]) {
+			return formElement["input-validation-next"] as Init;
+		}
+	}
 
 	if (mergedConfig.debug) {
 		if (!(formElement instanceof HTMLFormElement)) {
@@ -109,5 +117,5 @@ export function init(formElement: HTMLFormElement | HTMLElement | null, userConf
 		}
 	}
 
-	return new Init(formElement as HTMLFormElement, mergedConfig);
+	return (formElement["input-validation-next"] = new Init(formElement as HTMLFormElement, mergedConfig));
 }

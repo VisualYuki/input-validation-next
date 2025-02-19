@@ -1,4 +1,5 @@
-import {EnumRules} from "./rules";
+import {LocalConfig} from "./config";
+import {type EnumRules} from "./rules";
 
 export type handlerThis = {
 	config: LocalConfig;
@@ -22,7 +23,7 @@ export type Messages = {
 export type MessagesOptional = {
 	[Property in keyof Messages]?: Messages[Property];
 };
-//export type Messages = typeof messages_en;
 
-export type MessagesAny = Messages & {[index: string]: any};
-export type MessagesOptionalAny = MessagesOptional & {[index: string]: string};
+//export type AnyMessages = Messages & {[index: string]: any};
+
+export type OptionalAnyMessages = MessagesOptional & {[index: string]: string};

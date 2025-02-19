@@ -1,4 +1,4 @@
-import {Messages} from "@/common";
+import type {Messages} from "@/common";
 
 export const messages_en: Messages = {
 	required: "This field is required.",
@@ -11,8 +11,5 @@ export const messages_en: Messages = {
 	digits: "Please enter only digits.",
 	max: "Please enter a value less than or equal to {0}.",
 	min: "Please enter a value greater than or equal to {0}.",
-	//rangelength: "Please enter a value between {0} and {1} characters long.",
-	//step: "Please enter a multiple of {0}.",
-	//date: "Please enter a valid date.",
-	//equalTo: "Please enter the same value again.",
+	equalTo: "Please enter the same value again.",
 };

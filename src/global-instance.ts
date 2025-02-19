@@ -34,3 +34,5 @@ const globalInputValidationNext = new GlobalInputValidationNext();
 globalInputValidationNext.setRuleMessages(messages_en);
 
 export default globalInputValidationNext;
+
+export type globalInputValidationNext = typeof globalInputValidationNext;

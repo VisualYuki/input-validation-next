@@ -1,6 +1,6 @@
 import globalInputValidationNext from "./global-instance";
 import {consoleWarning, getSelectorName} from "./utils";
-import type {FormInput, MessagesOptionalAny} from "./common";
+import type {FormInput, OptionalAnyMessages} from "./common";
 import {LocalConfig, type ConfigRule} from "./config";
 import deepmerge from "deepmerge";
 
@@ -8,13 +8,13 @@ let globalValidators = globalInputValidationNext.validators;
 
 export class InputWrap {
 	ruleNames: string[] = [];
-	ruleMessages: MessagesOptionalAny;
+	ruleMessages: OptionalAnyMessages;
 	configRules: ConfigRule;
 	inputNode: FormInput;
 	errorNode: HTMLElement;
 	mergedConfig: LocalConfig;
 	needValidation: boolean = true;
-	localValidators: any = {};
+	localValidators: Record<string, any> = {};
 
 	isValid: boolean = false;
 	invalidRule: string = "";
@@ -126,7 +126,7 @@ export class InputWrap {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	removeRules(rules?: Array<keyof MessagesOptionalAny>) {
+	removeRules(rules?: Array<keyof OptionalAnyMessages>) {
 		if (rules) {
 			this.ruleNames = this.ruleNames.filter((ruleName) => (rules.includes(ruleName) ? false : true));
 		} else {
@@ -134,7 +134,7 @@ export class InputWrap {
 		}
 	}
 
-	addRules(config: {rules?: ConfigRule; messages?: MessagesOptionalAny}) {
+	addRules(config: {rules?: ConfigRule; messages?: OptionalAnyMessages}) {
 		this.initRules(config.rules);
 
 		if (config.messages) {

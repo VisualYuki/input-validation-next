@@ -24,7 +24,7 @@ Also you can add plugin by cdn direcly in browser without bundler. Add these imp
 
 ## Getting Started
 
-There is [InputValidationNext](https://visualyuki.github.io/input-validation-next/inputValidationNext.html) function for plugin initialization.
+There is [InputValidationNext](https://visualyuki.github.io/input-validation-next) function for plugin initialization.
 
 -  First argument is form element.
 -  Second argument is [config](https://visualyuki.github.io/input-validation-next/config.html).

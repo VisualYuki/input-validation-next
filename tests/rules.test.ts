@@ -11,6 +11,7 @@ import {
 	required,
 	url,
 	number,
+	equalTo,
 } from "@/rules";
 import {describe, expect, test} from "vitest";
 import {getFileContent} from "./utils";
@@ -19,9 +20,6 @@ document.body.innerHTML = getFileContent("./examples.html");
 
 describe("", () => {
 	let fakeInputNode = document.createElement("input");
-	//let multipleSelect = document.createElement("select");
-
-	//multipleSelect.setAttribute("multiple", "true");
 
 	test("required", () => {
 		expect(required("", {}, document.getElementById("disabled-select") as HTMLSelectElement)).toBe(false);
@@ -113,5 +111,15 @@ describe("", () => {
 		expect(number(12.4, undefined, fakeInputNode)).toBe(true);
 		expect(number(5, undefined, fakeInputNode)).toBe(true);
 		expect(number("-1.1", undefined, fakeInputNode)).toBe(true);
+	});
+
+	test("equalTo", () => {
+		let comparedNode1 = document.querySelector("#password-input-1") as HTMLInputElement;
+		let comparedNode2 = document.querySelector("#password-input-2") as HTMLInputElement;
+
+		expect(equalTo("password", "#password-input-2", comparedNode1)).toBe(false);
+
+		comparedNode2.value = "password";
+		expect(equalTo("password", "#password-input-2", comparedNode1)).toBe(true);
 	});
 });

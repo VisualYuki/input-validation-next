@@ -11,6 +11,7 @@ export default defineConfig({
 			formats: ["es", "umd", "cjs", "iife"],
 		},
 		outDir: resolve(__dirname, "dist"),
+		minify: true,
 	},
 	plugins: [
 		dts({
@@ -18,6 +19,7 @@ export default defineConfig({
 			outDir: "dist/types/",
 			copyDtsFiles: true,
 			include: ["src"],
+
 			//rollupTypes: true,
 			//insertTypesEntry: true,
 		}),

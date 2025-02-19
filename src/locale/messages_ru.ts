@@ -1,6 +1,5 @@
-import {Messages} from "@/common";
+import type {Messages} from "@/common";
 
-// TODO: sort by alphabet
 export const messages_ru: Messages = {
 	required: "Это поле обязательно.",
 	minLength: "Пожалуйста, введите не меньше {0} символов.",
@@ -12,12 +11,7 @@ export const messages_ru: Messages = {
 	url: "Пожалуйста, введите корректный URL.",
 	digits: "Пожалуйста, вводите только цифры.",
 	number: "Пожалуйста, введите число.",
-	//dateISO: "Пожалуйста, введите корректную дату в формате ISO.",
-	//date: "Пожалуйста, введите корректную дату.",
-	//creditcard: "Пожалуйста, введите правильный номер кредитной карты.",
-	//equalTo: "Пожалуйста, введите такое же значение ещё раз.",
-	//extension: "Пожалуйста, выберите файл с правильным расширением.",
-	//rangelength: $.validator.format("Пожалуйста, введите значение длиной от {0} до {1} символов."),
+	equalTo: "Пожалуйста, введите такое же значение ещё раз.",
 };
 
 window.messages_ru = messages_ru;

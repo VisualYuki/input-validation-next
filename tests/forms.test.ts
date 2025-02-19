@@ -10,6 +10,17 @@ function getErrorText(input: HTMLElement) {
 	return input.parentElement?.querySelector("." + defaultConfig.errorElementClass)?.textContent;
 }
 
+describe("dublicated init", () => {
+	test("", () => {
+		document.body.innerHTML = getFileContent(`./form-1.html`);
+		const inputWrapInstance1 = InputValidationNext(document.getElementById("form-1"), {});
+
+		const inputWrapInstance2 = InputValidationNext(document.getElementById("form-1"), {});
+
+		expect(inputWrapInstance1).toBe(inputWrapInstance2);
+	});
+});
+
 describe("form-1", () => {
 	test("rule order: requied, min-length, custom rule", async () => {
 		globalInputValidationNext.addRule(

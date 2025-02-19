@@ -1,6 +1,6 @@
 import {InputWrap} from "./input-wrap";
 import type {FormInput, handlerThis} from "./common";
-import type {MessagesOptional, MessagesOptionalAny} from "./common";
+import type {MessagesOptional, OptionalAnyMessages} from "./common";
 import type {ConfigRule, LocalConfig} from "./config";
 
 export class FormWrap {
@@ -37,6 +37,7 @@ export class FormWrap {
 		}
 	}
 
+	//TODO: make tests for this
 	submitEventCallback = (event: SubmitEvent) => {
 		if (this.mergedConfig.disableFormSubmitEvent) {
 			event.preventDefault();
@@ -102,7 +103,7 @@ export class FormWrap {
 		return isCorrectForm;
 	}
 
-	removeRules(input: FormInput, rules?: Array<keyof MessagesOptionalAny>) {
+	removeRules(input: FormInput, rules?: Array<keyof OptionalAnyMessages>) {
 		for (let i = 0; i < this.inputs.length; i++) {
 			if (this.inputs[i].inputNode === input) {
 				this.inputs[i].removeRules(rules);

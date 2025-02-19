@@ -1,4 +1,4 @@
-import {globalInputValidationNext} from "./src/global-instance";
+import {type globalInputValidationNext} from "./src/global-instance";
 //import {Messages, MessagesOptional} from "./src/localization/messages_en";
 
 declare global {

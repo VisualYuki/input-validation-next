@@ -1,0 +1,14 @@
+{
+	//"exclude": ["./src/common.d", "./src/config.ts"],
+	"include": ["./src/locale/*"],
+	"compilerOptions": {
+		"outDir": "./dist/locale/",
+		"removeComments": true,
+		"noCheck": true
+		//"noImplicitAny":
+		//"module": "UMD",
+		//"moduleResolution": "node"
+		//"module": "NodeNext",
+		//"moduleResolution": "NodeNext"
+	}
+}

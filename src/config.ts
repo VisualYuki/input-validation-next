@@ -1,4 +1,4 @@
-import {MessagesOptionalAny, type handlerThis} from "./common";
+import {OptionalAnyMessages, type handlerThis} from "./common";
 import type {Rules} from "./rules";
 
 export const defaultConfig: LocalConfig = {
@@ -26,7 +26,7 @@ export type ValidatorFunction = (
 export type UserConfig = Partial<Config>;
 
 export type ConfigRule = {
-	[index: string]: ValidatorFunction | boolean | number | string | Array<number> | undefined;
+	[index: string]: ValidatorFunction | boolean | number | string | number[] | undefined;
 } & Rules;
 
 export type Config = {
@@ -37,7 +37,7 @@ export type Config = {
 	};
 	messages: {
 		[index: string | number]: {
-			[prop in keyof MessagesOptionalAny]: string;
+			[prop in keyof OptionalAnyMessages]: string;
 		};
 	};
 	debug: boolean;

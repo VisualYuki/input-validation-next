@@ -37,9 +37,8 @@
 		"url": "https://t.me/denis_moshkin"
 	},
 	"scripts": {
-		"dev": "vite --config vite.config.dev.ts",
 		"dev:docs": "vitepress dev docs",
-		"build": "vite build --config vite.config.prod.ts",
+		"build": "vite build && tsc --project tsconfig.locale.json",
 		"docs:build": "vitepress build docs --base /input-validation-next/",
 		"lint": " npm run typing && npm run tests && npm run eslint",
 		"eslint": "npx eslint ./src/*",
@@ -48,8 +47,7 @@
 		"coverage": "vitest run --coverage",
 		"prepare": "husky install",
 		"types": "typedoc global.d.ts --json out.json",
-		"publicate": "npm run build && npm run localization && npm publish",
-		"locale": "tsc --project tsconfig.localization.json"
+		"publicate": "npm run build && npm run localization && npm publish"
 	},
 	"devDependencies": {
 		"@testing-library/dom": "^10.4.0",

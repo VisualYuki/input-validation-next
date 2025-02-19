@@ -6,16 +6,17 @@ import isEmail from "is-email";
 import isNumber from "is-number";
 
 export interface Rules {
-	required?: any;
-	minLength?: number;
+	required?: true | ValidatorFunction;
+	minLength?: number | ValidatorFunction;
 	maxLength?: number | ValidatorFunction;
-	range?: [number, number];
-	email?: any;
-	url?: any;
-	digits?: any;
-	max?: number;
-	min?: number;
-	number?: any;
+	range?: [number, number] | ValidatorFunction;
+	email?: true | ValidatorFunction;
+	url?: true | ValidatorFunction;
+	digits?: true | ValidatorFunction;
+	max?: number | ValidatorFunction;
+	min?: number | ValidatorFunction;
+	number?: true | ValidatorFunction;
+	equalTo?: string | ValidatorFunction;
 }
 
 export type EnumRules = keyof Rules;
@@ -122,3 +123,11 @@ export const number: ValidatorFunction = (value, params, element) => {
 };
 
 globalInputValidationNext.addRule("number", number, "");
+
+export const equalTo: ValidatorFunction = (value, params, element) => {
+	let targetNode = (element.closest("form") as HTMLFormElement).querySelector(params) as HTMLInputElement;
+
+	return isOptional(value, params, element) || targetNode.value === value;
+};
+
+globalInputValidationNext.addRule("equalTo", equalTo, "");
