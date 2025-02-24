@@ -8,20 +8,19 @@ export default defineConfig({
 			entry: resolve(__dirname, "./src/index.ts"),
 			name: "inputValidationNext",
 			fileName: "input-validation-next",
-			formats: ["es", "umd", "cjs", "iife"],
+			formats: ["es", "iife"],
 		},
 		outDir: resolve(__dirname, "dist"),
 		minify: true,
 	},
+
+	assetsInclude: ["**/*.html"],
 	plugins: [
 		dts({
-			exclude: ["demo", "test", "./src/localization/messages_ru.ts", "./src/appendStyles.ts"],
+			exclude: ["demo", "test"],
 			outDir: "dist/types/",
 			copyDtsFiles: true,
-			include: ["src"],
-
-			//rollupTypes: true,
-			//insertTypesEntry: true,
+			include: ["src", "./global.d.ts"],
 		}),
 	],
 });

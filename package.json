@@ -2,13 +2,26 @@
 	"name": "input-validation-next",
 	"private": false,
 	"version": "1.0.0",
+	"packageManager": "pnpm@10.4.1",
 	"type": "module",
 	"description": "Simple, lightweight form validation without jQuery",
 	"module": "./dist/input-validation-next.js",
 	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/input-validation-next.js",
+			"default": "./dist/input-validation-next.iife.js",
+			"types": "./dist/types/index.d.ts"
+		},
+		"./locale/*.es.js": {
+			"import": "./dist/locale/*.es.js",
+			"types": "./dist/types/locale/*.d.ts"
+		}
+	},
 	"homepage": "https://visualyuki.github.io/input-validation-next/",
 	"files": [
-		"dist"
+		"dist",
+		"src"
 	],
 	"bugs": {
 		"url": "https://visualyuki.github.io/input-validation-next/issues"
@@ -37,8 +50,10 @@
 		"url": "https://t.me/denis_moshkin"
 	},
 	"scripts": {
-		"dev:docs": "vitepress dev docs",
-		"build": "vite build && tsc --project tsconfig.locale.json",
+		"build": "npm run build:lib && npm run build:locale",
+		"build:locale": "rollup --config rollup.config.js",
+		"build:lib": "vite build",
+		"docs:dev": "vitepress dev docs",
 		"docs:build": "vitepress build docs --base /input-validation-next/",
 		"lint": " npm run typing && npm run tests && npm run eslint",
 		"eslint": "npx eslint ",
@@ -47,7 +62,7 @@
 		"coverage": "vitest run --coverage",
 		"prepare": "husky install",
 		"types": "typedoc global.d.ts --json out.json",
-		"publicate": "npm run build && npm run localization && npm publish"
+		"publicate": "npm run build  && npm publish"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.20.0",
@@ -75,14 +90,13 @@
 		"vitest": "^3.0.5"
 	},
 	"dependencies": {
-		"@elunic/is-iso-date": "^2.0.2",
+		"@mdit/plugin-include": "^0.16.0",
+		"@rollup/plugin-typescript": "^12.1.2",
 		"deepmerge": "^4.3.1",
-		"is-date-object": "^1.1.0",
 		"is-decimal": "^2.0.1",
 		"is-email": "^1.0.2",
 		"is-number": "^7.0.0",
 		"is-string": "^1.1.1",
-		"is-url": "^1.2.4",
-		"un": "^0.0.0"
+		"is-url": "^1.2.4"
 	}
 }

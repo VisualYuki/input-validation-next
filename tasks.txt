@@ -3,7 +3,6 @@ CURRENT:
 	- lint - настроить.
 
 OTHERS:
-	- работает ли импорт русских сообщений
 	- документацию обновить.
 	- обновить пакет.
 	- formNode['input-validation-next'] for docs

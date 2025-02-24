@@ -9,5 +9,6 @@ declare global {
 		globalInputValidationNext: globalInputValidationNext;
 		InputValidationNext: InputValidationNext;
 		messages_ru?: Messages;
+		messages_zh?: Messages;
 	}
 }
