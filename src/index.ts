@@ -1,10 +1,4 @@
-function sum(a: number, b: number) {
-	return a + b;
-}
-
-let i = sum(1, 2);
-
-import {init} from "./init";
+import {init} from "./Init";
 import globalInputValidationNext from "./global-instance";
 import "./rules.ts";
 import "./appendStyles";
