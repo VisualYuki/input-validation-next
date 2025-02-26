@@ -1,14 +1,23 @@
+<style src='../node_modules/bootstrap/dist/css/bootstrap.css'>
+</style>
+
+<style>
+a {
+   text-decoration: none;
+}
+</style>
+
 # Guide
 
 ## Using NPM
 
-Installing input-validation-next is straightforward, and can be done with npm package manager;
+Installing input-validation-next is straightforward, and can be done with npm package manager:
 
 ```sh
 npm install input-validation-next;
 ```
 
-After that, import plugin in your code. Required any bundler (webpack, vite, rollup);
+After that, import plugin in your code. Required any bundler (webpack, vite, rollup):
 
 ```js
 import {InputValidationNext, globalInputValidationNext} from "input-validation-next";
@@ -16,7 +25,7 @@ import {InputValidationNext, globalInputValidationNext} from "input-validation-n
 
 ## Using CDN
 
-Also you can add plugin by cdn direcly in browser without bundler. Add these imports to your html page:
+Also you can add plugin by cdn directly in browser without bundler. Add these imports to your html page:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/input-validation-next@latest/dist/input-validation-next.iife.js"></script>
@@ -29,44 +38,32 @@ There is [InputValidationNext](https://visualyuki.github.io/input-validation-nex
 -  First argument is form element.
 -  Second argument is [config](/config.html).
 
-```js
-let myform = InputValidationNext(document.getElementById("myform"), {
-   submitHandler: function (event) {
-      console.log(this); // `this` contain many common info.
-      console.log(event); // event of form submit
-   },
-   rules: {
-      inputName2: {
-         email: true,
-      },
-   },
-   messages: {
-      inputName2: "Custom error message for userEmail input.",
-   },
-});
-```
+<<< ./examples/guide/1/index.html
 
-Plugin support default validation attributes: required, min-length, max-length,
+Plugin support default validation attributes: required, min-length, max-length.
 
-```html
-<html>
-   <head> </head>
-   <body>
-      <!-- form tag is required -->
-      <form id="myform">
-         <div>
-            <input type="text" name="inputName1" required min-length="4" />
-         </div>
-         <div>
-            <input type="text" name="inputName2" />
-         </div>
+<<< ./examples/guide/1/index.js
 
-         <!-- submit button or submit link is required -->
-         <button type="submit">submit form</button>
-      </form>
-   </body>
-</html>
-```
+::: tip EXAMPLE
+<div class="container d-flex align-items-center justify-content-center ">
+   <!-- form -->
+   <form id='myform'>
+      <!-- input wrap -->
+      <div class="mb-3">
+         <label class='form-label'>inputName1</label>
+         <input class="form-control" type="text" name="inputName1" required min-length="4" />
+      </div>
+      <!-- input wrap -->
+      <div class="mb-3">
+         <label class='form-label'>inputName2</label>
+         <input type="text" class="form-control" name="inputName2" />
+      </div>
+      <!-- submit button -->
+      <button type="submit" class="btn btn-primary mx-auto d-block">submit form</button>
+   </form>
+</div>
+:::
+
 
 <div class="tip custom-block" style="padding-top: 8px">
 
@@ -135,6 +132,26 @@ let myform = InputValidationNext(document.getElementById("myform"), {
 </html>
 ```
 
+::: tip EXAMPLE
+<div class="container d-flex align-items-center justify-content-center">
+   <!-- form -->
+   <form id='myform-2'>
+      <!-- input wrap -->
+      <div class="mb-3">
+         <label class='form-label'>inputName1</label>
+         <input class="form-control" type="text" name="inputName1" required min-length="4" />
+      </div>
+      <!-- input wrap -->
+      <div class="mb-3">
+         <label class='form-label'>inputName2</label>
+         <input type="text" class="form-control" name="inputName2" />
+      </div>
+      <!-- submit button -->
+      <button type="submit" class="btn btn-primary mx-auto d-block">submit form</button>
+   </form>
+</div>
+:::
+
 <div class="tip custom-block" style="padding-top: 8px">
 
 [Example](https://jsfiddle.net/VisualYuki/h0ryxqfd/14/) in online editor.
@@ -180,3 +197,55 @@ OR 2. Import object via cdn in browser.
 ```js
 globalInputValidationNext.setRuleMessages(messages_ru);
 ```
+
+<script setup>
+import {InputValidationNext, globalInputValidationNext} from '../dist/input-validation-next.js'
+import {onMounted} from "vue"
+
+onMounted(() => {
+   let myform = InputValidationNext(document.getElementById("myform"), {
+      submitHandler: function(event) {
+         console.log(this);
+      },
+      rules: {
+         inputName2: {
+            email: true,
+         },
+      },
+      messages: {
+         inputName2: "Custom error message for userEmail input.",
+      },
+      disableFormSubmitEvent: true,
+   });
+
+   globalInputValidationNext.addRule(
+      "firstUppercaseLetter",
+      function(value, params, element) {
+         return value[0] === value[0].toUpperCase();
+      },
+      "First letter is not uppercase"
+   );
+
+   let myform2 = InputValidationNext(document.getElementById("myform-2"), {
+      submitHandler: function(event) {
+         console.log(this);
+         console.log(event);
+      },
+      rules: {
+         inputName1: {
+            firstUppercaseLetter: true,
+         },
+         inputName2: {
+            customName: (value, params, element) => {
+            return value === "qwe123";
+            },
+         },
+      },
+      messages: {
+         inputName2: {
+            customName: "error message for customName validator"
+         }
+      }
+   });
+})
+</script>

@@ -1,10 +1,8 @@
 CURRENT:
-	- deploy - разобраться как работает и настроить.
 	- lint - настроить.
 
 OTHERS:
-	- документацию обновить.
 	- обновить пакет.
 	- formNode['input-validation-next'] for docs
 	- вынести rules для отдельного импорта
-	- equalTo for docs
+	- equalTo обновляется только по одному инпуту.

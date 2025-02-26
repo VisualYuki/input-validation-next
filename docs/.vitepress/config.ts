@@ -1,4 +1,7 @@
 import {defineConfig} from "vitepress";
+// import {include} from "@mdit/plugin-include";
+// import {vitePlugin} from "@sandboxrun/vue";
+
 //--outDir ./docs/dist --base https://visualyuki.github.io/input-validation-next/docs/dist/
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -30,4 +33,16 @@ export default defineConfig({
 
 		socialLinks: [{icon: "github", link: "https://github.com/VisualYuki/input-validation-next"}],
 	},
+	//head: [["style", {src: "/node_modules/bootstrap/dist/css/bootstrap.css"}]],
+	// markdown: {
+	// 	config: (md) => {
+	// 		md.use(include, {
+	// 			// your options, currentPath is required
+	// 			currentPath: (env) => env.filePath,
+	// 		});
+	// 	},
+	// },
+	//vite: {
+	//plugins: [vitePlugin()],
+	//},
 });

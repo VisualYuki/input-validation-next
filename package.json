@@ -60,7 +60,7 @@
 		"tests": "vitest run",
 		"typing": "tsc --noEmit",
 		"coverage": "vitest run --coverage",
-		"prepare": "husky install",
+		"prepare12": "husky install",
 		"types": "typedoc global.d.ts --json out.json",
 		"publicate": "npm run build  && npm publish"
 	},
@@ -92,6 +92,7 @@
 	"dependencies": {
 		"@mdit/plugin-include": "^0.16.0",
 		"@rollup/plugin-typescript": "^12.1.2",
+		"@sandboxrun/vue": "^0.4.1",
 		"deepmerge": "^4.3.1",
 		"is-decimal": "^2.0.1",
 		"is-email": "^1.0.2",
