@@ -33,7 +33,7 @@ jobs:
          - name: Install dependencies
            run: npm ci # or pnpm install / yarn install / bun install
          - name: build lib
-           run: npm run build
+           run: npm run build:locale
    # build:
    #    runs-on: ubuntu-latest
    #    steps:

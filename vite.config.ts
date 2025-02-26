@@ -13,7 +13,6 @@ export default defineConfig({
 		outDir: resolve(__dirname, "dist"),
 		minify: true,
 	},
-
 	assetsInclude: ["**/*.html"],
 	plugins: [
 		dts({
