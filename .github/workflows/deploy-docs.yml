@@ -36,7 +36,7 @@ jobs:
            run: npm run build
    build:
       runs-on: ubuntu-latest
-      need: build-lib
+      needs: build-lib
       steps:
          - name: Build with VitePress
            run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
