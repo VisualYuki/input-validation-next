@@ -199,11 +199,13 @@ globalInputValidationNext.setRuleMessages(messages_ru);
 ```
 
 <script setup>
-import {InputValidationNext, globalInputValidationNext} from '../dist/input-validation-next.js'
+//import {InputValidationNext, globalInputValidationNext} from '../dist/input-validation-next.js'
 import {onMounted} from "vue"
 
 onMounted(() => {
-   let myform = InputValidationNext(document.getElementById("myform"), {
+   import('../dist/input-validation-next.js').then((module) => {
+
+   let myform = module.InputValidationNext(document.getElementById("myform"), {
       submitHandler: function(event) {
          console.log(this);
       },
@@ -218,7 +220,7 @@ onMounted(() => {
       disableFormSubmitEvent: true,
    });
 
-   globalInputValidationNext.addRule(
+   module.globalInputValidationNext.addRule(
       "firstUppercaseLetter",
       function(value, params, element) {
          return value[0] === value[0].toUpperCase();
@@ -226,7 +228,7 @@ onMounted(() => {
       "First letter is not uppercase"
    );
 
-   let myform2 = InputValidationNext(document.getElementById("myform-2"), {
+   let myform2 = module.InputValidationNext(document.getElementById("myform-2"), {
       submitHandler: function(event) {
          console.log(this);
          console.log(event);
@@ -247,5 +249,7 @@ onMounted(() => {
          }
       }
    });
+   })
+
 })
 </script>

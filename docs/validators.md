@@ -229,107 +229,110 @@ a {
 :::
 
 <script setup>
-import {InputValidationNext, globalInputValidationNext} from '../dist/input-validation-next.js'
 import {onMounted} from "vue"
 
 onMounted(() => {
-   let myform = InputValidationNext(document.getElementById("myform"), {
-      rules: {
-         inputName1: {
-            required: true,
-         },
-      },
-      disableFormSubmitEvent: true,
+   import('../dist/input-validation-next.js').then((module) => {
+      let myform = module.InputValidationNext(document.getElementById("myform"), {
+            rules: {
+               inputName1: {
+                  required: true,
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform2 = module.InputValidationNext(document.getElementById("myform2"), {
+            rules: {
+               inputName1: {
+                  minLength: 4
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform3 = module.InputValidationNext(document.getElementById("myform3"), {
+            rules: {
+               inputName1: {
+                  maxLength: 4
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform4 = module.InputValidationNext(document.getElementById("myform4"), {
+            rules: {
+               inputName1: {
+                  min: 100
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform5 = module.InputValidationNext(document.getElementById("myform5"), {
+            rules: {
+               inputName1: {
+                  max: 100
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform6 = module.InputValidationNext(document.getElementById("myform6"), {
+            rules: {
+               inputName1: {
+                  digits: true
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform7 = module.InputValidationNext(document.getElementById("myform7"), {
+            rules: {
+               inputName1: {
+                  range: [0,10]
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform8 = module.InputValidationNext(document.getElementById("myform8"), {
+            rules: {
+               inputName1: {
+                  email: true
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform9 = module.InputValidationNext(document.getElementById("myform9"), {
+            rules: {
+               inputName1: {
+                  url: true
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform10 = module.InputValidationNext(document.getElementById("myform10"), {
+            rules: {
+               inputName1: {
+                  number: true
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
+
+         let myform11 = module.InputValidationNext(document.getElementById("myform11"), {
+            rules: {
+               inputName2: {
+                  equalTo: "input[name='inputName1']"
+               },
+            },
+            disableFormSubmitEvent: true,
+         });
    });
 
-   let myform2 = InputValidationNext(document.getElementById("myform2"), {
-      rules: {
-         inputName1: {
-            minLength: 4
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
 
-   let myform3 = InputValidationNext(document.getElementById("myform3"), {
-      rules: {
-         inputName1: {
-            maxLength: 4
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform4 = InputValidationNext(document.getElementById("myform4"), {
-      rules: {
-         inputName1: {
-            min: 100
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform5 = InputValidationNext(document.getElementById("myform5"), {
-      rules: {
-         inputName1: {
-            max: 100
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform6 = InputValidationNext(document.getElementById("myform6"), {
-      rules: {
-         inputName1: {
-            digits: true
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform7 = InputValidationNext(document.getElementById("myform7"), {
-      rules: {
-         inputName1: {
-            range: [0,10]
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform8 = InputValidationNext(document.getElementById("myform8"), {
-      rules: {
-         inputName1: {
-            email: true
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform9 = InputValidationNext(document.getElementById("myform9"), {
-      rules: {
-         inputName1: {
-            url: true
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform10 = InputValidationNext(document.getElementById("myform10"), {
-      rules: {
-         inputName1: {
-            number: true
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
-
-   let myform11 = InputValidationNext(document.getElementById("myform11"), {
-      rules: {
-         inputName2: {
-            equalTo: "input[name='inputName1']"
-         },
-      },
-      disableFormSubmitEvent: true,
-   });
 })
 </script>

@@ -33,6 +33,11 @@ export default defineConfig({
 
 		socialLinks: [{icon: "github", link: "https://github.com/VisualYuki/input-validation-next"}],
 	},
+	vite: {
+		ssr: {
+			noExternal: ["@antv/g2plot"],
+		},
+	},
 	//head: [["style", {src: "/node_modules/bootstrap/dist/css/bootstrap.css"}]],
 	// markdown: {
 	// 	config: (md) => {

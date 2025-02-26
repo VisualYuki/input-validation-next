@@ -14,6 +14,7 @@ export default defineConfig({
 		minify: true,
 	},
 	assetsInclude: ["**/*.html"],
+
 	// plugins: [
 	// 	dts({
 	// 		exclude: ["demo", "test"],
