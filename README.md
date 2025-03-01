@@ -1,5 +1,12 @@
 # [DOCUMENTATION](https://visualyuki.github.io/input-validation-next/)
 
+[Example](https://jsfiddle.net/VisualYuki/h0ryxqfd/14/) in online editor.
+
+<div>
+   Visual Example
+   <img src='https://github.com/VisualYuki/input-validation-next/blob/main/.github/example.png' />
+</div>
+
 ## Using NPM
 
 Installing input-validation-next is straightforward, and can be done with npm package manager;
