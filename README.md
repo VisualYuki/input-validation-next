@@ -3,7 +3,6 @@
 [Example](https://jsfiddle.net/VisualYuki/h0ryxqfd/14/) in online editor.
 
 <div>
-   Visual Example
    <img src='https://github.com/VisualYuki/input-validation-next/blob/main/.github/example.png' />
 </div>
 
