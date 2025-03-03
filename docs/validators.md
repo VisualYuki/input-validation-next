@@ -232,7 +232,7 @@ a {
 import {onMounted} from "vue"
 
 onMounted(() => {
-   import('../dist/input-validation-next.js').then((module) => {
+   import('../dist/input-validation-next.es.js').then((module) => {
       let myform = module.InputValidationNext(document.getElementById("myform"), {
             rules: {
                inputName1: {

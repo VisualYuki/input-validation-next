@@ -212,7 +212,7 @@ globalInputValidationNext.setRuleMessages(messages_ru);
 import {onMounted} from "vue"
 
 onMounted(() => {
-   import('../dist/input-validation-next.js').then((module) => {
+   import('../dist/input-validation-next.es.js').then((module) => {
 
    let myform = module.InputValidationNext(document.getElementById("myform"), {
       submitHandler: function(event) {
