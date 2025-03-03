@@ -1,6 +1,6 @@
 import {FormWrap} from "./form-wrap";
 import {consoleWarning, getSelectorName} from "./utils";
-import type {FormInput, MessagesOptional, OptionalAnyMessages} from "./common";
+import type {FormInput, MessagesOptional, OptionalAnyMessages} from "./common.d.ts";
 import mergeDeep from "deepmerge";
 import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config";
 

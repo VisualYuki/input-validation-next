@@ -19,7 +19,7 @@ export class FormWrap {
 	private init() {
 		// process inputs inside form
 		this.formNode.querySelectorAll<FormInput>("select, input, textarea").forEach((input) => {
-			const inputWrap = new InputWrap(input, this.mergedConfig);
+			const inputWrap = new InputWrap(input, this.formNode, this.mergedConfig);
 
 			if (inputWrap.needValidation) {
 				this.inputs.push(inputWrap);

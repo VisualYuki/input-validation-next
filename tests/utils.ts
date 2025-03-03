@@ -26,8 +26,10 @@ export function isThereError(input: HTMLElement) {
 }
 
 export function initInputWrap(input: string, config: UserConfig): [HTMLInputElement, InputWrap] {
+	const formNode = document.body.querySelector("form") as HTMLFormElement;
+
 	const inputNode = document.getElementById(input) as HTMLInputElement;
 	const localDefaultConfig = deepmerge(defaultConfig, config as UserConfig);
 
-	return [inputNode, new InputWrap(inputNode, localDefaultConfig)];
+	return [inputNode, new InputWrap(inputNode, formNode, localDefaultConfig)];
 }

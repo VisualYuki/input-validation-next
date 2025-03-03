@@ -25,7 +25,7 @@ import {InputValidationNext, globalInputValidationNext} from "input-validation-n
 Also you can add plugin by cdn direcly in browser without bundler. Add these imports to your html page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/input-validation-next@latest/dist/input-validation-next.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/input-validation-next@latest/dist/input-validation-next.browser.js"></script>
 ```
 
 ## Getting Started

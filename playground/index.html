@@ -7,9 +7,7 @@
 		<title>Vite + TS</title>
 	</head>
 	<body>
-		<div id="app"></div>
-
-		<!-- <form id="form-1" class="mt-3 mb-5">
+		<form id="form-1" class="mt-3 mb-5">
 			<div class="row">
 				<div class="col-4">
 					<p class="form-label">default required attr</p>
@@ -56,58 +54,17 @@
 				</div>
 			</div>
 
-			<button class="btn btn-primary mt-3 mx-auto d-block" type="submit">Submit form</button>
-		</form> -->
+			<input id="password-input-1" value="password" name="password-input-1" />
+			<input id="password-input-2" name="password-input-2" />
 
-		<form id="form-2" action="/index" method="GET">
-			<div class="container">
-				<div>
-					<input type="date" name="date-input" />
-				</div>
-				<div class="inputs-wrap row">
-					<div class="col-4">
-						<p class="form-label">Select</p>
-						<!-- <select name="multiple" class="form-control" multiple>
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-						</select> -->
-					</div>
-					<!--
-					<div>
-						<input type="radio" name="unchecked-radio-input" />
-						<input type="radio" name="unchecked-radio-input" />
-						<input type="radio" name="unchecked-radio-input" />
-					</div> -->
-
-					<!-- <div>
-						<input type="radio" name="radio-input" value="1" />
-						<input type="radio" name="radio-input" value="2" required />
-						<input type="radio" name="radio-input" value="3" />
-					</div> -->
-					<!--
-					<div class="col-4">
-						<p class="form-label">default required attr</p>
-						<input type="text" class="form-control" required name="requiredInput2" />
-					</div>
-
-					<div class="col-4">
-						<p class="form-label">textarea</p>
-						<textarea required name="textarea"></textarea>
-					</div>
-
-					<div class="mb-3 form-check">
-						<input type="checkbox" class="form-check-input" id="exampleCheck1" name="checkboxInput" required />
-						<label class="form-check-label" for="exampleCheck1">required checkbox</label>
-					</div> -->
-				</div>
+			<div>
+				<input type="radio" name="radio-1" required />
+				<input type="radio" name="radio-1" />
+				<input type="radio" name="radio-1" />
 			</div>
 
-			<button class="btn btn-primary mx-auto d-block" type="submit">Submit form</button>
+			<button class="btn btn-primary mt-3 mx-auto d-block" type="submit">Submit form</button>
 		</form>
-
-		<!-- <script src="./messages_ru.js"></script> -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 		<script type="module" src="/src/main.ts"></script>
 	</body>

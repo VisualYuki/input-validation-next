@@ -28,7 +28,7 @@ import {InputValidationNext, globalInputValidationNext} from "input-validation-n
 Also you can add plugin by cdn directly in browser without bundler. Add these imports to your html page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/input-validation-next@latest/dist/input-validation-next.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/input-validation-next@latest/dist/input-validation-next.browser.js"></script>
 ```
 
 ## Getting Started
@@ -182,17 +182,26 @@ There are two ways.
 
 1. Import object from node_modules by bundler.
 
-```js
-import {messages_ru} from "input-validation-next/dist";
 
-globalInputValidationNext.setRuleMessages(messages_ru);
+```js
+import messages_ru from "input-validation-next/locale/messages_ru";
+
 ```
+
+
 
 OR 2. Import object via cdn in browser.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/input-validation-next/dist/localization/messages_ru.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/input-validation-next/dist/locale/messages_ru.browser.js"></script>
 ```
+
+::: info
+locale variants: [link](https://github.com/VisualYuki/input-validation-next/tree/main/src/locale)
+:::
+
+
+After that, add locale messages into plugin.
 
 ```js
 globalInputValidationNext.setRuleMessages(messages_ru);
@@ -250,6 +259,5 @@ onMounted(() => {
       }
    });
    })
-
 })
 </script>

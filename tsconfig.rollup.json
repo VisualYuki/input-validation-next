@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"allowSyntheticDefaultImports": true,
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+		//"declaration": true,
+		//"declarationDir": "dist/types"
+	},
+	"include": ["global", "global.d.ts", "./src/**/*"]
+}

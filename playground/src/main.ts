@@ -1,16 +1,9 @@
 import {InputValidationNext} from "../../src/index";
-import "../../src/index";
-debugger;
-let test = document.getElementById("form-2");
 
-let plugin = InputValidationNext(document.getElementById("form-2"), {
-	disableFormSubmitEvent: true,
+InputValidationNext(document.getElementById("form-1") as HTMLFormElement, {
 	rules: {
-		["date-input"]: {
-			required: true,
+		["password-input-2"]: {
+			equalTo: "#password-input-1",
 		},
-		// ["unchecked-radio-input"]: {
-		// 	required: true,
-		// },
 	},
 });

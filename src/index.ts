@@ -1,4 +1,4 @@
-import {init} from "./Init";
+import {init} from "./init";
 import globalInputValidationNext from "./global-instance";
 import "./rules.ts";
 import "./appendStyles";

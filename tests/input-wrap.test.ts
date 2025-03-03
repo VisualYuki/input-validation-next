@@ -13,13 +13,15 @@ const user = userEvent.setup();
 document.body.innerHTML = getFileContent("./examples.html");
 
 describe("input-wrap", () => {
+	const formNode = document.body.querySelector("form") as HTMLFormElement;
+
 	afterEach(() => {
 		(document.getElementById("text-input-3") as HTMLInputElement).value = "";
 	});
 
 	test("init with default attrs", () => {
 		const inputNode = document.getElementById("text-input") as HTMLInputElement;
-		const inputWrapInstance = new InputWrap(inputNode, defaultConfig);
+		const inputWrapInstance = new InputWrap(inputNode, formNode, defaultConfig);
 
 		expect(inputWrapInstance.configRules).toEqual({required: true, minLength: 1, maxLength: 2});
 		expect(inputWrapInstance.ruleNames).toEqual(["required", "minLength", "maxLength"]);
@@ -43,7 +45,7 @@ describe("input-wrap", () => {
 			},
 		} as UserConfig);
 
-		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+		const inputWrapInstance = new InputWrap(inputNode, formNode, localDefaultConfig);
 
 		expect(inputWrapInstance.configRules).toEqual({
 			required: true,
@@ -80,7 +82,7 @@ describe("input-wrap", () => {
 			},
 		} as UserConfig);
 
-		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+		const inputWrapInstance = new InputWrap(inputNode, formNode, localDefaultConfig);
 
 		expect(inputWrapInstance.validate()).toBe(false);
 		expect(inputWrapInstance.invalidRule).toBe("required");
@@ -153,7 +155,7 @@ describe("input-wrap", () => {
 			inputElementErrorClass: "custom-input-element-error-class",
 		} as UserConfig);
 
-		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+		const inputWrapInstance = new InputWrap(inputNode, formNode, localDefaultConfig);
 
 		await user.type(inputNode, "gg");
 		//expect(inputWrapInstance.validate()).toBe(false);
@@ -187,7 +189,7 @@ describe("input-wrap", () => {
 			},
 		} as UserConfig);
 
-		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+		const inputWrapInstance = new InputWrap(inputNode, formNode, localDefaultConfig);
 
 		inputWrapInstance.removeRules(["url"]);
 
@@ -231,7 +233,7 @@ describe("input-wrap", () => {
 			},
 		} as UserConfig);
 
-		const inputWrapInstance = new InputWrap(inputNode, localDefaultConfig);
+		const inputWrapInstance = new InputWrap(inputNode, formNode, localDefaultConfig);
 
 		expect(isThereError(inputNode)).toBe(false);
 		expect(inputWrapInstance.invalidRule).toBe("");
@@ -254,13 +256,13 @@ describe("input-wrap", () => {
 
 		const localDefaultConfig = deepmerge(defaultConfig, {
 			rules: {
-				["password-input-2"]: {
-					equalTo: "#password-input-1",
+				["password-input-1"]: {
+					equalTo: "#password-input-2",
 				},
 			},
 		} as UserConfig);
 
-		const inputWrapInstance = new InputWrap(comparedNode2, localDefaultConfig);
+		const inputWrapInstance = new InputWrap(comparedNode1, formNode, localDefaultConfig);
 
 		comparedNode2.value = "12";
 		expect(inputWrapInstance.validate()).toBe(false);

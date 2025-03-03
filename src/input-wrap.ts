@@ -6,6 +6,78 @@ import deepmerge from "deepmerge";
 
 const globalValidators = globalInputValidationNext.validators;
 
+class Listeners {
+	formNode: HTMLFormElement;
+	inputNode: FormInput;
+	inputName: string = "";
+	inputEvent: () => void;
+	configRules: ConfigRule;
+
+	constructor({
+		formNode,
+		inputNode,
+		inputEvent,
+		inputName,
+		configRules,
+	}: {
+		formNode: HTMLFormElement;
+		inputNode: FormInput;
+		inputEvent: () => void;
+		inputName: string;
+		configRules: ConfigRule;
+	}) {
+		this.formNode = formNode;
+		this.inputNode = inputNode;
+		this.inputName = inputName;
+		this.inputEvent = inputEvent;
+		this.configRules = configRules;
+	}
+
+	update() {
+		if (this.inputNode.getAttribute("type") === "radio") {
+			this.formNode
+				.querySelectorAll<HTMLInputElement>(`input${getSelectorName(this.inputName)}`)
+				.forEach((element) => {
+					element.addEventListener("input", this.inputEvent);
+				});
+		}
+
+		this.inputNode.addEventListener("focusout", this.inputEvent);
+		this.inputNode.addEventListener("input", this.inputEvent);
+
+		for (const ruleName in this.configRules) {
+			if (ruleName === "equalTo") {
+				(this.formNode.querySelector(this.configRules[ruleName] as string) as HTMLInputElement).addEventListener(
+					"input",
+					this.inputEvent
+				);
+			}
+		}
+	}
+
+	destroy() {
+		this.inputNode.removeEventListener("focusout", this.inputEvent);
+		this.inputNode.removeEventListener("input", this.inputEvent);
+
+		if (this.inputNode.getAttribute("type") === "radio") {
+			this.formNode
+				.querySelectorAll<HTMLInputElement>(`input${getSelectorName(this.inputName)}`)
+				.forEach((element) => {
+					element.removeEventListener("input", this.inputEvent);
+				});
+		}
+
+		for (const ruleName in this.configRules) {
+			if (ruleName === "equalTo") {
+				(this.formNode.querySelector(this.configRules[ruleName] as string) as HTMLInputElement).removeEventListener(
+					"input",
+					this.inputEvent
+				);
+			}
+		}
+	}
+}
+
 export class InputWrap {
 	ruleNames: string[] = [];
 	ruleMessages: OptionalAnyMessages;
@@ -20,14 +92,19 @@ export class InputWrap {
 	invalidRule: string = "";
 	invalidRuleMessage: string = "";
 	inputName: string = "";
+	formNode: HTMLFormElement;
+
+	listeners: Listeners;
 
 	private inputEvent = () => {
 		this.validate();
 	};
 
-	constructor(inputNode: FormInput, mergedConfig: LocalConfig) {
+	constructor(inputNode: FormInput, formNode: HTMLFormElement, mergedConfig: LocalConfig) {
 		this.inputNode = inputNode;
 		this.inputName = this.inputNode.getAttribute("name") || "";
+
+		this.formNode = formNode;
 
 		this.configRules = mergedConfig.rules?.[this.inputName] || {};
 		this.ruleMessages = mergedConfig.messages?.[this.inputName] || {};
@@ -65,36 +142,15 @@ export class InputWrap {
 			}
 		});
 
-		this.initRules(this.configRules);
-
-		// Sort rules by order: default attr, custom rules.
-		this.ruleNames.sort((firstValidator: string, secondValidator: string) => {
-			const firstValidatorIndex = (globalValidators.get(firstValidator)?.index as number) || Number.MAX_VALUE;
-			const secondValidatorIndex = (globalValidators.get(secondValidator)?.index as number) || Number.MAX_VALUE;
-
-			if (firstValidatorIndex < secondValidatorIndex) {
-				return -1;
-			}
-
-			return 1;
+		this.listeners = new Listeners({
+			formNode: this.formNode,
+			inputNode: this.inputNode,
+			inputEvent: this.inputEvent,
+			inputName: this.inputName,
+			configRules: this.configRules,
 		});
 
-		if (this.inputNode.getAttribute("type") === "radio") {
-			document.querySelectorAll<HTMLInputElement>(`input${getSelectorName(this.inputName)}`).forEach((element) => {
-				element.addEventListener("input", this.inputEvent);
-			});
-		}
-
-		if (this.ruleNames.length === 0) {
-			this.needValidation = false;
-		} else {
-			this.setLiseners();
-		}
-	}
-
-	private setLiseners() {
-		this.inputNode.addEventListener("focusout", this.inputEvent);
-		this.inputNode.addEventListener("input", this.inputEvent);
+		this.initRules(this.configRules);
 	}
 
 	private initRules = (configRules?: ConfigRule) => {
@@ -123,6 +179,25 @@ export class InputWrap {
 			// 		break;
 			// }
 		}
+
+		// Sort rules by order: default attr, custom rules.
+		this.ruleNames.sort((firstValidator: string, secondValidator: string) => {
+			const firstValidatorIndex = (globalValidators.get(firstValidator)?.index as number) || Number.MAX_VALUE;
+			const secondValidatorIndex = (globalValidators.get(secondValidator)?.index as number) || Number.MAX_VALUE;
+
+			if (firstValidatorIndex < secondValidatorIndex) {
+				return -1;
+			}
+
+			return 1;
+		});
+
+		if (this.ruleNames.length === 0) {
+			this.needValidation = false;
+			this.listeners.destroy();
+		} else {
+			this.listeners.update();
+		}
 	};
 
 	removeRules(rules?: Array<keyof OptionalAnyMessages>) {
@@ -136,14 +211,16 @@ export class InputWrap {
 	addRules(config: {rules?: ConfigRule; messages?: OptionalAnyMessages}) {
 		this.initRules(config.rules);
 
+		this.listeners.update();
+
 		if (config.messages) {
 			this.ruleMessages = deepmerge(this.ruleMessages, config.messages);
 		}
 	}
 
 	destroy() {
-		this.inputNode.removeEventListener("focusout", this.inputEvent);
-		this.inputNode.removeEventListener("input", this.inputEvent);
+		this.listeners.destroy();
+
 		this.errorNode?.remove();
 		this.inputNode.classList.remove(
 			...[
