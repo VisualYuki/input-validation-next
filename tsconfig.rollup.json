@@ -2,8 +2,6 @@
 	"compilerOptions": {
 		"target": "es6",
 		"allowSyntheticDefaultImports": true,
-		"noEmit": true,
-		"allowImportingTsExtensions": true,
 		"paths": {
 			"@/*": ["./src/*"]
 		}
