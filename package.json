@@ -49,7 +49,7 @@
 		"url": "https://t.me/denis_moshkin"
 	},
 	"scripts": {
-		"build": " npm run build:locale && npm run build:types",
+		"build": "npm run build:lib && npm run build:locale && npm run build:types",
 		"build:locale": "rollup --config rollup.config.locale.js",
 		"build:lib": "rollup --config rollup.config.lib.js",
 		"build:types": "tsc -p tsconfig.dts.json",
