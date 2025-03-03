@@ -1,8 +1,8 @@
-import {FormWrap} from "./form-wrap.ts";
-import {consoleWarning, getSelectorName} from "./utils.ts";
+import {FormWrap} from "./form-wrap";
+import {consoleWarning, getSelectorName} from "./utils";
 import type {FormInput, MessagesOptional, OptionalAnyMessages} from "./common";
 import mergeDeep from "deepmerge";
-import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config.ts";
+import {defaultConfig, type UserConfig, ConfigRule, LocalConfig} from "./config";
 
 /**
  * Public class for user.
