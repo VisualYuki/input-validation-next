@@ -1,5 +1,5 @@
 //@ts-ignore
-import {init} from "./init";
+import {init} from "./Init.ts";
 import globalInputValidationNext from "./global-instance";
 import "./rules.ts";
 import "./appendStyles";
