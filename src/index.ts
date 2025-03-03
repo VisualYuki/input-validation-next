@@ -1,9 +1,9 @@
-import {init} from "./init";
+//import {init} from "./init";
 import globalInputValidationNext from "./global-instance";
 import "./rules.ts";
 import "./appendStyles";
 
 window.globalInputValidationNext = globalInputValidationNext;
-window.InputValidationNext = init;
+//window.InputValidationNext = init;
 
-export {init as InputValidationNext, globalInputValidationNext};
+export {globalInputValidationNext};

@@ -1,7 +1,7 @@
 {
 	"name": "input-validation-next",
 	"private": false,
-	"version": "1.0.2",
+	"version": "2.0.2",
 	"type": "module",
 	"description": "Simple, lightweight form validation without jQuery",
 	"module": "./dist/input-validation-next.es.js",
@@ -62,7 +62,7 @@
 		"coverage": "vitest run --coverage",
 		"prepare12": "husky install",
 		"types": "typedoc global.d.ts --json out.json",
-		"publicate": "npm run build  && npm publish"
+		"publicate": "npm run build && npm publish"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.20.0",
